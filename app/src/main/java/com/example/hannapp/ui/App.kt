@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hannapp.ui.selection.DropDown
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
@@ -35,7 +36,13 @@ fun LandScapeSelectionScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                DropDown(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.CenterVertically)
+                        .weight(0.5f)
+                )
+                }
             }
         }
     }
-}
