@@ -25,6 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.hannapp.ui.button.Button
+import com.example.hannapp.ui.input.QuantityInput
 import com.example.hannapp.ui.selection.DropDown
 import com.example.hannapp.ui.theme.HannAppTheme
 
@@ -43,29 +46,7 @@ fun App() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun QuantityInput(modifier: Modifier) {
-    var text by rememberSaveable{ mutableStateOf("") }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text("Quantity") },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun Button(modifier: Modifier){
-    IconButton(
-        modifier = modifier,
-        onClick = { /*TODO*/ }) {
-        Icon(Icons.Filled.Check,"")
-    }
-}
-
-@Preview(showBackground = true, device = "spec:width=1280dp,height=800dp,dpi=240")
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
 fun LandScapeSelectionScreen() {
     HannAppTheme {
