@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hannapp.R
+import com.example.hannapp.ui.mood.Mood
+import com.example.hannapp.ui.mood.MoodLight
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
-fun CalculationScreen(){
+fun CalculationScreen(mood: Mood){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -25,7 +27,7 @@ fun CalculationScreen(){
     ) {
         OutputCard(modifier = Modifier.fillMaxWidth(), drawable = R.drawable.liter, text = "1234.56 ml", label = "Milchausschuss")
         OutputCard(modifier = Modifier.fillMaxWidth(), drawable = R.drawable.spoon, text = "1234.56 g", label = "Maltozugabe")
-
+        MoodLight(mood = mood)
     }
 }
 
@@ -38,7 +40,7 @@ fun CalculationScreen(){
 @Composable
 fun CalculationPreview_DarkMode(){
     HannAppTheme {
-        CalculationScreen()
+        CalculationScreen(Mood.GREEN)
     }
 }
 
@@ -51,6 +53,6 @@ fun CalculationPreview_DarkMode(){
 @Composable
 fun CalculationPreview_LightMode(){
     HannAppTheme {
-        CalculationScreen()
+        CalculationScreen(Mood.YELLOW)
     }
 }
