@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hannapp.ui.button.Button
 import com.example.hannapp.ui.input.QuantityInput
-import com.example.hannapp.ui.selection.DropDown
+import com.example.hannapp.ui.selection.DropDownField
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
@@ -68,7 +68,7 @@ fun PortraitSelectionScreen() {
             .fillMaxSize()
             .padding(32.dp)
     ) {
-        DropDown(
+        DropDownField(
             modifier = Modifier
                 .fillMaxWidth()
         )
