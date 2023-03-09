@@ -13,6 +13,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -30,9 +34,15 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            var selectedIndex by rememberSaveable { mutableStateOf(0) }
+
             when(LocalConfiguration.current.orientation){
-                Configuration.ORIENTATION_LANDSCAPE -> LandScapeSelectionScreen()
-                else -> PortraitSelectionScreen()
+                Configuration.ORIENTATION_LANDSCAPE -> LandScapeSelectionScreen(selectedIndex = selectedIndex){
+                    selectedIndex = it
+                }
+                else -> PortraitSelectionScreen(selectedIndex = selectedIndex){
+                    selectedIndex = it
+                }
             }
         }
     }
@@ -40,7 +50,7 @@ fun App() {
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
-fun LandScapeSelectionScreen() {
+fun LandScapeSelectionScreen(selectedIndex: Int = 999, onItemSelected: (Int) -> Unit = {}) {
     HannAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -50,36 +60,45 @@ fun LandScapeSelectionScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                PortraitSelectionScreen()
+                PortraitSelectionScreen(selectedIndex = selectedIndex){onItemSelected(it)}
             }
         }
     }
 }
 
-@Preview(showBackground = true,
-    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait"
-)
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
 @Composable
-fun PortraitSelectionScreen() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp)
-    ) {
-        DropDownField(
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        QuantityInput(
-            modifier = Modifier
-                .wrapContentSize()
-        )
-        Button(
-            modifier = Modifier
-                .wrapContentSize(),
-            icon = Icons.Filled.Add
-        )
+fun PortraitSelectionScreen(
+    selectedIndex: Int = 999,
+    onItemSelected: (Int) -> Unit = {}) {
+    HannAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(32.dp)
+            ) {
+                DropDownField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    selectedIndex = selectedIndex
+                ){ onItemSelected(it) }
+                QuantityInput(
+                    modifier = Modifier
+                        .wrapContentSize()
+                )
+                Button(
+                    modifier = Modifier
+                        .wrapContentSize(),
+                    icon = Icons.Filled.Add
+                )
+            }
+        }
     }
 }
