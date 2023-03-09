@@ -5,18 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.hannapp.ui.theme.HannAppTheme
 
@@ -38,7 +32,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun DropDownField(
     modifier: Modifier = Modifier,
-    items: List<String> = List(100){it.toString()}
+    items: List<String> = List(1000){it.toString()}
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
@@ -70,13 +64,79 @@ fun DropDownField(
                 color = Color.Transparent,
             ) {}
 
-//        if (expanded) {
-
-//        }
+            if (expanded) {
+                DropDownList(
+                    items = items,
+                    onItemSelected = {
+                        selectedIndex = it
+                        expanded = false
+                    },
+                    onDismiss = { expanded = false }
+                )
+            }
         }
     }
 }
 
+@Preview(showBackground = true,
+    device = "spec:width=800dp,height=1280dp,dpi=240,orientation=portrait",
+    uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun DropDownList(
+    modifier: Modifier = Modifier,
+    items: List<String> = List(100) { it.toString() },
+    onItemSelected: (Int) -> Unit = {},
+    onDismiss: () -> Unit = {}
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        HannAppTheme() {
+            Surface(
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    itemsIndexed(items) { index, item ->
+                        //Text(text = item)
+                        DropDownItem(index = index, item = item) {
+                            onItemSelected(index)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true,
+    device = "spec:width=800dp,height=1280dp,dpi=240,orientation=portrait",
+    uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun DropDownItem(
+    modifier: Modifier = Modifier,
+    index: Int = 0,
+    item: String = "Item",
+    onClick: (Int) -> Unit = {}
+) {
+    HannAppTheme {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(vertical = 4.dp)
+                .clickable { onClick(index) },
+        ) {
+            Text(
+                text = item,
+                fontSize = 24.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+    }
+}
 
 //            Dialog(onDismissRequest = { expanded = false }) {
 //                val listState = rememberLazyListState()
