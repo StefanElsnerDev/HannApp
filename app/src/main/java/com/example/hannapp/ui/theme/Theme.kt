@@ -1,6 +1,8 @@
 package com.example.hannapp.ui.theme
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -56,9 +58,9 @@ fun HannAppTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            val window = view.context.getActivity()?.window
+            window?.statusBarColor = colorScheme.primary.toArgb()
+            window?.let { it -> WindowCompat.getInsetsController(it, view).isAppearanceLightStatusBars = darkTheme }
         }
     }
 
@@ -67,4 +69,12 @@ fun HannAppTheme(
         typography = Typography,
         content = content
     )
+}
+
+private fun Context.getActivity(): Activity? {
+    return when (this) {
+        is Activity -> this
+        is ContextWrapper -> this.baseContext.getActivity()
+        else -> null
+    }
 }
