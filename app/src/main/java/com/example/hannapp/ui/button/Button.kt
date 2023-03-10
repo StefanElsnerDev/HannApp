@@ -7,10 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun Button(modifier: Modifier, icon: ImageVector){
+fun Button(modifier: Modifier, icon: ImageVector, onClick: ()->Unit){
     IconButton(
         modifier = modifier,
-        onClick = { /*TODO*/ }) {
-        Icon(icon,"")
+        onClick = onClick
+    ) {
+        Icon(icon, "")
     }
 }
