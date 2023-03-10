@@ -12,16 +12,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.example.hannapp.navigation.Destination
+import com.example.hannapp.navigation.NavigationActions
+import com.example.hannapp.navigation.NavigationGraph
 import com.example.hannapp.ui.button.Button
 import com.example.hannapp.ui.input.QuantityInput
 import com.example.hannapp.ui.selection.DropDownField
@@ -36,21 +37,45 @@ fun App() {
         ) {
             var selectedIndex by rememberSaveable { mutableStateOf(0) }
 
-            when(LocalConfiguration.current.orientation){
-                Configuration.ORIENTATION_LANDSCAPE -> LandScapeSelectionScreen(selectedIndex = selectedIndex){
-                    selectedIndex = it
-                }
-                else -> PortraitSelectionScreen(selectedIndex = selectedIndex){
-                    selectedIndex = it
-                }
+            val navController = rememberNavController()
+
+            val navigationActions = remember(navController) {
+                NavigationActions(navController)
             }
+
+            NavigationGraph(navController = navController,
+                startDestination = Destination.SELECTION.value,
+                selectedIndex = selectedIndex,
+                onAdd = navigationActions.navigateToCalculation,
+                onIndexSelected = { selectedIndex = it }
+            )
+        }
+    }
+}
+
+@Composable
+fun SelectionScreen(selectedIndex: Int, onAdd: () -> Unit, onIndexSelected: (Int) -> Unit) {
+
+    when (LocalConfiguration.current.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> LandScapeSelectionScreen(
+            selectedIndex = selectedIndex,
+            onAdd = onAdd
+        ) {
+            onIndexSelected(it)
+        }
+        else -> PortraitSelectionScreen(selectedIndex = selectedIndex, onAdd = onAdd) {
+            onIndexSelected(it)
         }
     }
 }
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
-fun LandScapeSelectionScreen(selectedIndex: Int = 999, onItemSelected: (Int) -> Unit = {}) {
+fun LandScapeSelectionScreen(
+    selectedIndex: Int = 999,
+    onAdd: () -> Unit = {},
+    onItemSelected: (Int) -> Unit = {}
+) {
     HannAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -60,7 +85,10 @@ fun LandScapeSelectionScreen(selectedIndex: Int = 999, onItemSelected: (Int) -> 
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                PortraitSelectionScreen(selectedIndex = selectedIndex){onItemSelected(it)}
+                PortraitSelectionScreen(
+                    selectedIndex = selectedIndex,
+                    onAdd = onAdd
+                ) { onItemSelected(it) }
             }
         }
     }
@@ -70,6 +98,7 @@ fun LandScapeSelectionScreen(selectedIndex: Int = 999, onItemSelected: (Int) -> 
 @Composable
 fun PortraitSelectionScreen(
     selectedIndex: Int = 999,
+    onAdd: () -> Unit = {},
     onItemSelected: (Int) -> Unit = {}) {
     HannAppTheme {
         Surface(
@@ -97,7 +126,7 @@ fun PortraitSelectionScreen(
                     modifier = Modifier
                         .wrapContentSize(),
                     icon = Icons.Filled.Add
-                )
+                ){ onAdd() }
             }
         }
     }
