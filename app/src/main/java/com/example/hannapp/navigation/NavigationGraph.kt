@@ -1,6 +1,7 @@
 package com.example.hannapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,15 +19,19 @@ fun NavigationGraph (
     navController: NavHostController,
     startDestination: String,
     selectedIndex: Int,
-    onAdd: () -> Unit,
     onIndexSelected: (Int) -> Unit
 ){
+    val navigationActions = remember(navController) {
+        NavigationActions(navController)
+    }
+
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Destination.SELECTION.value) {
             SelectionScreen(
                 selectedIndex = selectedIndex,
-                onAdd = onAdd,
-                onIndexSelected = onIndexSelected
+                onAdd = navigationActions.navigateToCalculation,
+                onIndexSelected = onIndexSelected,
+                navController = navController
             )
         }
         composable(Destination.CALCULATION.value) {
