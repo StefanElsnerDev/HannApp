@@ -5,9 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.hannapp.ui.SelectionScreen
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationScreen
+import com.example.hannapp.ui.selection.SelectionScreen
 
 enum class Destination(val value: String) {
     SELECTION("selection"),
@@ -30,7 +30,7 @@ fun NavigationGraph (
             SelectionScreen(
                 selectedIndex = selectedIndex,
                 onAdd = navigationActions.navigateToCalculation,
-                onIndexSelected = onIndexSelected,
+                onItemSelected = onIndexSelected,
                 navController = navController
             )
         }
