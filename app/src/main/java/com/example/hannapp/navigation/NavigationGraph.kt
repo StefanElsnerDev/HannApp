@@ -36,7 +36,8 @@ fun NavigationGraph (
         }
         composable(Destination.CALCULATION.value) {
             CalculationScreen(
-                mood = Mood.GREEN
+                mood = Mood.GREEN,
+                navController = navController
             )
         }
     }
