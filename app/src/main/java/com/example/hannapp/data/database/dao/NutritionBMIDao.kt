@@ -15,7 +15,7 @@ interface NutritionBMIDao {
     fun getAll(): Flow<List<NutritionBMI>>
 
     @Query("SELECT $NUTRITION_BMI_NAME FROM $NUTRITION_BMI_TABLE")
-    fun getNames(): Flow<List<String>>
+    fun getNames(): Flow<List<String>?>
 
     @Query("SELECT * FROM $NUTRITION_BMI_TABLE WHERE uid IN (:id)")
     fun getById(id: Int): Flow<NutritionBMI>

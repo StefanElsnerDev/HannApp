@@ -1,10 +1,12 @@
 package com.example.hannapp.viewmodel
 
 import com.example.hannapp.domain.GetNutritionBMIsUseCase
+import com.example.hannapp.ui.viewmodel.NutritionUiState
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.AfterEach
@@ -55,8 +57,58 @@ class NutritionViewModelShould {
             testDispatcher
         )
 
-        val result = nutritionViewModel.uiState.first().nutritionNames
+        Assertions.assertEquals(
+            NutritionUiState(
+                isLoading = false,
+                errorMessage = null,
+                nutritionNames = nutritionNames
+            ),
+            nutritionViewModel.uiState.first()
+        )
+    }
 
-        Assertions.assertEquals(nutritionNames, result)
+    @Test
+    fun produceUIStateWithEmptyData() = runTest {
+        whenever(getNutritionBMIsUseCase.invoke()).thenReturn(
+            flowOf(null)
+        )
+
+        nutritionViewModel = NutritionViewModel(
+            getNutritionBMIsUseCase,
+            testDispatcher
+        )
+
+        Assertions.assertEquals(
+            NutritionUiState(
+                isLoading = false,
+                errorMessage = null,
+                nutritionNames = emptyList()
+            ),
+            nutritionViewModel.uiState.first()
+        )
+    }
+
+    @Test
+    fun produceErrorUIStateOnException() = runTest {
+        val errorMessage = "error"
+        whenever(getNutritionBMIsUseCase.invoke()).thenReturn(
+            flow {
+                throw RuntimeException(errorMessage)
+            }
+        )
+
+        nutritionViewModel = NutritionViewModel(
+            getNutritionBMIsUseCase,
+            testDispatcher
+        )
+
+        Assertions.assertEquals(
+            NutritionUiState(
+                isLoading = false,
+                errorMessage = errorMessage,
+                nutritionNames = emptyList()
+            ),
+            nutritionViewModel.uiState.first()
+        )
     }
 }

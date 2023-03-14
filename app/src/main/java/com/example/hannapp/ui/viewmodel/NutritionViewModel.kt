@@ -6,16 +6,13 @@ import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetNutritionBMIsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String = "",
+    val errorMessage: String? = null,
     val nutritionNames: List<String> = emptyList()
 )
 
@@ -36,14 +33,24 @@ class NutritionViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getNutritionBMIsUseCase().collect { names ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        nutritionNames = names
-                    )
+            getNutritionBMIsUseCase()
+                .catch { throwable ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            nutritionNames = emptyList(),
+                            errorMessage = throwable.message ?: "Something went wrong"
+                        )
+                    }
                 }
-            }
+                .collect { names ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            nutritionNames = names ?: emptyList()
+                        )
+                    }
+                }
         }
     }
 }
