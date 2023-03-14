@@ -2,6 +2,7 @@ package com.example.hannapp.data.repository
 
 import com.example.hannapp.data.database.dao.NutritionBMIDao
 import com.example.hannapp.data.model.entity.NutritionBMI
+import com.example.hannapp.data.modul.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 class NutritionRepository @Inject constructor(
     private val nutritionBMIDao: NutritionBMIDao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun insert(nutritionBMI: NutritionBMI) =
         withContext(dispatcher) {
