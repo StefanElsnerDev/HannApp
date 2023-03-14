@@ -32,11 +32,6 @@ class NutritionViewModel @Inject constructor(
         getAll()
     }
 
-    fun insertDummy() =
-        viewModelScope.launch(dispatcher) {
-            getNutritionBMIsUseCase.insertDummy()
-        }
-
     private fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
 
