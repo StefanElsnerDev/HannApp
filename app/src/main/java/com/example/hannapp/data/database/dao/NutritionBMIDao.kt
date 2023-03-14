@@ -4,23 +4,28 @@ import androidx.room.*
 import com.example.hannapp.Constants.NUTRITION_BMI_NAME
 import com.example.hannapp.Constants.NUTRITION_BMI_TABLE
 import com.example.hannapp.data.model.entity.NutritionBMI
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NutritionBMIDao {
     @Insert
-    fun insert(nutritionBMI: NutritionBMI)
+    suspend fun insert(nutritionBMI: NutritionBMI)
+
     @Query("SELECT * FROM $NUTRITION_BMI_TABLE")
-    fun getAll(): List<NutritionBMI>
+    fun getAll(): Flow<List<NutritionBMI>>
+
+    @Query("SELECT $NUTRITION_BMI_NAME FROM $NUTRITION_BMI_TABLE")
+    fun getNames(): Flow<List<String>>
 
     @Query("SELECT * FROM $NUTRITION_BMI_TABLE WHERE uid IN (:id)")
-    fun getById(id: Int): NutritionBMI
+    fun getById(id: Int): Flow<NutritionBMI>
 
     @Query("SELECT * FROM $NUTRITION_BMI_TABLE WHERE $NUTRITION_BMI_NAME IN (:name)")
-    fun getByName(name: String): NutritionBMI
+    fun getByName(name: String): Flow<NutritionBMI>
 
     @Update
-    fun update(nutritionBMI: NutritionBMI)
+    suspend fun update(nutritionBMI: NutritionBMI)
 
     @Delete
-    fun delete(nutritionBMI: NutritionBMI)
+    suspend fun delete(nutritionBMI: NutritionBMI)
 }
