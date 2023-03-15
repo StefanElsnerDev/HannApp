@@ -3,10 +3,8 @@ package com.example.hannapp.ui.selection
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,19 +17,23 @@ import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.input.QuantityInput
 import com.example.hannapp.ui.theme.HannAppTheme
 
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectionScreen(
-    selectedIndex: Int,
+fun SelectionContent(
+    uiState: NutritionUiState = NutritionUiState(),
+    selectedIndex: Int = 0,
     onAdd: () -> Unit = {},
-    navController: NavHostController,
+    navController: NavHostController = rememberNavController(),
     onItemSelected: (Int) -> Unit = {}
 ) {
+    val snackBarHost = remember { SnackbarHostState() }
+
     HannAppTheme {
         AppScaffold(
-            bottomBar = { NavigationBar(navController) }
+            bottomBar = { NavigationBar(navController) },
+            snackbarHost = { SnackbarHost(hostState = snackBarHost) }
         ) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceAround,
@@ -42,8 +44,9 @@ fun SelectionScreen(
                 DropDownField(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    items = uiState.nutritionNames,
                     selectedIndex = selectedIndex
-                ){ onItemSelected(it) }
+                ) { onItemSelected(it) }
                 QuantityInput(
                     modifier = Modifier
                         .wrapContentSize()
@@ -52,7 +55,7 @@ fun SelectionScreen(
                     modifier = Modifier
                         .wrapContentSize(),
                     icon = Icons.Filled.Add
-                ){ onAdd() }
+                ) { onAdd() }
             }
         }
     }
