@@ -94,30 +94,3 @@ fun SelectionScreen(
         onItemSelected = onItemSelected
     )
 }
-
-@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
-@Composable
-fun PortraitSelectionScreen(
-    selectedIndex: Int = 999,
-    onAdd: () -> Unit = {},
-    navController: NavHostController = rememberNavController(),
-    onItemSelected: (Int) -> Unit = {}
-) {
-    HannAppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                PortraitSelectionScreen(
-                    selectedIndex = selectedIndex,
-                    onAdd = onAdd,
-                    navController = navController
-                ) { onItemSelected(it) }
-            }
-        }
-    }
-}
