@@ -40,7 +40,7 @@ fun DropDownField(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             OutlinedTextField(
-                value = items[selectedIndex],
+                value = if (items.isNotEmpty()) items[selectedIndex] else "No Data",
                 onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
@@ -61,7 +61,7 @@ fun DropDownField(
                 color = Color.Transparent,
             ) {}
 
-            if (expanded) {
+            if (expanded && items.isNotEmpty()) {
                 DropDownList(
                     items = items,
                     onItemSelected = {
@@ -114,7 +114,7 @@ fun DropDownList(
 fun DropDownItem(
     modifier: Modifier = Modifier,
     index: Int = 0,
-    item: String = "Item",
+    item: String? = "Item",
     onClick: (Int) -> Unit = {}
 ) {
     HannAppTheme {
@@ -126,7 +126,7 @@ fun DropDownItem(
                 .clickable { onClick(index) },
         ) {
             Text(
-                text = item,
+                text = item ?: "empty",
                 fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.labelMedium
