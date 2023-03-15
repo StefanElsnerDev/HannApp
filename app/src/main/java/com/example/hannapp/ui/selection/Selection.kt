@@ -44,6 +44,18 @@ fun SelectionContent(
                     .fillMaxSize()
                     .padding(32.dp)
             ) {
+                uiState.errorMessage?.let {
+                    val errorMessageText: String = uiState.errorMessage
+                    val retryMessageText = "Okay?!"
+
+                    LaunchedEffect(errorMessageText, retryMessageText, snackBarHost) {
+                        snackBarHost.showSnackbar(
+                            message = errorMessageText,
+                            actionLabel = retryMessageText
+                        )
+                    }
+                }
+
                 DropDownField(
                     modifier = Modifier
                         .fillMaxWidth(),
