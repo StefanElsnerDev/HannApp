@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hannapp.ui.button.Button
@@ -16,6 +17,8 @@ import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.input.QuantityInput
 import com.example.hannapp.ui.theme.HannAppTheme
+import com.example.hannapp.ui.viewmodel.NutritionUiState
+import com.example.hannapp.ui.viewmodel.NutritionViewModel
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +35,7 @@ fun SelectionContent(
     HannAppTheme {
         AppScaffold(
             bottomBar = { NavigationBar(navController) },
-            snackbarHost = { SnackbarHost(hostState = snackBarHost) }
+            snackBarHost = { SnackbarHost(hostState = snackBarHost) }
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -59,6 +62,25 @@ fun SelectionContent(
             }
         }
     }
+}
+
+@Composable
+fun SelectionScreen(
+    viewModel: NutritionViewModel = hiltViewModel(),
+    selectedIndex: Int,
+    onAdd: () -> Unit = {},
+    navController: NavHostController,
+    onItemSelected: (Int) -> Unit = {}
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    SelectionContent(
+        uiState = uiState,
+        selectedIndex = selectedIndex,
+        onAdd = onAdd,
+        navController = navController,
+        onItemSelected = onItemSelected
+    )
 }
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
