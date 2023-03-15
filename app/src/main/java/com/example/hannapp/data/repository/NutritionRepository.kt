@@ -1,21 +1,21 @@
 package com.example.hannapp.data.repository
 
-import com.example.hannapp.data.database.dao.NutritionBMIDao
-import com.example.hannapp.data.model.entity.NutritionBMI
+import com.example.hannapp.data.database.dao.NutritionDao
+import com.example.hannapp.data.model.entity.Nutrition
 import javax.inject.Inject
 
 class NutritionRepository @Inject constructor(
-    private val nutritionBMIDao: NutritionBMIDao,
+    private val nutritionDao: NutritionDao,
 ) {
-    suspend fun insert(nutritionBMI: NutritionBMI) = nutritionBMIDao.insert(nutritionBMI)
+    suspend fun insert(nutrition: Nutrition) = nutritionDao.insert(nutrition)
 
-    fun get(nutritionName: String) = nutritionBMIDao.getByName(nutritionName)
+    fun get(nutritionName: String) = nutritionDao.getByName(nutritionName)
 
-    fun getNames() = nutritionBMIDao.getNames()
+    fun getNames() = nutritionDao.getNames()
 
-    suspend fun update(nutritionBMI: NutritionBMI) = nutritionBMIDao.update(nutritionBMI)
+    suspend fun update(nutrition: Nutrition) = nutritionDao.update(nutrition)
 
-    suspend fun delete(nutritionBMI: NutritionBMI) = nutritionBMIDao.delete(nutritionBMI)
+    suspend fun delete(nutrition: Nutrition) = nutritionDao.delete(nutrition)
 
 }
 

@@ -1,7 +1,7 @@
 package com.example.hannapp.usecase
 
 import com.example.hannapp.data.repository.NutritionRepository
-import com.example.hannapp.domain.GetNutritionBMIsUseCase
+import com.example.hannapp.domain.GetNutritionsUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -14,9 +14,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetNutritionBMIsUseCaseShould {
+class GetNutritionsUseCaseShould {
 
-    lateinit var getNutritionBMIsUseCase: GetNutritionBMIsUseCase
+    lateinit var getNutritionsUseCase: GetNutritionsUseCase
     private val nutritionRepository: NutritionRepository = mock(NutritionRepository::class.java)
     private val nutritionNames = listOf("Apple", "Banana", "Grapefruit")
 
@@ -27,21 +27,21 @@ class GetNutritionBMIsUseCaseShould {
             flowOf(nutritionNames)
         )
 
-        getNutritionBMIsUseCase = GetNutritionBMIsUseCase(
+        getNutritionsUseCase = GetNutritionsUseCase(
             nutritionRepository
         )
     }
 
     @Test
     fun invokeGetterOfRepository() {
-        getNutritionBMIsUseCase()
+        getNutritionsUseCase()
 
         verify(nutritionRepository).getNames()
     }
 
     @Test
     fun getNutritionNames() = runTest {
-        val result = getNutritionBMIsUseCase().first()
+        val result = getNutritionsUseCase().first()
 
         Assertions.assertEquals(nutritionNames, result)
     }

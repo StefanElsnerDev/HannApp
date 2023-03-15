@@ -1,6 +1,6 @@
 package com.example.hannapp.viewmodel
 
-import com.example.hannapp.domain.GetNutritionBMIsUseCase
+import com.example.hannapp.domain.GetNutritionsUseCase
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,14 +21,14 @@ import org.mockito.kotlin.whenever
 class NutritionViewModelShould {
 
     private lateinit var nutritionViewModel: NutritionViewModel
-    private val getNutritionBMIsUseCase = mock(GetNutritionBMIsUseCase::class.java)
+    private val getNutritionsUseCase = mock(GetNutritionsUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
     private val nutritionNames = listOf("Apple", "Banana", "Grapefruit")
 
 
     @BeforeEach
     fun beforeEach() {
-        whenever(getNutritionBMIsUseCase.invoke()).thenReturn(
+        whenever(getNutritionsUseCase.invoke()).thenReturn(
             flowOf(nutritionNames)
         )
 
@@ -43,17 +43,17 @@ class NutritionViewModelShould {
     @Test
     fun invokeUseCaseOnInstantiation() = runTest {
         nutritionViewModel = NutritionViewModel(
-            getNutritionBMIsUseCase,
+            getNutritionsUseCase,
             testDispatcher
         )
 
-        verify(getNutritionBMIsUseCase).invoke()
+        verify(getNutritionsUseCase).invoke()
     }
 
     @Test
     fun transformDataToUIStateOnInstantiation() = runTest {
         nutritionViewModel = NutritionViewModel(
-            getNutritionBMIsUseCase,
+            getNutritionsUseCase,
             testDispatcher
         )
 
@@ -69,12 +69,12 @@ class NutritionViewModelShould {
 
     @Test
     fun produceUIStateWithEmptyData() = runTest {
-        whenever(getNutritionBMIsUseCase.invoke()).thenReturn(
+        whenever(getNutritionsUseCase.invoke()).thenReturn(
             flowOf(null)
         )
 
         nutritionViewModel = NutritionViewModel(
-            getNutritionBMIsUseCase,
+            getNutritionsUseCase,
             testDispatcher
         )
 
@@ -91,14 +91,14 @@ class NutritionViewModelShould {
     @Test
     fun produceErrorUIStateOnException() = runTest {
         val errorMessage = "error"
-        whenever(getNutritionBMIsUseCase.invoke()).thenReturn(
+        whenever(getNutritionsUseCase.invoke()).thenReturn(
             flow {
                 throw RuntimeException(errorMessage)
             }
         )
 
         nutritionViewModel = NutritionViewModel(
-            getNutritionBMIsUseCase,
+            getNutritionsUseCase,
             testDispatcher
         )
 

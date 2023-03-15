@@ -3,7 +3,7 @@ package com.example.hannapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.modul.IoDispatcher
-import com.example.hannapp.domain.GetNutritionBMIsUseCase
+import com.example.hannapp.domain.GetNutritionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -18,7 +18,7 @@ data class NutritionUiState(
 
 @HiltViewModel
 class NutritionViewModel @Inject constructor(
-    private val getNutritionBMIsUseCase: GetNutritionBMIsUseCase,
+    private val getNutritionsUseCase: GetNutritionsUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class NutritionViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getNutritionBMIsUseCase()
+            getNutritionsUseCase()
                 .catch { throwable ->
                     _uiState.update { state ->
                         state.copy(

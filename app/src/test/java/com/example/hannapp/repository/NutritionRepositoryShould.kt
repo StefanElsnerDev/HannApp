@@ -1,7 +1,7 @@
 package com.example.hannapp.repository
 
-import com.example.hannapp.data.database.dao.NutritionBMIDao
-import com.example.hannapp.data.model.entity.NutritionBMI
+import com.example.hannapp.data.database.dao.NutritionDao
+import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.repository.NutritionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -19,38 +19,38 @@ import org.mockito.kotlin.whenever
 class NutritionRepositoryShould {
 
     lateinit var nutritionRepository: NutritionRepository
-    private val nutritionBMIDao: NutritionBMIDao = mock()
-    private val nutritionBMI = NutritionBMI()
+    private val nutritionDao: NutritionDao = mock()
+    private val nutrition = Nutrition()
 
     @BeforeEach
     fun beforeEach() {
         nutritionRepository = NutritionRepository(
-            nutritionBMIDao
+            nutritionDao
         )
     }
 
     @Test
     fun insertNutritionData() = runTest {
-        nutritionRepository.insert(nutritionBMI)
+        nutritionRepository.insert(nutrition)
 
-        verify(nutritionBMIDao).insert(any())
+        verify(nutritionDao).insert(any())
     }
 
     @Test
-    fun getNutritionBMI() = runTest {
-        whenever(nutritionBMIDao.getByName(any())).thenReturn(
-            flowOf(nutritionBMI)
+    fun getNutrition() = runTest {
+        whenever(nutritionDao.getByName(any())).thenReturn(
+            flowOf(nutrition)
         )
 
         val result = nutritionRepository.get("Some delicious food").first()
 
-        Assertions.assertEquals(nutritionBMI, result)
+        Assertions.assertEquals(nutrition, result)
     }
 
     @Test
     fun getNutritionNames() = runTest {
         val names = listOf("Apple", "Banana", "Grapefruit")
-        whenever(nutritionBMIDao.getNames()).thenReturn(
+        whenever(nutritionDao.getNames()).thenReturn(
             flowOf(names)
         )
 
@@ -60,16 +60,16 @@ class NutritionRepositoryShould {
     }
 
     @Test
-    fun updateNutritionBMI() = runTest {
-        nutritionRepository.update(nutritionBMI)
+    fun updateNutrition() = runTest {
+        nutritionRepository.update(nutrition)
 
-        verify(nutritionBMIDao).update(any())
+        verify(nutritionDao).update(any())
     }
 
     @Test
-    fun deleteNutritionBMI() = runTest {
-        nutritionRepository.delete(nutritionBMI)
+    fun deleteNutrition() = runTest {
+        nutritionRepository.delete(nutrition)
 
-        verify(nutritionBMIDao).delete(any())
+        verify(nutritionDao).delete(any())
     }
 }
