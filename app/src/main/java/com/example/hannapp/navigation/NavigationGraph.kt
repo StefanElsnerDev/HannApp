@@ -34,7 +34,10 @@ fun NavigationGraph (
             SelectionScreen(
                 viewModel = viewModel,
                 selectedIndex = selectedIndex,
-                onAdd = navigationActions.navigateToCalculation,
+                onAdd = {
+                    /*TODO 'it' used by viewModel*/
+                    navigationActions.navigateToCalculation
+                },
                 onItemSelected = onIndexSelected,
                 navController = navController
             )

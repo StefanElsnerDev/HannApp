@@ -29,7 +29,7 @@ import com.example.hannapp.ui.viewmodel.NutritionViewModel
 fun SelectionContent(
     uiState: NutritionUiState = NutritionUiState(),
     selectedIndex: Int = 0,
-    onAdd: () -> Unit = {},
+    onAdd: (String) -> Unit = {},
     navController: NavHostController = rememberNavController(),
     onItemSelected: (Int) -> Unit = {}
 ) {
@@ -51,7 +51,7 @@ fun SelectionContent(
 
                 uiState.errorMessage?.let {
                     val errorMessageText: String = uiState.errorMessage
-                    val retryMessageText = "Okay?!"
+                    val retryMessageText = stringResource(id = R.string.okay)
 
                     LaunchedEffect(errorMessageText, retryMessageText, snackBarHost) {
                         snackBarHost.showSnackbar(
@@ -79,7 +79,7 @@ fun SelectionContent(
                     modifier = Modifier
                         .wrapContentSize(),
                     icon = Icons.Filled.Add
-                ) { onAdd() }
+                ) { onAdd(input) }
             }
         }
     }
@@ -89,7 +89,7 @@ fun SelectionContent(
 fun SelectionScreen(
     viewModel: NutritionViewModel = hiltViewModel(),
     selectedIndex: Int,
-    onAdd: () -> Unit = {},
+    onAdd: (String) -> Unit = {},
     navController: NavHostController,
     onItemSelected: (Int) -> Unit = {}
 ) {
