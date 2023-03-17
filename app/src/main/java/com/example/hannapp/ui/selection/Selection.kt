@@ -5,17 +5,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.hannapp.R
 import com.example.hannapp.ui.button.Button
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NavigationBar
-import com.example.hannapp.ui.input.QuantityInput
+import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
@@ -44,6 +47,8 @@ fun SelectionContent(
                     .fillMaxSize()
                     .padding(32.dp)
             ) {
+                var input by rememberSaveable{ mutableStateOf("") }
+
                 uiState.errorMessage?.let {
                     val errorMessageText: String = uiState.errorMessage
                     val retryMessageText = "Okay?!"
@@ -62,9 +67,13 @@ fun SelectionContent(
                     items = uiState.nutritionNames,
                     selectedIndex = selectedIndex
                 ) { onItemSelected(it) }
-                QuantityInput(
+                InputField(
+                    value = input,
+                    onValueChange = { input = it },
                     modifier = Modifier
-                        .wrapContentSize()
+                        .wrapContentSize(),
+                    label = stringResource(id = R.string.quantity),
+                    isError = false
                 )
                 Button(
                     modifier = Modifier
