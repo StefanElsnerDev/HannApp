@@ -8,12 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationScreen
+import com.example.hannapp.ui.screens.NutritionDataScreen
 import com.example.hannapp.ui.selection.SelectionScreen
+import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 
 enum class Destination(val value: String) {
     SELECTION("selection"),
-    CALCULATION("calculation")
+    CALCULATION("calculation"),
+    DATA("data")
 }
 
 @Composable
@@ -45,6 +48,14 @@ fun NavigationGraph (
         composable(Destination.CALCULATION.value) {
             CalculationScreen(
                 mood = Mood.GREEN,
+                navController = navController
+            )
+        }
+        composable(Destination.DATA.value) {
+            val viewModel = hiltViewModel<NutritionDataViewModel>()
+
+            NutritionDataScreen(
+                viewModel = viewModel,
                 navController = navController
             )
         }

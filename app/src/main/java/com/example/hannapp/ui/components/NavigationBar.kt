@@ -54,7 +54,12 @@ private fun navigationItems(navController: NavHostController): List<NavigationIt
     }
 
     return listOf(
-        NavigationItem(R.string.database, R.drawable.food),
+        NavigationItem(
+            R.string.database,
+            R.drawable.food,
+            Destination.DATA.value,
+            navigationActions.navigateToData
+        ),
         NavigationItem(
             R.string.food_selection,
             R.drawable.eat,
