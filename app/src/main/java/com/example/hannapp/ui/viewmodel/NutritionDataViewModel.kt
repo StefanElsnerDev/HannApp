@@ -2,15 +2,13 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
-import com.example.hannapp.data.distinct.NutritionComponent
 import com.example.hannapp.domain.InsertNutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +21,7 @@ data class NutritionComponentState(
     val sugar: String = "",
     val fiber: String = "",
     val alcohol: String = "",
-    val energy: String = ""
+    val energy: String = "",
 )
 
 @HiltViewModel
@@ -34,6 +32,20 @@ class NutritionDataViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NutritionComponentState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiComponents = MutableStateFlow(
+        listOf(
+            Kcal(),
+            Protein(),
+            Fad(),
+            Carbohydrates(),
+            Sugar(),
+            Fiber(),
+            Alcohol(),
+            Energy()
+        )
+    )
+    val uiComponents = _uiComponents.asStateFlow()
 
     fun insert() {
         viewModelScope.launch(dispatcher) {
@@ -53,19 +65,9 @@ class NutritionDataViewModel @Inject constructor(
         }
     }
 
-    fun onNutritionTypeChange(type: NutritionComponent, value: String) {
+    fun onNutritionTypeChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
-            when (type) {
-                NutritionComponent.NAME -> state.copy(name = value)
-                NutritionComponent.KCAL -> state.copy(kcal = value)
-                NutritionComponent.PROTEIN -> state.copy(protein = value)
-                NutritionComponent.FAD -> state.copy(fad = value)
-                NutritionComponent.CARBOHYDRATES -> state.copy(carbohydrates = value)
-                NutritionComponent.SUGAR -> state.copy(sugar = value)
-                NutritionComponent.FIBER -> state.copy(fiber = value)
-                NutritionComponent.ALCOHOL -> state.copy(alcohol = value)
-                NutritionComponent.ENERGY -> state.copy(energy = value)
-            }
+            nutritionComponent.update(state, value)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.hannapp.viewmodel
 
-import com.example.hannapp.data.distinct.NutritionComponent
+import com.example.hannapp.data.distinct.Energy
+import com.example.hannapp.data.distinct.Fad
 import com.example.hannapp.domain.InsertNutritionUseCase
 import com.example.hannapp.ui.viewmodel.NutritionComponentState
 import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
@@ -49,7 +50,7 @@ class NutritionDataViewModelShould {
         val expectedUiState = NutritionComponentState(energy = "987.6")
 
         nutritionDataViewModel.onNutritionTypeChange(
-            NutritionComponent.ENERGY, "987.6"
+            Energy(), "987.6"
         )
 
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
@@ -59,13 +60,14 @@ class NutritionDataViewModelShould {
     fun copyStateOnEvent() {
         val expectedUiState = NutritionComponentState(
             fad = "123.4",
-            energy = "987.6")
+            energy = "987.6"
+        )
 
         nutritionDataViewModel.onNutritionTypeChange(
-            NutritionComponent.ENERGY, "987.6"
+            Energy(), "987.6"
         )
         nutritionDataViewModel.onNutritionTypeChange(
-            NutritionComponent.FAD, "123.4"
+            Fad(), "123.4"
         )
 
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
