@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
@@ -72,37 +73,49 @@ class NutritionDataViewModelShould {
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
     }
 
-    @Test
-    fun emitErrorUiState(){
-        nutritionDataViewModel.validate()
+    @Nested
+    inner class ErrorState{
 
-        val expectedUiState = NutritionComponentState(
-            error = listOf(
-                NutritionDataComponent.NAME,
-                NutritionDataComponent.KCAL,
-                NutritionDataComponent.PROTEIN,
-                NutritionDataComponent.FAD,
-                NutritionDataComponent.CARBOHYDRATES,
-                NutritionDataComponent.SUGAR,
-                NutritionDataComponent.FIBER,
-                NutritionDataComponent.ALCOHOL,
-                NutritionDataComponent.ENERGY
+        @BeforeEach
+        fun beforeEach() = nutritionDataViewModel.validate()
+
+        @Test
+        fun emitErrorUiState(){
+            val expectedUiState = NutritionComponentState(
+                error = listOf(
+                    NutritionDataComponent.NAME,
+                    NutritionDataComponent.KCAL,
+                    NutritionDataComponent.PROTEIN,
+                    NutritionDataComponent.FAD,
+                    NutritionDataComponent.CARBOHYDRATES,
+                    NutritionDataComponent.SUGAR,
+                    NutritionDataComponent.FIBER,
+                    NutritionDataComponent.ALCOHOL,
+                    NutritionDataComponent.ENERGY
+                )
             )
-        )
 
-        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
-    }
+            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+        }
 
-    @Test
-    fun emitDataErrorState(){
-        nutritionDataViewModel.onNutritionTypeChange(
-            Energy(), "987.6"
-        )
-        nutritionDataViewModel.onNutritionTypeChange(
-            Fad(), "123.4"
-        )
+        @Test
+        fun resetErrorOfComponent() {
+            val expectedUiState = NutritionComponentState(
+                error = listOf(
+                    NutritionDataComponent.KCAL,
+                    NutritionDataComponent.PROTEIN,
+                    NutritionDataComponent.FAD,
+                    NutritionDataComponent.CARBOHYDRATES,
+                    NutritionDataComponent.SUGAR,
+                    NutritionDataComponent.FIBER,
+                    NutritionDataComponent.ALCOHOL,
+                    NutritionDataComponent.ENERGY
+                )
+            )
 
+            nutritionDataViewModel.resetError(NutritionDataComponent.NAME)
 
-        Assertions.assertEquals(false, nutritionDataViewModel.uiState.value.isValid)
+            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+        }
     }
 }

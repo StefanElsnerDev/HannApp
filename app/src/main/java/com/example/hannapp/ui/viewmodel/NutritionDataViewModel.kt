@@ -87,4 +87,12 @@ class NutritionDataViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetError(nutritionDataComponent: NutritionDataComponent) {
+        _uiState.update { state ->
+            val errors = state.error.toMutableList()
+            errors.remove(nutritionDataComponent)
+            state.copy(error = errors.toList())
+        }
+    }
 }

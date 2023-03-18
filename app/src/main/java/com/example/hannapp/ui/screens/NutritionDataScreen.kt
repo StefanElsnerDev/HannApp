@@ -47,6 +47,7 @@ fun NutritionDataContent(
         Energy()
     ),
     onComponentValueChange: (NutritionComponent, String) -> Unit = { _, _ -> },
+    onReset: (NutritionDataComponent) -> Unit = { _ -> },
     onAdd: () -> Unit = {}
 ) {
     HannAppTheme {
@@ -69,6 +70,7 @@ fun NutritionDataContent(
                 )
                 NutritionDataGroup(
                     onComponentValueChange = onComponentValueChange,
+                    onReset = onReset,
                     uiComponents = uiComponents,
                     uiState = uiState
                 )
@@ -96,6 +98,7 @@ fun NutritionDataScreen(
             )
             viewModel.validate()
         },
+        onReset = { viewModel.resetError(it) },
         onAdd = {
             if (uiState.isValid) viewModel.insert()
             else viewModel.validate()
@@ -107,7 +110,8 @@ fun NutritionDataScreen(
 fun NutritionDataGroup(
     uiState: NutritionComponentState,
     uiComponents: List<NutritionComponent>,
-    onComponentValueChange: (NutritionComponent, String) -> Unit
+    onReset: (NutritionDataComponent) -> Unit,
+    onComponentValueChange: (NutritionComponent, String) -> Unit,
 ) {
     LazyVerticalGrid(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
@@ -122,11 +126,16 @@ fun NutritionDataGroup(
                 value = uiState.toUiState(component.type),
                 onValueChange = {
                     onComponentValueChange(component, it)
+                    onReset(component.type)
                 },
                 modifier = Modifier,
                 label = component.text,
                 isError = isError,
-                supportingText = if (isError) { stringResource(id = R.string.fill_field) } else { "" }
+                supportingText = if (isError) {
+                    stringResource(id = R.string.fill_field)
+                } else {
+                    ""
+                }
             )
         }
     }
@@ -165,7 +174,8 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
                 Fiber(),
                 Alcohol(),
                 Energy()
-            )
+            ),
+            onReset = {}
         ) { _, _ -> }
     }
 }
@@ -191,7 +201,8 @@ fun FoodDataGroup_Preview_LandScape_LightMode(
                 Fiber(),
                 Alcohol(),
                 Energy()
-            )
+            ),
+            onReset = {}
         ) { _, _ -> }
     }
 }
