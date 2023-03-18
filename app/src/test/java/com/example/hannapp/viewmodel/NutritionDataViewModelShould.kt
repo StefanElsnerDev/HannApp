@@ -118,4 +118,20 @@ class NutritionDataViewModelShould {
             Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
         }
     }
+
+    @Test
+    fun clearUiStateOnInsert() {
+        val expectedUiState = NutritionComponentState()
+
+        nutritionDataViewModel.onNutritionTypeChange(
+            Energy(), "987.6"
+        )
+        nutritionDataViewModel.onNutritionTypeChange(
+            Fad(), "123.4"
+        )
+
+        nutritionDataViewModel.clearState()
+
+        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+    }
 }

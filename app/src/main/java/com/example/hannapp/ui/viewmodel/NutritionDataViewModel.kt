@@ -52,6 +52,7 @@ class NutritionDataViewModel @Inject constructor(
 
     fun insert() {
         viewModelScope.launch(dispatcher) {
+            // TODO error handling on failing insertion
             insertNutritionUseCase(
                 Nutrition(
                     name = _uiState.value.name,
@@ -65,6 +66,7 @@ class NutritionDataViewModel @Inject constructor(
                     energyDensity = _uiState.value.energy
                 )
             )
+            clearState()
         }
     }
 
@@ -94,5 +96,9 @@ class NutritionDataViewModel @Inject constructor(
             errors.remove(nutritionDataComponent)
             state.copy(error = errors.toList())
         }
+    }
+
+    fun clearState() {
+        _uiState.update { NutritionComponentState() }
     }
 }
