@@ -22,6 +22,8 @@ data class NutritionComponentState(
     val fiber: String = "",
     val alcohol: String = "",
     val energy: String = "",
+    val error: List<NutritionDataComponent> = emptyList(),
+    val isValid: Boolean = false
 )
 
 @HiltViewModel
@@ -35,6 +37,7 @@ class NutritionDataViewModel @Inject constructor(
 
     private val _uiComponents = MutableStateFlow(
         listOf(
+            Name(),
             Kcal(),
             Protein(),
             Fad(),
@@ -68,6 +71,20 @@ class NutritionDataViewModel @Inject constructor(
     fun onNutritionTypeChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
             nutritionComponent.update(state, value)
+        }
+    }
+
+    fun validate() {
+        _uiComponents.value.forEach {
+            _uiState.update { state ->
+                it.validate(state)
+            }
+        }
+
+        _uiState.also {
+            it.update { state ->
+                state.copy(isValid = it.value.error.isEmpty())
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.hannapp.viewmodel
 
-import com.example.hannapp.data.distinct.Energy
-import com.example.hannapp.data.distinct.Fad
+import com.example.hannapp.data.distinct.*
 import com.example.hannapp.domain.InsertNutritionUseCase
 import com.example.hannapp.ui.viewmodel.NutritionComponentState
 import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
@@ -71,5 +70,39 @@ class NutritionDataViewModelShould {
         )
 
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+    }
+
+    @Test
+    fun emitErrorUiState(){
+        nutritionDataViewModel.validate()
+
+        val expectedUiState = NutritionComponentState(
+            error = listOf(
+                NutritionDataComponent.NAME,
+                NutritionDataComponent.KCAL,
+                NutritionDataComponent.PROTEIN,
+                NutritionDataComponent.FAD,
+                NutritionDataComponent.CARBOHYDRATES,
+                NutritionDataComponent.SUGAR,
+                NutritionDataComponent.FIBER,
+                NutritionDataComponent.ALCOHOL,
+                NutritionDataComponent.ENERGY
+            )
+        )
+
+        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+    }
+
+    @Test
+    fun emitDataErrorState(){
+        nutritionDataViewModel.onNutritionTypeChange(
+            Energy(), "987.6"
+        )
+        nutritionDataViewModel.onNutritionTypeChange(
+            Fad(), "123.4"
+        )
+
+
+        Assertions.assertEquals(false, nutritionDataViewModel.uiState.value.isValid)
     }
 }

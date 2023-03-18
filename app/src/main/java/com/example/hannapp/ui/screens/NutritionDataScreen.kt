@@ -94,8 +94,12 @@ fun NutritionDataScreen(
                 updateStrategy,
                 value
             )
+            viewModel.validate()
         },
-        onAdd = { viewModel.insert() }
+        onAdd = {
+            if (uiState.isValid) viewModel.insert()
+            else viewModel.validate()
+        }
     )
 }
 
@@ -111,13 +115,18 @@ fun NutritionDataGroup(
     ) {
 
         items(uiComponents) { component ->
+
+            val isError = uiState.error.contains(component.type)
+
             InputField(
                 value = uiState.toUiState(component.type),
                 onValueChange = {
                     onComponentValueChange(component, it)
                 },
                 modifier = Modifier,
-                label = component.text
+                label = component.text,
+                isError = isError,
+                supportingText = if (isError) { stringResource(id = R.string.fill_field) } else { "" }
             )
         }
     }

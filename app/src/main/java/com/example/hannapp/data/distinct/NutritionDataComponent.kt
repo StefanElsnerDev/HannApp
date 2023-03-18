@@ -18,7 +18,12 @@ enum class NutritionDataComponent(val text: String) {
 interface NutritionComponent {
     var type: NutritionDataComponent
     var text: String
-    fun update(nutritionComponentState: NutritionComponentState, value: String): NutritionComponentState
+    fun update(
+        nutritionComponentState: NutritionComponentState,
+        value: String
+    ): NutritionComponentState
+
+    fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState
 }
 
 class Name : NutritionComponent {
@@ -27,6 +32,17 @@ class Name : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(name = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.name.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.NAME)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Kcal : NutritionComponent {
@@ -35,6 +51,17 @@ class Kcal : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(kcal = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.kcal.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.KCAL)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Protein : NutritionComponent {
@@ -43,6 +70,17 @@ class Protein : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(protein = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.protein.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.PROTEIN)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Fad : NutritionComponent {
@@ -51,6 +89,17 @@ class Fad : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(fad = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.fad.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.FAD)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Carbohydrates : NutritionComponent {
@@ -59,6 +108,17 @@ class Carbohydrates : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(carbohydrates = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.carbohydrates.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.CARBOHYDRATES)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Sugar : NutritionComponent {
@@ -67,6 +127,17 @@ class Sugar : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(sugar = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.sugar.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.SUGAR)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Fiber : NutritionComponent {
@@ -75,6 +146,17 @@ class Fiber : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(fiber = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.fiber.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.FIBER)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Alcohol : NutritionComponent {
@@ -83,6 +165,17 @@ class Alcohol : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(alcohol = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.alcohol.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.ALCOHOL)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
 
 class Energy : NutritionComponent {
@@ -91,4 +184,15 @@ class Energy : NutritionComponent {
 
     override fun update(nutritionComponentState: NutritionComponentState, value: String) =
         nutritionComponentState.copy(energy = value)
+
+    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
+        return if (nutritionComponentState.energy.isEmpty()) {
+            val errors = nutritionComponentState.error.toMutableList()
+            errors.add(NutritionDataComponent.ENERGY)
+
+            nutritionComponentState.copy(error = errors)
+        } else {
+            nutritionComponentState
+        }
+    }
 }
