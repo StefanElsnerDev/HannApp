@@ -37,6 +37,7 @@ fun NutritionDataContent(
     navController: NavHostController = rememberNavController(),
     uiState: NutritionComponentState = NutritionComponentState(),
     uiComponents: List<NutritionComponent> = listOf(
+        Name(),
         Kcal(),
         Protein(),
         Fad(),
@@ -62,12 +63,6 @@ fun NutritionDataContent(
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InputField(
-                    value = uiState.name,
-                    onValueChange = { onComponentValueChange(Name(), it) },
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    label = stringResource(id = R.string.food_name)
-                )
                 NutritionDataGroup(
                     onComponentValueChange = onComponentValueChange,
                     onReset = onReset,
