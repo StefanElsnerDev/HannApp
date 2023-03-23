@@ -87,8 +87,7 @@ fun SelectionContent(
 fun SelectionScreen(
     viewModel: NutritionViewModel = hiltViewModel(),
     onAdd: (String) -> Unit = {},
-    navController: NavHostController,
-    onItemSelected: (Int) -> Unit = {}
+    navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -96,6 +95,6 @@ fun SelectionScreen(
         uiState = uiState,
         onAdd = onAdd,
         navController = navController,
-        onItemSelected = onItemSelected
+        onItemSelected = { }
     )
 }
