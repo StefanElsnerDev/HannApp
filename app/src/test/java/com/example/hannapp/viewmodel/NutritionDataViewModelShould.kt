@@ -76,9 +76,6 @@ class NutritionDataViewModelShould {
     @Nested
     inner class ErrorState{
 
-        @BeforeEach
-        fun beforeEach() = nutritionDataViewModel.validate()
-
         @Test
         fun emitErrorUiState(){
             val expectedUiState = NutritionComponentState(
@@ -94,6 +91,8 @@ class NutritionDataViewModelShould {
                     NutritionDataComponent.ENERGY
                 )
             )
+
+            nutritionDataViewModel.validate()
 
             Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
         }
@@ -112,6 +111,8 @@ class NutritionDataViewModelShould {
                     NutritionDataComponent.ENERGY
                 )
             )
+
+            nutritionDataViewModel.validate()
 
             nutritionDataViewModel.resetError(NutritionDataComponent.NAME)
 
