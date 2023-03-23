@@ -39,11 +39,11 @@ class NutritionRepositoryShould {
 
     @Test
     fun getNutrition() = runTest {
-        whenever(nutritionDao.getByName(any())).thenReturn(
-            flowOf(Nutrition(name = "Some delicious food"))
+        whenever(nutritionDao.getById(any())).thenReturn(
+            Nutrition(name = "Some delicious food")
         )
 
-        val result = nutritionRepository.get("Some delicious food").first()
+        val result = nutritionRepository.get(1)
 
         Assertions.assertEquals(Nutrition(name = "Some delicious food"), result)
     }

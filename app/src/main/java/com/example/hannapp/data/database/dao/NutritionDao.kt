@@ -19,7 +19,7 @@ interface NutritionDao {
     fun getFood(): Flow<List<Food>?>
 
     @Query("SELECT * FROM $NUTRITION_TABLE WHERE uid IN (:id)")
-    fun getById(id: Int): Flow<Nutrition>
+    suspend fun getById(id: Int): Nutrition?
 
     @Query("SELECT * FROM $NUTRITION_TABLE WHERE $FOOD_NAME IN (:name)")
     fun getByName(name: String): Flow<Nutrition>

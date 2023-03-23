@@ -9,7 +9,7 @@ class NutritionRepository @Inject constructor(
 ) {
     suspend fun insert(nutrition: Nutrition) = nutritionDao.insert(nutrition)
 
-    fun get(nutritionName: String) = nutritionDao.getByName(nutritionName)
+    suspend fun get(id: Int) = nutritionDao.getById(id)
 
     fun getFood() = nutritionDao.getFood()
 
