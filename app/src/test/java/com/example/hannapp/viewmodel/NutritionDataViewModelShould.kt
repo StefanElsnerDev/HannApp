@@ -118,21 +118,54 @@ class NutritionDataViewModelShould {
 
             Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
         }
-    }
 
-    @Test
-    fun clearUiStateOnInsert() {
-        val expectedUiState = NutritionComponentState()
+        @Test
+        fun emitInvalidDataState() {
+            nutritionDataViewModel.validate()
+            Assertions.assertEquals(false, nutritionDataViewModel.uiState.value.isValid)
+        }
 
-        nutritionDataViewModel.onNutritionTypeChange(
-            Energy(), "987.6"
-        )
-        nutritionDataViewModel.onNutritionTypeChange(
-            Fad(), "123.4"
-        )
+        @Test
+        fun emitValidDataState() {
+            nutritionDataViewModel.fakeCompletion()
 
-        nutritionDataViewModel.clearState()
+            nutritionDataViewModel.validate()
 
-        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+            Assertions.assertEquals(true, nutritionDataViewModel.uiState.value.isValid)
+        }
+
+        @Test
+        fun clearUiStateOnInsert() {
+            val expectedUiState = NutritionComponentState()
+
+            nutritionDataViewModel.onNutritionTypeChange(
+                Energy(), "987.6"
+            )
+            nutritionDataViewModel.onNutritionTypeChange(
+                Fad(), "123.4"
+            )
+
+            nutritionDataViewModel.clearState()
+
+            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+        }
+
+        private fun NutritionDataViewModel.fakeCompletion(){
+            listOf(
+                Name(),
+                Kcal(),
+                Protein(),
+                Fad(),
+                Carbohydrates(),
+                Sugar(),
+                Fiber(),
+                Alcohol(),
+                Energy()
+            ).forEach{
+                this.onNutritionTypeChange(
+                    it, "String"
+                )
+            }
+        }
     }
 }
