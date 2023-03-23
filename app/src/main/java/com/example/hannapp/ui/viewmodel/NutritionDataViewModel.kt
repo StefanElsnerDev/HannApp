@@ -23,7 +23,8 @@ data class NutritionComponentState(
     val alcohol: String = "",
     val energy: String = "",
     val error: List<NutritionDataComponent> = emptyList(),
-    val isValid: Boolean = false
+    val isValid: Boolean = false,
+    val showErrors: Boolean = false
 )
 
 @HiltViewModel
@@ -89,6 +90,8 @@ class NutritionDataViewModel @Inject constructor(
             }
         }
     }
+
+    fun showErrors() = _uiState.update { state -> state.copy(showErrors = true) }
 
     fun resetError(nutritionDataComponent: NutritionDataComponent) {
         _uiState.update { state ->

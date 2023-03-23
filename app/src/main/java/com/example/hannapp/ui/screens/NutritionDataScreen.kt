@@ -67,7 +67,8 @@ fun NutritionDataContent(
                     onComponentValueChange = onComponentValueChange,
                     onReset = onReset,
                     uiComponents = uiComponents,
-                    uiState = uiState
+                    uiState = uiState,
+                    showErrors = uiState.showErrors
                 )
             }
         }
@@ -96,7 +97,7 @@ fun NutritionDataScreen(
         onReset = { viewModel.resetError(it) },
         onAdd = {
             if (uiState.isValid) viewModel.insert()
-            else viewModel.validate()
+            else viewModel.showErrors()
         }
     )
 }
@@ -105,6 +106,7 @@ fun NutritionDataScreen(
 fun NutritionDataGroup(
     uiState: NutritionComponentState,
     uiComponents: List<NutritionComponent>,
+    showErrors: Boolean,
     onReset: (NutritionDataComponent) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
 ) {
@@ -115,7 +117,7 @@ fun NutritionDataGroup(
 
         items(uiComponents) { component ->
 
-            val isError = uiState.error.contains(component.type)
+            val isError = uiState.error.contains(component.type)  && showErrors
 
             InputField(
                 value = uiState.toUiState(component.type),
@@ -170,6 +172,7 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
                 Alcohol(),
                 Energy()
             ),
+            showErrors = false,
             onReset = {}
         ) { _, _ -> }
     }
@@ -197,6 +200,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode(
                 Alcohol(),
                 Energy()
             ),
+            showErrors = false,
             onReset = {}
         ) { _, _ -> }
     }
