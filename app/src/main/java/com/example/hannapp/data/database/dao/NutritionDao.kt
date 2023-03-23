@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NutritionDao {
     @Insert
-    suspend fun insert(nutrition: Nutrition)
+    suspend fun insert(nutrition: Nutrition): Long
 
     @Query("SELECT * FROM $NUTRITION_TABLE")
     fun getAll(): Flow<List<Nutrition>>
