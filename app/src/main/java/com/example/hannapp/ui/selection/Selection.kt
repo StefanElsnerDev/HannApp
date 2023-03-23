@@ -28,7 +28,6 @@ import com.example.hannapp.ui.viewmodel.NutritionViewModel
 @Composable
 fun SelectionContent(
     uiState: NutritionUiState = NutritionUiState(),
-    selectedIndex: Int = 0,
     onAdd: (String) -> Unit = {},
     navController: NavHostController = rememberNavController(),
     onItemSelected: (Int) -> Unit = {}
@@ -64,8 +63,7 @@ fun SelectionContent(
                 DropDownField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    items = uiState.nutritionNames,
-                    selectedIndex = selectedIndex
+                    items = uiState.nutritionNames
                 ) { onItemSelected(it) }
                 InputField(
                     value = input,
@@ -88,7 +86,6 @@ fun SelectionContent(
 @Composable
 fun SelectionScreen(
     viewModel: NutritionViewModel = hiltViewModel(),
-    selectedIndex: Int,
     onAdd: (String) -> Unit = {},
     navController: NavHostController,
     onItemSelected: (Int) -> Unit = {}
@@ -97,7 +94,6 @@ fun SelectionScreen(
 
     SelectionContent(
         uiState = uiState,
-        selectedIndex = selectedIndex,
         onAdd = onAdd,
         navController = navController,
         onItemSelected = onItemSelected

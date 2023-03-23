@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,10 +30,11 @@ import com.example.hannapp.ui.theme.HannAppTheme
 fun DropDownField(
     modifier: Modifier = Modifier,
     items: List<String> = List(1000){it.toString()},
-    selectedIndex: Int = 999,
     onItemSelected: (Int) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var selectedIndex by rememberSaveable { mutableStateOf(0) }
+
     HannAppTheme {
         Box(
             modifier = modifier
@@ -66,6 +68,7 @@ fun DropDownField(
                     items = items,
                     onItemSelected = {
                         onItemSelected(it)
+                        selectedIndex = it
                         expanded = false
                     },
                     onDismiss = { expanded = false }

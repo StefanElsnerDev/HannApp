@@ -4,10 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.hannapp.navigation.Destination
@@ -21,15 +17,12 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            var selectedIndex by rememberSaveable { mutableStateOf(0) }
-
             val navController = rememberNavController()
 
             NavigationGraph(
                 navController = navController,
                 startDestination = Destination.SELECTION.value,
-                selectedIndex = selectedIndex,
-                onIndexSelected = { selectedIndex = it }
+                onIndexSelected = {}
             )
         }
     }

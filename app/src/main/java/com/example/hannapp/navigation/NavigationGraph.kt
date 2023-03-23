@@ -23,7 +23,6 @@ enum class Destination(val value: String) {
 fun NavigationGraph (
     navController: NavHostController,
     startDestination: String,
-    selectedIndex: Int,
     onIndexSelected: (Int) -> Unit
 ){
     val navigationActions = remember(navController) {
@@ -36,7 +35,6 @@ fun NavigationGraph (
 
             SelectionScreen(
                 viewModel = viewModel,
-                selectedIndex = selectedIndex,
                 onAdd = {
                     /*TODO 'it' used by viewModel*/
                     navigationActions.navigateToCalculation
