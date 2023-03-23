@@ -1,5 +1,6 @@
 package com.example.hannapp.viewmodel
 
+import com.example.hannapp.data.model.Food
 import com.example.hannapp.domain.GetNutritionsUseCase
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
@@ -23,13 +24,12 @@ class NutritionViewModelShould {
     private lateinit var nutritionViewModel: NutritionViewModel
     private val getNutritionsUseCase = mock(GetNutritionsUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val nutritionNames = listOf("Apple", "Banana", "Grapefruit")
-
+    private val foodList = listOf(Food(1, "Apple"), Food(2, "Banana"), Food(3, "Grapefruit"))
 
     @BeforeEach
     fun beforeEach() {
         whenever(getNutritionsUseCase.invoke()).thenReturn(
-            flowOf(nutritionNames)
+            flowOf(foodList)
         )
 
         Dispatchers.setMain(testDispatcher)
@@ -61,7 +61,7 @@ class NutritionViewModelShould {
             NutritionUiState(
                 isLoading = false,
                 errorMessage = null,
-                nutritionNames = nutritionNames
+                foodList = foodList
             ),
             nutritionViewModel.uiState.first()
         )
@@ -82,7 +82,7 @@ class NutritionViewModelShould {
             NutritionUiState(
                 isLoading = false,
                 errorMessage = null,
-                nutritionNames = emptyList()
+                foodList = emptyList()
             ),
             nutritionViewModel.uiState.first()
         )
@@ -106,7 +106,7 @@ class NutritionViewModelShould {
             NutritionUiState(
                 isLoading = false,
                 errorMessage = errorMessage,
-                nutritionNames = emptyList()
+                foodList = emptyList()
             ),
             nutritionViewModel.uiState.first()
         )

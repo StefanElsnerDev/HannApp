@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetNutritionsUseCase @Inject constructor(
     private val repository: NutritionRepository,
 ) {
-    operator fun invoke() = repository.getNames()
+    operator fun invoke() = repository.getFood()
 }

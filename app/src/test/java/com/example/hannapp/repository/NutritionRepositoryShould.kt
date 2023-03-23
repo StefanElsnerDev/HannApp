@@ -1,6 +1,7 @@
 package com.example.hannapp.repository
 
 import com.example.hannapp.data.database.dao.NutritionDao
+import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.repository.NutritionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,15 +49,15 @@ class NutritionRepositoryShould {
     }
 
     @Test
-    fun getNutritionNames() = runTest {
-        val names = listOf("Apple", "Banana", "Grapefruit")
-        whenever(nutritionDao.getNames()).thenReturn(
-            flowOf(names)
+    fun getFoodWithNamesAndID() = runTest {
+        val foodList = listOf(Food(1, "Apple"), Food(2, "Banana"),Food(3, "Grapefruit"))
+        whenever(nutritionDao.getFood()).thenReturn(
+            flowOf(foodList)
         )
 
-        val result = nutritionRepository.getNames().first()
+        val result = nutritionRepository.getFood().first()
 
-        Assertions.assertEquals(names, result)
+        Assertions.assertEquals(foodList, result)
     }
 
     @Test

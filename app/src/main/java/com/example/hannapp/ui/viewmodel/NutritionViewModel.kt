@@ -2,6 +2,7 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetNutritionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import javax.inject.Inject
 data class NutritionUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val nutritionNames: List<String> = emptyList()
+    val foodList: List<Food> = emptyList()  //TODO ViewModel State
 )
 
 @HiltViewModel
@@ -38,7 +39,7 @@ class NutritionViewModel @Inject constructor(
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,
-                            nutritionNames = emptyList(),
+                            foodList = emptyList(),
                             errorMessage = throwable.message ?: "Something went wrong"
                         )
                     }
@@ -47,7 +48,7 @@ class NutritionViewModel @Inject constructor(
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,
-                            nutritionNames = names ?: emptyList()
+                            foodList = names ?: emptyList()
                         )
                     }
                 }

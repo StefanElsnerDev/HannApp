@@ -63,7 +63,7 @@ fun SelectionContent(
                 DropDownField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    items = uiState.nutritionNames
+                    items = uiState.foodList.map { it.toString() } //TODO Remove Develop Output
                 ) { onItemSelected(it) }
                 InputField(
                     value = input,

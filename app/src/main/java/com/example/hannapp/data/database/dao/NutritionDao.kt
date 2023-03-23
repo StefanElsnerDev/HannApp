@@ -3,6 +3,7 @@ package com.example.hannapp.data.database.dao
 import androidx.room.*
 import com.example.hannapp.Constants.FOOD_NAME
 import com.example.hannapp.Constants.NUTRITION_TABLE
+import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.entity.Nutrition
 import kotlinx.coroutines.flow.Flow
 
@@ -14,8 +15,8 @@ interface NutritionDao {
     @Query("SELECT * FROM $NUTRITION_TABLE")
     fun getAll(): Flow<List<Nutrition>>
 
-    @Query("SELECT $FOOD_NAME FROM $NUTRITION_TABLE")
-    fun getNames(): Flow<List<String>?>
+    @Query("SELECT uid, $FOOD_NAME FROM $NUTRITION_TABLE")
+    fun getFood(): Flow<List<Food>?>
 
     @Query("SELECT * FROM $NUTRITION_TABLE WHERE uid IN (:id)")
     fun getById(id: Int): Flow<Nutrition>

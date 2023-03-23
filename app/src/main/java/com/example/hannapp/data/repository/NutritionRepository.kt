@@ -11,7 +11,7 @@ class NutritionRepository @Inject constructor(
 
     fun get(nutritionName: String) = nutritionDao.getByName(nutritionName)
 
-    fun getNames() = nutritionDao.getNames()
+    fun getFood() = nutritionDao.getFood()
 
     suspend fun update(nutrition: Nutrition) = nutritionDao.update(nutrition)
 
