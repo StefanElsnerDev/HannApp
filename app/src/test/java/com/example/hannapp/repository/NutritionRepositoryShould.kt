@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
@@ -60,12 +61,41 @@ class NutritionRepositoryShould {
         Assertions.assertEquals(foodList, result)
     }
 
-    @Test
-    fun updateNutrition() = runTest {
-        nutritionRepository.update(nutrition)
+    @Nested
+    inner class Update{
 
-        verify(nutritionDao).update(any())
+        @BeforeEach
+        fun beforeEach() = runTest {
+            whenever(nutritionDao.update(any())).thenReturn(1)
+        }
+
+
+        @Test
+        fun invokeUpdate() = runTest {
+            nutritionRepository.update(nutrition)
+
+            verify(nutritionDao).update(any())
+        }
+
+        @Test
+        fun returnSuccessfulUpdate() = runTest {
+            whenever(nutritionDao.update(any())).thenReturn(1)
+
+            val result = nutritionRepository.update(nutrition)
+
+            Assertions.assertEquals(true, result)
+        }
+
+        @Test
+        fun returnFailingUpdate() = runTest {
+            whenever(nutritionDao.update(any())).thenReturn(-1)
+
+            val result = nutritionRepository.update(nutrition)
+
+            Assertions.assertEquals(false, result)
+        }
     }
+
 
     @Test
     fun deleteNutrition() = runTest {

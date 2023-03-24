@@ -25,7 +25,7 @@ interface NutritionDao {
     fun getByName(name: String): Flow<Nutrition>
 
     @Update
-    suspend fun update(nutrition: Nutrition)
+    suspend fun update(nutrition: Nutrition): Int
 
     @Delete
     suspend fun delete(nutrition: Nutrition)

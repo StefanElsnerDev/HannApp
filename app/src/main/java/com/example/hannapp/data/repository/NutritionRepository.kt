@@ -13,7 +13,7 @@ class NutritionRepository @Inject constructor(
 
     fun getFood() = nutritionDao.getFood()
 
-    suspend fun update(nutrition: Nutrition) = nutritionDao.update(nutrition)
+    suspend fun update(nutrition: Nutrition) = nutritionDao.update(nutrition) == 1
 
     suspend fun delete(nutrition: Nutrition) = nutritionDao.delete(nutrition)
 
