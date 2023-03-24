@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,7 +56,7 @@ fun NutritionDataContent(
         AppScaffold(
             bottomBar = { NavigationBar(navController) },
             floatingActionButton = {
-                FAB(imageVector = Icons.Filled.Add) { onAdd() }
+                FAB({ Icon(Icons.Filled.Add, "") }) { onAdd() }
             }
         ) {
             Column(

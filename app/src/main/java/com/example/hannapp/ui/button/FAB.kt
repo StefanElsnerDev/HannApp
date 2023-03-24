@@ -8,17 +8,16 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun FAB(
-    imageVector: ImageVector,
+    icon: @Composable () -> Unit,
     onClick: () -> Unit,
 ) {
     FloatingActionButton(
         contentColor = MaterialTheme.colorScheme.onBackground,
-        content = { Icon(imageVector, "") },
+        content = icon,
         onClick = onClick
     )
 }
@@ -26,11 +25,11 @@ fun FAB(
 @Preview(uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun FAB_LightMode() {
-    FAB(imageVector = Icons.Filled.Add){}
+    FAB({ Icon(Icons.Filled.Add, "") }){}
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun FAB_DarkMode() {
-    FAB(imageVector = Icons.Filled.Add){}
+    FAB({ Icon(Icons.Filled.Add, "") }){}
 }
