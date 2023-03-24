@@ -9,21 +9,23 @@ import androidx.navigation.compose.composable
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationScreen
 import com.example.hannapp.ui.screens.NutritionDataScreen
+import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.selection.SelectionScreen
 import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
+import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 
 enum class Destination(val value: String) {
-    SELECTION("selection"),
     CALCULATION("calculation"),
-    DATA("data")
+    DATA("data"),
+    DATA_UPDATE("data_update"),
+    SELECTION("selection")
 }
 
 @Composable
 fun NavigationGraph (
     navController: NavHostController,
-    startDestination: String,
-    onIndexSelected: (Int) -> Unit
+    startDestination: String
 ){
     val navigationActions = remember(navController) {
         NavigationActions(navController)
@@ -54,6 +56,13 @@ fun NavigationGraph (
             NutritionDataScreen(
                 viewModel = viewModel,
                 navController = navController
+            )
+        }
+        composable(Destination.DATA_UPDATE.value) {
+            val viewModel = hiltViewModel<NutritionUpdateViewModel>() // TODO: Necessary with HILT?
+
+            NutritionDataUpdateScreen(
+                viewModel = viewModel
             )
         }
     }
