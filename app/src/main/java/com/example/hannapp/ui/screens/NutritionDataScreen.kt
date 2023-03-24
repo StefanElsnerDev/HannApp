@@ -5,13 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,8 +27,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
+import com.example.hannapp.navigation.NavigationActions
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
+import com.example.hannapp.ui.components.AppTopBar
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -52,8 +57,21 @@ fun NutritionDataContent(
     onReset: (NutritionDataComponent) -> Unit = { _ -> },
     onAdd: () -> Unit = {}
 ) {
+    val navigationActions = remember(navController) {
+        NavigationActions(navController)
+    }
+
     HannAppTheme {
         AppScaffold(
+            topBar = {
+                AppTopBar() {
+                    IconButton(
+                        onClick = {
+                            navigationActions.navigateToUpdateData()
+                        }
+                    ) { Icon(Icons.Filled.Edit, "") }
+                }
+            },
             bottomBar = { NavigationBar(navController) },
             floatingActionButton = {
                 FAB({ Icon(Icons.Filled.Add, "") }) { onAdd() }
@@ -126,7 +144,7 @@ fun NutritionDataGroup(
                     onComponentValueChange(component, it)
                     onReset(component.type)
                 },
-                modifier = Modifier,
+                modifier = Modifier.padding(12.dp),
                 label = component.text,
                 isError = isError,
                 supportingText = if (isError) {
