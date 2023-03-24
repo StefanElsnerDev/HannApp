@@ -21,8 +21,7 @@ fun App() {
 
             NavigationGraph(
                 navController = navController,
-                startDestination = Destination.SELECTION.value,
-                onIndexSelected = {}
+                startDestination = Destination.SELECTION.value
             )
         }
     }
