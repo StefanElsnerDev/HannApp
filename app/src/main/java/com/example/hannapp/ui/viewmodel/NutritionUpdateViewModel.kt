@@ -37,11 +37,14 @@ class NutritionUpdateViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
 
+    private var currentID = -1
+    var currentListIndex = 0
+
     init {
         viewModelScope.launch(dispatcher) {
             catchFood().collect { names ->
                 names.copy()
-                selectItem(0)
+                selectItem(currentListIndex)
             }
         }
     }
@@ -69,14 +72,47 @@ class NutritionUpdateViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(nutritionComponentState = nutritionComponent.update(state.nutritionComponentState, value))
         }
+        _uiState.update { state ->
+            state.copy(nutrition = state.nutritionComponentState.mapToNutrition())
+        }
     }
 
     fun selectItem(listIndex: Int) {
         viewModelScope.launch(dispatcher) {
             _uiState.update { state ->
-                val id = _uiState.value.foodList[listIndex].uid
-                state.copy(nutrition = getNutritionUseCase(id))
+                currentID = _uiState.value.foodList[listIndex].uid
+                val nutrition = getNutritionUseCase(currentID)
+                state.copy(
+                    nutritionComponentState = nutrition?.mapToNutritionComponentState() ?: NutritionComponentState(),
+                    nutrition = nutrition)
             }
         }
     }
+
+    private fun NutritionComponentState.mapToNutrition() =
+        Nutrition(
+            uid = currentID,
+            name = this.name.ifBlank { null },
+            kcal = this.kcal.ifBlank { null },
+            protein = this.protein.ifBlank { null },
+            fad = this.fad.ifBlank { null },
+            carbohydrates = this.carbohydrates.ifBlank { null },
+            sugar = this.sugar.ifBlank { null },
+            fiber = this.fiber.ifBlank { null },
+            alcohol = this.alcohol.ifBlank { null },
+            energyDensity = this.energy.ifBlank { null }
+        )
+
+    private fun Nutrition.mapToNutritionComponentState() =
+        NutritionComponentState(
+            name = this.name ?: "",
+            kcal = this.kcal ?: "",
+            protein = this.protein ?: "",
+            fad = this.fad ?: "",
+            carbohydrates = this.carbohydrates ?: "",
+            sugar = this.sugar ?: "",
+            fiber = this.fiber ?: "",
+            alcohol = this.alcohol ?: "",
+            energy = this.energyDensity ?: ""
+        )
 }

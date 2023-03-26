@@ -38,6 +38,8 @@ class NutritionDataUpdateModelShould {
         whenever(getFoodUseCase.invoke()).thenReturn(
             flowOf(food)
         )
+        whenever(getNutritionUseCase.invoke(100)).thenReturn(nutritions.first())
+
     }
 
     @AfterEach
@@ -62,8 +64,6 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun emitPreselectedNutritionDataState() = runTest {
-            whenever(getNutritionUseCase.invoke(100)).thenReturn(nutritions.first())
-
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
@@ -105,7 +105,37 @@ class NutritionDataUpdateModelShould {
 
             nutritionDataUpdateViewModel.selectItem(1)
 
-            Assertions.assertEquals(nutritions.last(), nutritionDataUpdateViewModel.uiState.value.nutrition)
+            Assertions.assertEquals(
+                nutritions.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutrition
+            )
+        }
+    }
+
+    @Nested
+    inner class ChangeOnCallback {
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            nutritionDataUpdateViewModel = NutritionUpdateViewModel(
+                getFoodUseCase = getFoodUseCase,
+                getNutritionUseCase = getNutritionUseCase,
+                updateNutritionUseCase = updateNutritionUseCase,
+                testDispatcher
+            )
+        }
+
+        @Test
+        fun changeUiStateOnCallback() {
+            val updatedNutrition = Nutrition(uid = 100, name = "Strawberry", kcal = "987cal")
+
+            nutritionDataUpdateViewModel.onNutritionTypeChange(Name(), "Strawberry")
+            nutritionDataUpdateViewModel.onNutritionTypeChange(Kcal(), "987cal")
+
+            Assertions.assertEquals(
+                updatedNutrition,
+                nutritionDataUpdateViewModel.uiState.value.nutrition
+            )
         }
     }
 }
