@@ -115,4 +115,16 @@ class NutritionUpdateViewModel @Inject constructor(
             alcohol = this.alcohol ?: "",
             energy = this.energyDensity ?: ""
         )
+
+    fun update(){
+        viewModelScope.launch(dispatcher) {
+            try {
+                val isSuccess = _uiState.value.nutrition?.let { updateNutritionUseCase(it) }
+
+                if (isSuccess == false) _uiState.update { it.copy(errorMessage = "Update failed") }
+            } catch (e: Exception){
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
 }

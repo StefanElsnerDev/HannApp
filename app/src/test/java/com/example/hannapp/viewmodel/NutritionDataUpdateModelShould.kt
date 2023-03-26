@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -135,6 +136,59 @@ class NutritionDataUpdateModelShould {
             Assertions.assertEquals(
                 updatedNutrition,
                 nutritionDataUpdateViewModel.uiState.value.nutrition
+            )
+        }
+    }
+
+    @Nested
+    inner class Updating {
+        @BeforeEach
+        fun beforeEach() = runTest {
+            nutritionDataUpdateViewModel = NutritionUpdateViewModel(
+                getFoodUseCase = getFoodUseCase,
+                getNutritionUseCase = getNutritionUseCase,
+                updateNutritionUseCase = updateNutritionUseCase,
+                testDispatcher
+            )
+        }
+
+        @Test
+        fun invokeUseCaseForUpdatingSelectedItem() = runTest {
+            whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
+
+            nutritionDataUpdateViewModel.selectItem(1)
+
+            nutritionDataUpdateViewModel.update()
+
+            Assertions.assertEquals(
+                nutritions.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutrition
+            )
+            verify(updateNutritionUseCase).invoke(nutritions.last())
+        }
+
+        @Test
+        fun emitFailureStateOnFailingUpdate() = runTest {
+            whenever(updateNutritionUseCase.invoke(any())).thenReturn(false)
+
+            nutritionDataUpdateViewModel.update()
+
+            Assertions.assertEquals(
+                "Update failed",
+                nutritionDataUpdateViewModel.uiState.value.errorMessage
+            )
+        }
+
+        @Test
+        fun emitFailureStateOnThrowingUpdate() = runTest {
+            val errorMessage = "Internal Error"
+            whenever(updateNutritionUseCase.invoke(any())).thenThrow(RuntimeException(errorMessage))
+
+            nutritionDataUpdateViewModel.update()
+
+            Assertions.assertEquals(
+                errorMessage,
+                nutritionDataUpdateViewModel.uiState.value.errorMessage
             )
         }
     }
