@@ -21,7 +21,6 @@ import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.selection.DropDownField
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutritionComponentState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 
@@ -56,7 +55,7 @@ fun NutritionDataUpdateContent(
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
                 uiComponents = uiState.components,
-                uiState = NutritionComponentState(),
+                uiState = uiState.nutritionComponentState,
                 showErrors = false
             )
         }
