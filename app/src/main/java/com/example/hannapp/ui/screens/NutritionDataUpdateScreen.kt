@@ -71,10 +71,18 @@ fun NutritionDataUpdateScreen(
     NutritionDataUpdateContent(
         items = uiState.foodList.map { it.name },
         uiState = uiState,
-        onItemSelected = {},
-        onComponentValueChange = { _, _ -> },
+        onItemSelected = {
+            viewModel.currentListIndex = it
+            viewModel.selectItem(it)
+        },
+        onComponentValueChange = { componentStrategy, value ->
+            viewModel.onNutritionTypeChange(
+                componentStrategy,
+                value
+            )
+        },
         onReset = {},
-        onUpdate = {}
+        onUpdate = { viewModel.update() }
     )
 }
 
