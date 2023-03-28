@@ -1,8 +1,10 @@
 package com.example.hannapp.ui.selection
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -13,12 +15,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,8 +33,9 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun DropDownField(
     modifier: Modifier = Modifier,
-    items: List<String> = List(1000){it.toString()},
-    onItemSelected: (Int) -> Unit = {}
+    items: List<String> = List(1000) { it.toString() },
+    onItemSelected: (Int) -> Unit = {},
+    onDeleteSelected: (Int) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
@@ -71,6 +76,7 @@ fun DropDownField(
                         selectedIndex = it
                         expanded = false
                     },
+                    onDeleteSelected = onDeleteSelected,
                     onDismiss = { expanded = false }
                 )
             }
@@ -78,6 +84,7 @@ fun DropDownField(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Preview(showBackground = true,
     device = "spec:width=800dp,height=1280dp,dpi=240,orientation=portrait",
     uiMode = Configuration.UI_MODE_NIGHT_NO)
@@ -86,9 +93,13 @@ fun DropDownList(
     modifier: Modifier = Modifier,
     items: List<String> = List(100) { it.toString() },
     onItemSelected: (Int) -> Unit = {},
+    onDeleteSelected: (Int) -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        onDismissRequest = onDismiss
+    ) {
         HannAppTheme() {
             Surface(
                 shape = RoundedCornerShape(12.dp)
@@ -100,9 +111,11 @@ fun DropDownList(
                 ) {
                     itemsIndexed(items) { index, item ->
                         //Text(text = item)
-                        DropDownItem(index = index, item = item) {
-                            onItemSelected(index)
-                        }
+                        DropDownItem(index = index,
+                            item = item,
+                            onClick = { onItemSelected(index) },
+                            onLongClick = { onDeleteSelected(index) }
+                        )
                     }
                 }
             }
@@ -110,6 +123,7 @@ fun DropDownList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true,
     device = "spec:width=800dp,height=1280dp,dpi=240,orientation=portrait",
     uiMode = Configuration.UI_MODE_NIGHT_NO)
@@ -118,7 +132,8 @@ fun DropDownItem(
     modifier: Modifier = Modifier,
     index: Int = 0,
     item: String? = "Item",
-    onClick: (Int) -> Unit = {}
+    onClick: (Int) -> Unit = {},
+    onLongClick: (Int) -> Unit = {}
 ) {
     HannAppTheme {
         Box(
@@ -126,7 +141,10 @@ fun DropDownItem(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(vertical = 4.dp)
-                .clickable { onClick(index) },
+                .combinedClickable(
+                    onClick = { onClick(index) },
+                    onLongClick = { onLongClick(index) }
+                )
         ) {
             Text(
                 text = item ?: "empty",

@@ -31,6 +31,7 @@ fun NutritionDataUpdateContent(
     items: List<String>,
     uiState: NutritionUpdateUiState,
     onItemSelected: (Int) -> Unit,
+    onDeleteSelected: (Int) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
@@ -51,7 +52,8 @@ fun NutritionDataUpdateContent(
             DropDownField(
                 modifier = Modifier.fillMaxWidth(),
                 items = items,
-            ) { onItemSelected(it) }
+                onItemSelected = { onItemSelected(it) },
+                onDeleteSelected = { onDeleteSelected(it) })
             NutritionDataGroup(
                 nutritionModel = uiState.nutritionModel,
                 onComponentValueChange = onComponentValueChange,
@@ -77,6 +79,7 @@ fun NutritionDataUpdateScreen(
             viewModel.currentListIndex = it
             viewModel.selectItem(it)
         },
+        onDeleteSelected = { viewModel.delete(it) },
         onComponentValueChange = { component, value ->
             viewModel.onNutritionChange(
                 component,
@@ -100,6 +103,7 @@ fun NutritionDataUpdate_LightMode() {
             items = emptyList(),
             uiState = NutritionUpdateUiState(),
             onItemSelected = {},
+            onDeleteSelected = {},
             onComponentValueChange = { _, _ -> },
             onReset = {},
             onUpdate = {},
