@@ -1,7 +1,7 @@
 package com.example.hannapp.data.distinct
 
 import com.example.hannapp.Constants
-import com.example.hannapp.ui.viewmodel.NutritionComponentState
+import com.example.hannapp.data.model.NutritionModel
 
 enum class NutritionDataComponent(val text: String) {
     NAME(Constants.FOOD_NAME),
@@ -37,25 +37,31 @@ interface NutritionComponent {
     var type: NutritionDataComponent
     var text: String
     fun update(
-        nutritionComponentState: NutritionComponentState,
+        nutritionModel: NutritionModel,
         value: String
-    ): NutritionComponentState
+    ): NutritionModel
 
-    fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState
+    fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent>
 }
 
 class Name : NutritionComponent {
     override var type = NutritionDataComponent.NAME
     override var text = "name"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(name = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(name = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.name.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.NAME)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.name.isBlank()) {
+            addError(errors, NutritionDataComponent.NAME)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.NAME)
+            removeError(errors, NutritionDataComponent.NAME)
         }
     }
 }
@@ -64,14 +70,17 @@ class Kcal : NutritionComponent {
     override var type = NutritionDataComponent.KCAL
     override var text = "Kcal"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(kcal = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(kcal = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.kcal.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.KCAL)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.kcal.isBlank()) {
+            addError(errors, NutritionDataComponent.KCAL)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.KCAL)
+            removeError(errors, NutritionDataComponent.KCAL)
         }
     }
 }
@@ -80,14 +89,17 @@ class Protein : NutritionComponent {
     override var type = NutritionDataComponent.PROTEIN
     override var text = "Protein"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(protein = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(protein = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.protein.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.PROTEIN)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.protein.isBlank()) {
+            addError(errors, NutritionDataComponent.PROTEIN)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.PROTEIN)
+            removeError(errors, NutritionDataComponent.PROTEIN)
         }
     }
 }
@@ -96,14 +108,17 @@ class Fad : NutritionComponent {
     override var type = NutritionDataComponent.FAD
     override var text = "Fad"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(fad = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(fad = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.fad.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.FAD)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.fad.isBlank()) {
+            addError(errors, NutritionDataComponent.FAD)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.FAD)
+            removeError(errors, NutritionDataComponent.FAD)
         }
     }
 }
@@ -112,14 +127,17 @@ class Carbohydrates : NutritionComponent {
     override var type = NutritionDataComponent.CARBOHYDRATES
     override var text = "Carbohydrates"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(carbohydrates = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(carbohydrates = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.carbohydrates.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.CARBOHYDRATES)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.carbohydrates.isBlank()) {
+            addError(errors, NutritionDataComponent.CARBOHYDRATES)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.CARBOHYDRATES)
+            removeError(errors, NutritionDataComponent.CARBOHYDRATES)
         }
     }
 }
@@ -128,14 +146,17 @@ class Sugar : NutritionComponent {
     override var type = NutritionDataComponent.SUGAR
     override var text = "Sugar"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(sugar = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(sugar = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.sugar.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.SUGAR)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.sugar.isBlank()) {
+            addError(errors, NutritionDataComponent.SUGAR)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.SUGAR)
+            removeError(errors, NutritionDataComponent.SUGAR)
         }
     }
 }
@@ -144,14 +165,17 @@ class Fiber : NutritionComponent {
     override var type = NutritionDataComponent.FIBER
     override var text = "Fiber"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(fiber = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(fiber = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.fiber.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.FIBER)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.fiber.isBlank()) {
+            addError(errors, NutritionDataComponent.FIBER)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.FIBER)
+            removeError(errors, NutritionDataComponent.FIBER)
         }
     }
 }
@@ -160,14 +184,17 @@ class Alcohol : NutritionComponent {
     override var type = NutritionDataComponent.ALCOHOL
     override var text = "Alcohol"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(alcohol = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(alcohol = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.alcohol.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.ALCOHOL)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.alcohol.isBlank()) {
+            addError(errors, NutritionDataComponent.ALCOHOL)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.ALCOHOL)
+            removeError(errors, NutritionDataComponent.ALCOHOL)
         }
     }
 }
@@ -176,14 +203,17 @@ class Energy : NutritionComponent {
     override var type = NutritionDataComponent.ENERGY
     override var text = "Energy"
 
-    override fun update(nutritionComponentState: NutritionComponentState, value: String) =
-        nutritionComponentState.copy(energy = value)
+    override fun update(nutritionModel: NutritionModel, value: String) =
+        nutritionModel.copy(energy = value)
 
-    override fun validate(nutritionComponentState: NutritionComponentState): NutritionComponentState {
-        return if (nutritionComponentState.energy.isBlank()) {
-            addError(nutritionComponentState, NutritionDataComponent.ENERGY)
+    override fun validate(
+        nutritionModel: NutritionModel,
+        errors: Set<NutritionDataComponent>
+    ): Set<NutritionDataComponent> {
+        return if (nutritionModel.energy.isBlank()) {
+            addError(errors, NutritionDataComponent.ENERGY)
         } else {
-            removeError(nutritionComponentState, NutritionDataComponent.ENERGY)
+            removeError(errors, NutritionDataComponent.ENERGY)
         }
     }
 }
