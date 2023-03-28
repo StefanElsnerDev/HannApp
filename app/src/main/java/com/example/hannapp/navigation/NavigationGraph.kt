@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationScreen
-import com.example.hannapp.ui.screens.NutritionDataScreen
+import com.example.hannapp.ui.screens.NutritionInsertScreen
 import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.selection.SelectionScreen
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
@@ -53,7 +53,7 @@ fun NavigationGraph (
         composable(Destination.DATA.value) {
             val viewModel = hiltViewModel<NutritionInsertViewModel>()
 
-            NutritionDataScreen(
+            NutritionInsertScreen(
                 viewModel = viewModel,
                 navController = navController
             )

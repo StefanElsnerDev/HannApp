@@ -41,7 +41,7 @@ import com.example.hannapp.ui.viewmodel.*
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NutritionDataContent(
+fun NutritionInsertContent(
     navController: NavHostController = rememberNavController(),
     nutritionModel: NutritionModel = NutritionModel(),
     uiComponents: List<NutritionComponent> = listOf(
@@ -100,14 +100,14 @@ fun NutritionDataContent(
 }
 
 @Composable
-fun NutritionDataScreen(
+fun NutritionInsertScreen(
     viewModel: NutritionInsertViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val uiComponents by viewModel.uiComponents.collectAsState()
 
-    NutritionDataContent(
+    NutritionInsertContent(
         navController = navController,
         nutritionModel = uiState.nutrition,
         uiComponents = uiComponents,
