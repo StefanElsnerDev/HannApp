@@ -2,6 +2,7 @@ package com.example.hannapp.viewmodel
 
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.GetFoodUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -31,6 +32,10 @@ class NutritionDataUpdateModelShould {
         Nutrition(uid = 100, name = "Apple", kcal = "12kcal"),
         Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
     )
+    private val nutritionModels = listOf(
+        NutritionModel(name = "Apple", kcal = "12kcal"),
+        NutritionModel(name = "Banana", kcal = "123kcal")
+    )
 
     @BeforeEach
     fun beforeEach() = runTest {
@@ -40,7 +45,7 @@ class NutritionDataUpdateModelShould {
             flowOf(food)
         )
         whenever(getNutritionUseCase.invoke(100)).thenReturn(nutritions.first())
-
+        whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
     }
 
     @AfterEach
@@ -74,8 +79,8 @@ class NutritionDataUpdateModelShould {
 
             verify(getNutritionUseCase).invoke(100)
             Assertions.assertEquals(
-                nutritions.first(),
-                nutritionDataUpdateViewModel.uiState.value.nutrition
+                nutritionModels.first(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionModel
             )
         }
     }
@@ -102,13 +107,11 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun emitStateWithSelectedFoodNutrition() = runTest {
-            whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
-
             nutritionDataUpdateViewModel.selectItem(1)
 
             Assertions.assertEquals(
-                nutritions.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutrition
+                nutritionModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionModel
             )
         }
     }
@@ -128,14 +131,14 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun changeUiStateOnCallback() {
-            val updatedNutrition = Nutrition(uid = 100, name = "Strawberry", kcal = "987cal")
+            val updatedNutritionModel = NutritionModel(name = "Strawberry", kcal = "987cal")
 
             nutritionDataUpdateViewModel.onNutritionTypeChange(Name(), "Strawberry")
             nutritionDataUpdateViewModel.onNutritionTypeChange(Kcal(), "987cal")
 
             Assertions.assertEquals(
-                updatedNutrition,
-                nutritionDataUpdateViewModel.uiState.value.nutrition
+                updatedNutritionModel,
+                nutritionDataUpdateViewModel.uiState.value.nutritionModel
             )
         }
     }
@@ -154,15 +157,13 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun invokeUseCaseForUpdatingSelectedItem() = runTest {
-            whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
-
             nutritionDataUpdateViewModel.selectItem(1)
 
             nutritionDataUpdateViewModel.update()
 
             Assertions.assertEquals(
-                nutritions.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutrition
+                nutritionModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionModel
             )
             verify(updateNutritionUseCase).invoke(nutritions.last())
         }

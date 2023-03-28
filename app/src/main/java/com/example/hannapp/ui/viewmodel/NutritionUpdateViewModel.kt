@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetFoodUseCase
@@ -18,13 +19,13 @@ import javax.inject.Inject
 data class NutritionUpdateUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val nutritionComponentState: NutritionComponentState = NutritionComponentState(),
-    val nutrition: Nutrition? = null,
+    val nutritionModel: NutritionModel = NutritionModel(),
     val foodList: List<Food> = emptyList(),
     val components: List<NutritionComponent> = listOf(
         Name(), Kcal(), Protein(), Fad(), Carbohydrates(), Sugar(), Fiber(), Alcohol(), Energy()
+    ),
+    val errors: Set<NutritionDataComponent> = emptySet()
     )
-)
 
 @HiltViewModel
 class NutritionUpdateViewModel @Inject constructor(
@@ -70,10 +71,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     fun onNutritionTypeChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
-            state.copy(nutritionComponentState = nutritionComponent.update(state.nutritionComponentState, value))
-        }
-        _uiState.update { state ->
-            state.copy(nutrition = state.nutritionComponentState.mapToNutrition())
+            state.copy(nutritionModel = nutritionComponent.update(state.nutritionModel, value))
         }
     }
 
@@ -83,13 +81,13 @@ class NutritionUpdateViewModel @Inject constructor(
                 currentID = _uiState.value.foodList[listIndex].uid
                 val nutrition = getNutritionUseCase(currentID)
                 state.copy(
-                    nutritionComponentState = nutrition?.mapToNutritionComponentState() ?: NutritionComponentState(),
-                    nutrition = nutrition)
+                    nutritionModel = nutrition?.toNutritionState() ?: NutritionModel()
+                )
             }
         }
     }
 
-    private fun NutritionComponentState.mapToNutrition() =
+    private fun NutritionModel.toNutrition() =
         Nutrition(
             uid = currentID,
             name = this.name.ifBlank { null },
@@ -103,8 +101,8 @@ class NutritionUpdateViewModel @Inject constructor(
             energyDensity = this.energy.ifBlank { null }
         )
 
-    private fun Nutrition.mapToNutritionComponentState() =
-        NutritionComponentState(
+    private fun Nutrition.toNutritionState() =
+        NutritionModel(
             name = this.name ?: "",
             kcal = this.kcal ?: "",
             protein = this.protein ?: "",
@@ -119,9 +117,9 @@ class NutritionUpdateViewModel @Inject constructor(
     fun update(){
         viewModelScope.launch(dispatcher) {
             try {
-                val isSuccess = _uiState.value.nutrition?.let { updateNutritionUseCase(it) }
+                val isSuccess = _uiState.value.nutritionModel.toNutrition().let { updateNutritionUseCase(it) }
 
-                if (isSuccess == false) _uiState.update { it.copy(errorMessage = "Update failed") }
+                if (!isSuccess) _uiState.update { it.copy(errorMessage = "Update failed") }
             } catch (e: Exception){
                 _uiState.update { it.copy(errorMessage = e.message) }
             }
