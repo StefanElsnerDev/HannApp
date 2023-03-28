@@ -3,8 +3,8 @@ package com.example.hannapp.viewmodel
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.domain.InsertNutritionUseCase
-import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
 import com.example.hannapp.ui.viewmodel.NutritionInsertState
+import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -14,15 +14,15 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class NutritionDataViewModelShould {
+class NutritionInsertViewModelShould {
 
-    lateinit var nutritionDataViewModel: NutritionDataViewModel
+    lateinit var nutritionDataViewModel: NutritionInsertViewModel
     private val insertNutritionUseCase = mock(InsertNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @BeforeEach
     fun beforeEach() = runTest {
-        nutritionDataViewModel = NutritionDataViewModel(
+        nutritionDataViewModel = NutritionInsertViewModel(
             insertNutritionUseCase,
             testDispatcher
         )
@@ -160,7 +160,7 @@ class NutritionDataViewModelShould {
             Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
         }
 
-        private fun NutritionDataViewModel.fakeCompletion(){
+        private fun NutritionInsertViewModel.fakeCompletion(){
             listOf(
                 Name(),
                 Kcal(),

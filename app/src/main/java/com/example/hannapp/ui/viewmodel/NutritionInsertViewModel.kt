@@ -23,7 +23,7 @@ data class NutritionInsertState(
 )
 
 @HiltViewModel
-class NutritionDataViewModel @Inject constructor(
+class NutritionInsertViewModel @Inject constructor(
     private val insertNutritionUseCase: InsertNutritionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {

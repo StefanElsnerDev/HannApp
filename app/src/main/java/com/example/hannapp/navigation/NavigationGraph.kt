@@ -11,7 +11,7 @@ import com.example.hannapp.ui.output.CalculationScreen
 import com.example.hannapp.ui.screens.NutritionDataScreen
 import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.selection.SelectionScreen
-import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
+import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 
@@ -51,7 +51,7 @@ fun NavigationGraph (
             )
         }
         composable(Destination.DATA.value) {
-            val viewModel = hiltViewModel<NutritionDataViewModel>()
+            val viewModel = hiltViewModel<NutritionInsertViewModel>()
 
             NutritionDataScreen(
                 viewModel = viewModel,

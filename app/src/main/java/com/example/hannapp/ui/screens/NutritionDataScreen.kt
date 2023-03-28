@@ -101,7 +101,7 @@ fun NutritionDataContent(
 
 @Composable
 fun NutritionDataScreen(
-    viewModel: NutritionDataViewModel = hiltViewModel(),
+    viewModel: NutritionInsertViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
