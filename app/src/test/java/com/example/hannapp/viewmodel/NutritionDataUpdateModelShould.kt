@@ -33,8 +33,8 @@ class NutritionDataUpdateModelShould {
         Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
     )
     private val nutritionModels = listOf(
-        NutritionModel(name = "Apple", kcal = "12kcal"),
-        NutritionModel(name = "Banana", kcal = "123kcal")
+        NutritionModel(id = 100, name = "Apple", kcal = "12kcal"),
+        NutritionModel(id = 200, name = "Banana", kcal = "123kcal")
     )
 
     @BeforeEach
@@ -131,7 +131,7 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun changeUiStateOnCallback() {
-            val updatedNutritionModel = NutritionModel(name = "Strawberry", kcal = "987cal")
+            val updatedNutritionModel = NutritionModel(id = 100, name = "Strawberry", kcal = "987cal")
 
             nutritionDataUpdateViewModel.onNutritionTypeChange(Name(), "Strawberry")
             nutritionDataUpdateViewModel.onNutritionTypeChange(Kcal(), "987cal")

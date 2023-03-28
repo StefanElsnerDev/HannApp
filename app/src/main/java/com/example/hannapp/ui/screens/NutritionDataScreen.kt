@@ -191,7 +191,7 @@ private fun NutritionModel.toUiState(
 fun FoodDataGroup_Preview_Portrait_LightMode() {
     HannAppTheme {
         NutritionDataGroup(
-            nutritionModel = NutritionModel("Apple", "123 kcal"),
+            nutritionModel = NutritionModel(123, "Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
@@ -220,7 +220,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode(
 ) {
     HannAppTheme {
         NutritionDataGroup(
-            nutritionModel = NutritionModel("Apple", "123 kcal"),
+            nutritionModel = NutritionModel(123, "Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),

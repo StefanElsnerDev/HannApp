@@ -38,7 +38,6 @@ class NutritionUpdateViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
 
-    private var currentID = -1
     var currentListIndex = 0
 
     init {
@@ -78,8 +77,7 @@ class NutritionUpdateViewModel @Inject constructor(
     fun selectItem(listIndex: Int) {
         viewModelScope.launch(dispatcher) {
             _uiState.update { state ->
-                currentID = _uiState.value.foodList[listIndex].uid
-                val nutrition = getNutritionUseCase(currentID)
+                val nutrition = getNutritionUseCase(state.foodList[listIndex].uid)
                 state.copy(
                     nutritionModel = nutrition?.toNutritionState() ?: NutritionModel()
                 )
@@ -89,7 +87,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     private fun NutritionModel.toNutrition() =
         Nutrition(
-            uid = currentID,
+            uid = this.id ?: -1,
             name = this.name.ifBlank { null },
             kcal = this.kcal.ifBlank { null },
             protein = this.protein.ifBlank { null },
@@ -103,6 +101,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     private fun Nutrition.toNutritionState() =
         NutritionModel(
+            id = this.uid,
             name = this.name ?: "",
             kcal = this.kcal ?: "",
             protein = this.protein ?: "",

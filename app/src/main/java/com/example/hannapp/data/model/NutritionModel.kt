@@ -1,6 +1,7 @@
 package com.example.hannapp.data.model
 
 data class NutritionModel(
+    val id: Int? = null,
     val name: String = "",
     val kcal: String = "",
     val protein: String = "",
