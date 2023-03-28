@@ -4,6 +4,7 @@ import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetFoodUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.UpdateNutritionUseCase
@@ -15,6 +16,7 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -25,6 +27,7 @@ class NutritionDataUpdateModelShould {
     private val getFoodUseCase = mock(GetFoodUseCase::class.java)
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val updateNutritionUseCase = mock(UpdateNutritionUseCase::class.java)
+    private val deleteNutritionUseCase = mock(DeleteNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val food = listOf(Food(100, "Apple"), Food(200, "Banana"))
@@ -61,6 +64,7 @@ class NutritionDataUpdateModelShould {
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
 
@@ -74,6 +78,7 @@ class NutritionDataUpdateModelShould {
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
 
@@ -94,6 +99,7 @@ class NutritionDataUpdateModelShould {
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
         }
@@ -125,6 +131,7 @@ class NutritionDataUpdateModelShould {
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
         }
@@ -151,6 +158,7 @@ class NutritionDataUpdateModelShould {
                 getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
         }
@@ -190,6 +198,44 @@ class NutritionDataUpdateModelShould {
             Assertions.assertEquals(
                 errorMessage,
                 nutritionDataUpdateViewModel.uiState.value.errorMessage
+            )
+        }
+    }
+
+    @Nested
+    inner class Delete {
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            nutritionDataUpdateViewModel = NutritionUpdateViewModel(
+                getFoodUseCase = getFoodUseCase,
+                getNutritionUseCase = getNutritionUseCase,
+                updateNutritionUseCase = updateNutritionUseCase,
+                deleteNutritionUseCase = deleteNutritionUseCase,
+                testDispatcher
+            )
+        }
+
+        @Test
+        fun invokeDeleteUseCase() {
+            nutritionDataUpdateViewModel.delete()
+        }
+
+        @Test
+        fun deleteNutrition() = runTest {
+            val expectedFoodList = listOf(food.last())
+
+            clearInvocations(getFoodUseCase)
+            whenever(getFoodUseCase.invoke()).thenReturn(
+                flowOf(expectedFoodList)
+            )
+
+            nutritionDataUpdateViewModel.delete()
+
+            verify(getFoodUseCase).invoke()
+            Assertions.assertEquals(
+                expectedFoodList,
+                nutritionDataUpdateViewModel.uiState.value.foodList
             )
         }
     }

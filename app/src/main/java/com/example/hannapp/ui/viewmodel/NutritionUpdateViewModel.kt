@@ -7,6 +7,7 @@ import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
+import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetFoodUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.UpdateNutritionUseCase
@@ -32,6 +33,7 @@ class NutritionUpdateViewModel @Inject constructor(
     private val getFoodUseCase: GetFoodUseCase,
     private val getNutritionUseCase: GetNutritionUseCase,
     private val updateNutritionUseCase: UpdateNutritionUseCase,
+    private val deleteNutritionUseCase: DeleteNutritionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -42,10 +44,14 @@ class NutritionUpdateViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(dispatcher) {
-            catchFood().collect { names ->
-                names.copy()
-                selectItem(currentListIndex)
-            }
+            fetchAndSelectFood()
+        }
+    }
+
+    private suspend fun fetchAndSelectFood() {
+        catchFood().collect { names ->
+            names.copy()
+            selectItem(currentListIndex)
         }
     }
 
@@ -99,6 +105,13 @@ class NutritionUpdateViewModel @Inject constructor(
             } catch (e: Exception){
                 _uiState.update { it.copy(errorMessage = e.message) }
             }
+        }
+    }
+
+    fun delete() {
+        viewModelScope.launch(dispatcher) {
+            deleteNutritionUseCase(NutritionConverter().model(_uiState.value.nutritionModel).toEntity())
+            fetchAndSelectFood()
         }
     }
 }
