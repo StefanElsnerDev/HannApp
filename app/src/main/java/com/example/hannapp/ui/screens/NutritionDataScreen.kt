@@ -34,6 +34,7 @@ import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.AppTopBar
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.input.InputField
+import com.example.hannapp.ui.mapComponentToModelProperty
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.*
 
@@ -150,7 +151,7 @@ fun NutritionDataGroup(
             val isError = errors.contains(component.type)  && showErrors
 
             InputField(
-                value = nutritionModel.toUiState(component.type),
+                value = mapComponentToModelProperty(component.type, nutritionModel),
                 onValueChange = {
                     onComponentValueChange(component, it)
                     onReset(component.type)
@@ -166,20 +167,6 @@ fun NutritionDataGroup(
             )
         }
     }
-}
-
-private fun NutritionModel.toUiState(
-    type: NutritionDataComponent
-) = when (type) {
-    NutritionDataComponent.NAME -> name
-    NutritionDataComponent.KCAL -> kcal
-    NutritionDataComponent.PROTEIN -> protein
-    NutritionDataComponent.FAD -> fad
-    NutritionDataComponent.CARBOHYDRATES -> carbohydrates
-    NutritionDataComponent.SUGAR -> sugar
-    NutritionDataComponent.FIBER -> fiber
-    NutritionDataComponent.ALCOHOL -> alcohol
-    NutritionDataComponent.ENERGY -> energy
 }
 
 @Preview(
