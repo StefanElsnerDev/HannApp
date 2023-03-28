@@ -36,6 +36,19 @@ class NutritionDataViewModelShould {
     }
 
     @Test
+    fun updateStateOnCallback() {
+        val expectedNutritionState = NutritionModel(name = "Apple Juice", kcal = "12346.78")
+
+        nutritionDataViewModel.onNutritionTypeChange(Name(), "Apple Juice")
+        nutritionDataViewModel.onNutritionTypeChange(Kcal(), "12346.78")
+
+        Assertions.assertEquals(
+            expectedNutritionState,
+            nutritionDataViewModel.uiState.value.nutrition
+        )
+    }
+
+    @Test
     fun invokeInsertUseCase() = runTest {
         nutritionDataViewModel.insert()
 
