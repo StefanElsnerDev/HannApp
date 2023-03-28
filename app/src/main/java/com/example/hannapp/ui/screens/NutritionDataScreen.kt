@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.navigation.NavigationActions
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
@@ -41,7 +42,7 @@ import com.example.hannapp.ui.viewmodel.*
 @Composable
 fun NutritionDataContent(
     navController: NavHostController = rememberNavController(),
-    uiState: NutritionComponentState = NutritionComponentState(),
+    nutritionModel: NutritionModel = NutritionModel(),
     uiComponents: List<NutritionComponent> = listOf(
         Name(),
         Kcal(),
@@ -53,6 +54,8 @@ fun NutritionDataContent(
         Alcohol(),
         Energy()
     ),
+    errors: Set<NutritionDataComponent> = emptySet(),
+    showErrors: Boolean = false,
     onComponentValueChange: (NutritionComponent, String) -> Unit = { _, _ -> },
     onReset: (NutritionDataComponent) -> Unit = { _ -> },
     onAdd: () -> Unit = {}
@@ -86,8 +89,9 @@ fun NutritionDataContent(
                     onComponentValueChange = onComponentValueChange,
                     onReset = onReset,
                     uiComponents = uiComponents,
-                    uiState = uiState,
-                    showErrors = uiState.showErrors
+                    nutritionModel = nutritionModel,
+                    errors = errors,
+                    showErrors = showErrors
                 )
             }
         }
@@ -104,8 +108,10 @@ fun NutritionDataScreen(
 
     NutritionDataContent(
         navController = navController,
-        uiState = uiState,
+        nutritionModel = uiState.nutrition,
         uiComponents = uiComponents,
+        errors = uiState.errors,
+        showErrors = uiState.showErrors,
         onComponentValueChange = { updateStrategy, value ->
             viewModel.onNutritionTypeChange(
                 updateStrategy,
@@ -123,7 +129,8 @@ fun NutritionDataScreen(
 
 @Composable
 fun NutritionDataGroup(
-    uiState: NutritionComponentState,
+    nutritionModel: NutritionModel,
+    errors: Set<NutritionDataComponent>,
     uiComponents: List<NutritionComponent>,
     showErrors: Boolean,
     onReset: (NutritionDataComponent) -> Unit,
@@ -136,10 +143,10 @@ fun NutritionDataGroup(
 
         items(uiComponents) { component ->
 
-            val isError = uiState.error.contains(component.type)  && showErrors
+            val isError = errors.contains(component.type)  && showErrors
 
             InputField(
-                value = uiState.toUiState(component.type),
+                value = nutritionModel.toUiState(component.type),
                 onValueChange = {
                     onComponentValueChange(component, it)
                     onReset(component.type)
@@ -157,7 +164,7 @@ fun NutritionDataGroup(
     }
 }
 
-private fun NutritionComponentState.toUiState(
+private fun NutritionModel.toUiState(
     type: NutritionDataComponent
 ) = when (type) {
     NutritionDataComponent.NAME -> name
@@ -180,7 +187,7 @@ private fun NutritionComponentState.toUiState(
 fun FoodDataGroup_Preview_Portrait_LightMode() {
     HannAppTheme {
         NutritionDataGroup(
-            uiState = NutritionComponentState(),
+            nutritionModel = NutritionModel("Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
@@ -191,6 +198,7 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
                 Alcohol(),
                 Energy()
             ),
+            errors = emptySet(),
             showErrors = false,
             onReset = {}
         ) { _, _ -> }
@@ -208,7 +216,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode(
 ) {
     HannAppTheme {
         NutritionDataGroup(
-            uiState = NutritionComponentState(),
+            nutritionModel = NutritionModel("Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
@@ -219,6 +227,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode(
                 Alcohol(),
                 Energy()
             ),
+            errors = emptySet(),
             showErrors = false,
             onReset = {}
         ) { _, _ -> }
