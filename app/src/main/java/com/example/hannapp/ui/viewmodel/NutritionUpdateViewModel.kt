@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetFoodUseCase
@@ -85,20 +86,6 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    private fun NutritionModel.toNutrition() =
-        Nutrition(
-            uid = this.id ?: -1,
-            name = this.name.ifBlank { null },
-            kcal = this.kcal.ifBlank { null },
-            protein = this.protein.ifBlank { null },
-            fad = this.fad.ifBlank { null },
-            carbohydrates = this.carbohydrates.ifBlank { null },
-            sugar = this.sugar.ifBlank { null },
-            fiber = this.fiber.ifBlank { null },
-            alcohol = this.alcohol.ifBlank { null },
-            energyDensity = this.energy.ifBlank { null }
-        )
-
     private fun Nutrition.toNutritionState() =
         NutritionModel(
             id = this.uid,
@@ -116,7 +103,8 @@ class NutritionUpdateViewModel @Inject constructor(
     fun update(){
         viewModelScope.launch(dispatcher) {
             try {
-                val isSuccess = _uiState.value.nutritionModel.toNutrition().let { updateNutritionUseCase(it) }
+                val isSuccess = NutritionConverter().model(_uiState.value.nutritionModel).toEntity()
+                    .let { updateNutritionUseCase(it) }
 
                 if (!isSuccess) _uiState.update { it.copy(errorMessage = "Update failed") }
             } catch (e: Exception){
