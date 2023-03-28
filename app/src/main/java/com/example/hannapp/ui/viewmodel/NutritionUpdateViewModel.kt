@@ -108,10 +108,14 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    fun delete() {
+    fun delete(listIndex: Int) {
         viewModelScope.launch(dispatcher) {
-            deleteNutritionUseCase(NutritionConverter().model(_uiState.value.nutritionModel).toEntity())
-            fetchAndSelectFood()
+            val nutrition = getNutritionUseCase(_uiState.value.foodList[listIndex].uid)
+
+            if (nutrition != null) {
+                deleteNutritionUseCase(nutrition)
+                fetchAndSelectFood()
+            }
         }
     }
 }

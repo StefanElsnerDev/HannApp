@@ -217,8 +217,10 @@ class NutritionDataUpdateModelShould {
         }
 
         @Test
-        fun invokeDeleteUseCase() {
-            nutritionDataUpdateViewModel.delete()
+        fun invokeDeleteUseCase() = runTest {
+            nutritionDataUpdateViewModel.delete(0)
+
+            verify(deleteNutritionUseCase).invoke(any())
         }
 
         @Test
@@ -230,7 +232,7 @@ class NutritionDataUpdateModelShould {
                 flowOf(expectedFoodList)
             )
 
-            nutritionDataUpdateViewModel.delete()
+            nutritionDataUpdateViewModel.delete(0)
 
             verify(getFoodUseCase).invoke()
             Assertions.assertEquals(
