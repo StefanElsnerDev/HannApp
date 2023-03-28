@@ -19,6 +19,7 @@ import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
+import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.selection.DropDownField
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
