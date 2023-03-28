@@ -1,17 +1,14 @@
 package com.example.hannapp.viewmodel
 
 import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.domain.InsertNutritionUseCase
-import com.example.hannapp.ui.viewmodel.NutritionComponentState
 import com.example.hannapp.ui.viewmodel.NutritionDataViewModel
+import com.example.hannapp.ui.viewmodel.NutritionInsertState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
@@ -47,7 +44,7 @@ class NutritionDataViewModelShould {
 
     @Test
     fun emitUiStateOnEvent() {
-        val expectedUiState = NutritionComponentState(energy = "987.6")
+        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(energy = "987.6"))
 
         nutritionDataViewModel.onNutritionTypeChange(
             Energy(), "987.6"
@@ -58,10 +55,10 @@ class NutritionDataViewModelShould {
 
     @Test
     fun copyStateOnEvent() {
-        val expectedUiState = NutritionComponentState(
+        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(
             fad = "123.4",
             energy = "987.6"
-        )
+        ))
 
         nutritionDataViewModel.onNutritionTypeChange(
             Energy(), "987.6"
@@ -78,8 +75,8 @@ class NutritionDataViewModelShould {
 
         @Test
         fun emitErrorUiState(){
-            val expectedUiState = NutritionComponentState(
-                error = listOf(
+            val expectedUiState = NutritionInsertState(
+                errors = setOf(
                     NutritionDataComponent.NAME,
                     NutritionDataComponent.KCAL,
                     NutritionDataComponent.PROTEIN,
@@ -99,8 +96,8 @@ class NutritionDataViewModelShould {
 
         @Test
         fun resetErrorOfComponent() {
-            val expectedUiState = NutritionComponentState(
-                error = listOf(
+            val expectedUiState = NutritionInsertState(
+                errors = setOf(
                     NutritionDataComponent.KCAL,
                     NutritionDataComponent.PROTEIN,
                     NutritionDataComponent.FAD,
@@ -136,7 +133,7 @@ class NutritionDataViewModelShould {
 
         @Test
         fun clearUiStateOnInsert() {
-            val expectedUiState = NutritionComponentState()
+            val expectedUiState = NutritionInsertState()
 
             nutritionDataViewModel.onNutritionTypeChange(
                 Energy(), "987.6"

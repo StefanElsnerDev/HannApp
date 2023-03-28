@@ -3,26 +3,21 @@ package com.example.hannapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.InsertNutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class NutritionComponentState(
-    val name: String = "",
-    val kcal: String = "",
-    val protein: String = "",
-    val fad: String = "",
-    val carbohydrates: String = "",
-    val sugar: String = "",
-    val fiber: String = "",
-    val alcohol: String = "",
-    val energy: String = "",
-    val error: List<NutritionDataComponent> = emptyList(),
+data class NutritionInsertState(
+    val nutrition: NutritionModel = NutritionModel(),
+    val errors: Set<NutritionDataComponent> = emptySet(),
     val isValid: Boolean = false,
     val showErrors: Boolean = false
 )
@@ -33,7 +28,7 @@ class NutritionDataViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NutritionComponentState())
+    private val _uiState = MutableStateFlow(NutritionInsertState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiComponents = MutableStateFlow(
@@ -56,15 +51,15 @@ class NutritionDataViewModel @Inject constructor(
             // TODO error handling on failing insertion
             insertNutritionUseCase(
                 Nutrition(
-                    name = _uiState.value.name,
-                    kcal = _uiState.value.kcal,
-                    protein = _uiState.value.protein,
-                    fad = _uiState.value.fad,
-                    carbohydrates = _uiState.value.carbohydrates,
-                    sugar = _uiState.value.sugar,
-                    fiber = _uiState.value.fiber,
-                    alcohol = _uiState.value.alcohol,
-                    energyDensity = _uiState.value.energy
+                    name = _uiState.value.nutrition.name,
+                    kcal = _uiState.value.nutrition.kcal,
+                    protein = _uiState.value.nutrition.protein,
+                    fad = _uiState.value.nutrition.fad,
+                    carbohydrates = _uiState.value.nutrition.carbohydrates,
+                    sugar = _uiState.value.nutrition.sugar,
+                    fiber = _uiState.value.nutrition.fiber,
+                    alcohol = _uiState.value.nutrition.alcohol,
+                    energyDensity = _uiState.value.nutrition.energy
                 )
             )
             clearState()
@@ -73,21 +68,21 @@ class NutritionDataViewModel @Inject constructor(
 
     fun onNutritionTypeChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
-            nutritionComponent.update(state, value)
+            state.copy(nutrition = nutritionComponent.update(state.nutrition, value))
         }
     }
 
     fun validate() {
         _uiComponents.value.forEach {
             _uiState.update { state ->
-                it.validate(state)
+                state.copy(
+                    errors = it.validate(state.nutrition, state.errors),
+                    isValid = state.errors.isEmpty()
+                )
             }
         }
-
-        _uiState.also {
-            it.update { state ->
-                state.copy(isValid = it.value.error.isEmpty())
-            }
+        _uiState.update { state ->
+            state.copy(isValid = state.errors.isEmpty())
         }
     }
 
@@ -95,13 +90,13 @@ class NutritionDataViewModel @Inject constructor(
 
     fun resetError(nutritionDataComponent: NutritionDataComponent) {
         _uiState.update { state ->
-            val errors = state.error.toMutableList()
+            val errors = state.errors.toMutableSet()
             errors.remove(nutritionDataComponent)
-            state.copy(error = errors.toList())
+            state.copy(errors = errors.toSet())
         }
     }
 
     fun clearState() {
-        _uiState.update { NutritionComponentState() }
+        _uiState.update { NutritionInsertState() }
     }
 }
