@@ -16,21 +16,21 @@ enum class NutritionDataComponent(val text: String) {
 }
 
 private fun addError(
-    componentState: NutritionComponentState,
+    errorCollection: Set<NutritionDataComponent>,
     component: NutritionDataComponent
-): NutritionComponentState {
-    val errors = componentState.error.toMutableSet()
+): Set<NutritionDataComponent> {
+    val errors = errorCollection.toMutableSet()
     errors.add(component)
-    return componentState.copy(error = errors.toList())
+    return errors.toSet()
 }
 
 private fun removeError(
-    nutritionComponentState: NutritionComponentState,
+    errorCollection: Set<NutritionDataComponent>,
     component: NutritionDataComponent
-): NutritionComponentState {
-    val errors = nutritionComponentState.error.toMutableSet()
+): Set<NutritionDataComponent> {
+    val errors = errorCollection.toMutableSet()
     errors.remove(component)
-    return nutritionComponentState.copy(error = errors.toList())
+    return errors.toSet()
 }
 
 interface NutritionComponent {
