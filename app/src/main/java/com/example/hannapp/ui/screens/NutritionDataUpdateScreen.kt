@@ -77,7 +77,7 @@ fun NutritionDataUpdateScreen(
             viewModel.selectItem(it)
         },
         onComponentValueChange = { component, value ->
-            viewModel.onNutritionTypeChange(
+            viewModel.onNutritionChange(
                 component,
                 value
             )
