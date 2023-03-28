@@ -66,7 +66,7 @@ class NutritionDataViewModel @Inject constructor(
         }
     }
 
-    fun onNutritionTypeChange(nutritionComponent: NutritionComponent, value: String) {
+    fun onNutritionChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
             state.copy(nutrition = nutritionComponent.update(state.nutrition, value))
         }

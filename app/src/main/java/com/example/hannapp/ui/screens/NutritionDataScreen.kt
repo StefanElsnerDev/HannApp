@@ -114,7 +114,7 @@ fun NutritionDataScreen(
         errors = uiState.errors,
         showErrors = uiState.showErrors,
         onComponentValueChange = { component, value ->
-            viewModel.onNutritionTypeChange(
+            viewModel.onNutritionChange(
                 component,
                 value
             )

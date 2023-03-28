@@ -39,8 +39,8 @@ class NutritionDataViewModelShould {
     fun updateStateOnCallback() {
         val expectedNutritionState = NutritionModel(name = "Apple Juice", kcal = "12346.78")
 
-        nutritionDataViewModel.onNutritionTypeChange(Name(), "Apple Juice")
-        nutritionDataViewModel.onNutritionTypeChange(Kcal(), "12346.78")
+        nutritionDataViewModel.onNutritionChange(Name(), "Apple Juice")
+        nutritionDataViewModel.onNutritionChange(Kcal(), "12346.78")
 
         Assertions.assertEquals(
             expectedNutritionState,
@@ -59,7 +59,7 @@ class NutritionDataViewModelShould {
     fun emitUiStateOnEvent() {
         val expectedUiState = NutritionInsertState(nutrition = NutritionModel(energy = "987.6"))
 
-        nutritionDataViewModel.onNutritionTypeChange(
+        nutritionDataViewModel.onNutritionChange(
             Energy(), "987.6"
         )
 
@@ -73,10 +73,10 @@ class NutritionDataViewModelShould {
             energy = "987.6"
         ))
 
-        nutritionDataViewModel.onNutritionTypeChange(
+        nutritionDataViewModel.onNutritionChange(
             Energy(), "987.6"
         )
-        nutritionDataViewModel.onNutritionTypeChange(
+        nutritionDataViewModel.onNutritionChange(
             Fad(), "123.4"
         )
 
@@ -148,10 +148,10 @@ class NutritionDataViewModelShould {
         fun clearUiStateOnInsert() {
             val expectedUiState = NutritionInsertState()
 
-            nutritionDataViewModel.onNutritionTypeChange(
+            nutritionDataViewModel.onNutritionChange(
                 Energy(), "987.6"
             )
-            nutritionDataViewModel.onNutritionTypeChange(
+            nutritionDataViewModel.onNutritionChange(
                 Fad(), "123.4"
             )
 
@@ -172,7 +172,7 @@ class NutritionDataViewModelShould {
                 Alcohol(),
                 Energy()
             ).forEach{
-                this.onNutritionTypeChange(
+                this.onNutritionChange(
                     it, "String"
                 )
             }
