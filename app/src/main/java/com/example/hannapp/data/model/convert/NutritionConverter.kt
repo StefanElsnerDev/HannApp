@@ -6,6 +6,7 @@ import com.example.hannapp.data.model.entity.Nutrition
 class NutritionConverter {
 
     fun model(nutritionModel: NutritionModel) = InnerNutritionModel(nutritionModel)
+    fun entity(nutrition: Nutrition) = InnerNutrition(nutrition)
 
     class InnerNutritionModel(private val nutritionModel: NutritionModel) {
 
@@ -21,6 +22,24 @@ class NutritionConverter {
                 fiber = it.fiber.ifBlank { null },
                 alcohol = it.alcohol.ifBlank { null },
                 energyDensity = it.energy.ifBlank { null }
+            )
+        }
+    }
+    
+    class InnerNutrition(private val nutrition: Nutrition){
+        
+        fun toModel() = nutrition.let {
+            NutritionModel(
+                id = it.uid,
+                name = it.name ?: "",
+                kcal = it.kcal ?: "",
+                protein = it.protein ?: "",
+                fad = it.fad ?: "",
+                carbohydrates = it.carbohydrates ?: "",
+                sugar = it.sugar ?: "",
+                fiber = it.fiber ?: "",
+                alcohol = it.alcohol ?: "",
+                energy = it.energyDensity ?: ""
             )
         }
     }

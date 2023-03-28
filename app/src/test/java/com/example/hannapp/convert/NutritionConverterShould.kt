@@ -25,4 +25,11 @@ class NutritionConverterShould {
 
         Assertions.assertEquals(nutritionEntity, result)
     }
+
+    @Test
+    fun convertNutritionEntityToModel(){
+        val result = nutritionConverter.entity(nutritionEntity).toModel()
+
+        Assertions.assertEquals(nutritionModel, result)
+    }
 }

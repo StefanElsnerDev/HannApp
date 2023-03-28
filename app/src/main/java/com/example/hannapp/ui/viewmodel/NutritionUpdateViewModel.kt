@@ -6,7 +6,6 @@ import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.convert.NutritionConverter
-import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetFoodUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -76,29 +75,19 @@ class NutritionUpdateViewModel @Inject constructor(
     }
 
     fun selectItem(listIndex: Int) {
+        // TODO: Error Handling
         viewModelScope.launch(dispatcher) {
-            _uiState.update { state ->
-                val nutrition = getNutritionUseCase(state.foodList[listIndex].uid)
-                state.copy(
-                    nutritionModel = nutrition?.toNutritionState() ?: NutritionModel()
-                )
+            val nutrition = getNutritionUseCase(_uiState.value.foodList[listIndex].uid)
+
+            nutrition?.let {
+                _uiState.update { state ->
+                    state.copy(
+                        nutritionModel = NutritionConverter().entity(nutrition).toModel()
+                    )
+                }
             }
         }
     }
-
-    private fun Nutrition.toNutritionState() =
-        NutritionModel(
-            id = this.uid,
-            name = this.name ?: "",
-            kcal = this.kcal ?: "",
-            protein = this.protein ?: "",
-            fad = this.fad ?: "",
-            carbohydrates = this.carbohydrates ?: "",
-            sugar = this.sugar ?: "",
-            fiber = this.fiber ?: "",
-            alcohol = this.alcohol ?: "",
-            energy = this.energyDensity ?: ""
-        )
 
     fun update(){
         viewModelScope.launch(dispatcher) {
