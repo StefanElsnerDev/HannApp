@@ -121,8 +121,12 @@ fun NutritionDataScreen(
         },
         onReset = { viewModel.resetError(it) },
         onAdd = {
-            if (uiState.isValid) viewModel.insert()
-            else viewModel.showErrors()
+            if (uiState.isValid) {
+                viewModel.insert()
+            } else {
+                viewModel.validate()
+                viewModel.showErrors()
+            }
         }
     )
 }
