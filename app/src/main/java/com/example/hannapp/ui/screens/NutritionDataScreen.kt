@@ -113,9 +113,9 @@ fun NutritionDataScreen(
         uiComponents = uiComponents,
         errors = uiState.errors,
         showErrors = uiState.showErrors,
-        onComponentValueChange = { updateStrategy, value ->
+        onComponentValueChange = { component, value ->
             viewModel.onNutritionTypeChange(
-                updateStrategy,
+                component,
                 value
             )
             viewModel.validate()
