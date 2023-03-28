@@ -52,10 +52,11 @@ fun NutritionDataUpdateContent(
                 items = items,
             ) { onItemSelected(it) }
             NutritionDataGroup(
+                nutritionModel = uiState.nutritionModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
                 uiComponents = uiState.components,
-                uiState = uiState.nutritionComponentState,
+                errors = uiState.errors,
                 showErrors = false
             )
         }
