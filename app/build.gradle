@@ -76,6 +76,12 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
+    //OkHttp
+    implementation platform("com.squareup.okhttp3:okhttp-bom:4.10.0")
+    // define any required OkHttp artifacts without version
+    implementation "com.squareup.okhttp3:okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor"
+
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     kapt "androidx.room:room-compiler:$room_version"
