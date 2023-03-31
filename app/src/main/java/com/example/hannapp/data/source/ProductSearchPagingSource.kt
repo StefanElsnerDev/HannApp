@@ -8,8 +8,10 @@ import retrofit2.HttpException
 
 class ProductSearchPagingSource(
     private val productSearchApi: ProductSearchApi,
-    private val searchString: String
+    private val searchString: String,
+    private val pageSize: Int
 ) : PagingSource<Int, Product>() {
+
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
@@ -22,7 +24,8 @@ class ProductSearchPagingSource(
         return try {
             val response = productSearchApi.search(
                 searchString = searchString,
-                page = page
+                page = page,
+                pageSize = pageSize
             )
 
             if (response.isSuccessful) {

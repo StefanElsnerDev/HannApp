@@ -62,7 +62,8 @@ class ProductSearchPagingSourceShould {
 
         productSearchPagingSource = ProductSearchPagingSource(
             productSearchApi = productSearchApi,
-            searchString = "Apple"
+            searchString = "Apple",
+            pageSize = 24
         )
     }
 
