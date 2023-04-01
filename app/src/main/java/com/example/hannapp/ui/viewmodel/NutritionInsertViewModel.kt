@@ -2,16 +2,18 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.api.Product
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
+import com.example.hannapp.domain.GetProductSearchResultsUseCase
 import com.example.hannapp.domain.InsertNutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +27,7 @@ data class NutritionInsertState(
 @HiltViewModel
 class NutritionInsertViewModel @Inject constructor(
     private val insertNutritionUseCase: InsertNutritionUseCase,
+    private val getProductSearchResultsUseCase: GetProductSearchResultsUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -45,6 +48,17 @@ class NutritionInsertViewModel @Inject constructor(
         )
     )
     val uiComponents = _uiComponents.asStateFlow()
+
+    private var _products = MutableSharedFlow<PagingData<Product>>()
+    var products: Flow<PagingData<Product>> = _products.cachedIn(viewModelScope)//.search("", 24).cachedIn(viewModelScope)
+
+    fun search(searchString: String) {
+        viewModelScope.launch(dispatcher) {
+            getProductSearchResultsUseCase.search(searchString, 24).collectLatest {
+                _products.emit(it)
+            }
+        }
+    }
 
     fun insert() {
         viewModelScope.launch(dispatcher) {
