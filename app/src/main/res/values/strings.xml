@@ -9,4 +9,5 @@
     <string name="okay">Okay</string>
     <string name="food_name">Food Name</string>
     <string name="fill_field">Please fill this field</string>
+    <string name="search">Search</string>
 </resources>
