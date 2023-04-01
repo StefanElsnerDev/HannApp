@@ -36,7 +36,7 @@ class ProductSearchPagingSource(
                 LoadResult.Page(
                     data = resultBody.products,
                     prevKey = if (page == 1) null else page,
-                    nextKey = if (resultBody.pageCount <= resultBody.pageSize) null else page.plus(1)
+                    nextKey = if (resultBody.products.isEmpty()) null else page.plus(1)
                 )
             } else {
                 return LoadResult.Error(
