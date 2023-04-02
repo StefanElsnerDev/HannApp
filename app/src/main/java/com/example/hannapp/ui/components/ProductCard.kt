@@ -3,6 +3,7 @@ package com.example.hannapp.ui.components
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -22,14 +23,16 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
-    product: Product
+    product: Product,
+    onItemClick: (Product)-> Unit
 ) {
     Surface(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(12.dp)
             .height(IntrinsicSize.Min)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onItemClick(product) },
         shape = RoundedCornerShape(15.dp)
     ) {
         Row(
@@ -115,7 +118,8 @@ fun ProductCard_LightMode() {
                     1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7
                 ),
                 image = ""
-            )
+            ),
+            onItemClick = {}
         )
     }
 }
