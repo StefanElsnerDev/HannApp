@@ -50,7 +50,8 @@ class NutritionInsertViewModel @Inject constructor(
     val uiComponents = _uiComponents.asStateFlow()
 
     private var _products = MutableSharedFlow<PagingData<Product>>()
-    var products: Flow<PagingData<Product>> = _products.cachedIn(viewModelScope)//.search("", 24).cachedIn(viewModelScope)
+    val products: Flow<PagingData<Product>> =
+        _products.cachedIn(viewModelScope)//.search("", 24).cachedIn(viewModelScope)
 
     fun search(searchString: String) {
         viewModelScope.launch(dispatcher) {
@@ -112,5 +113,24 @@ class NutritionInsertViewModel @Inject constructor(
 
     fun clearState() {
         _uiState.update { NutritionInsertState() }
+    }
+
+    fun select(product: Product) {
+        _uiState.update { state ->
+            state.copy(
+                nutrition = NutritionModel(
+                    name = product.productName,
+                    kcal = product.nutriments.kcal.toString(),
+                    protein = product.nutriments.protein.toString(),
+                    fad = product.nutriments.fat.toString(),
+                    carbohydrates = product.nutriments.carbohydrates.toString(),
+                    sugar = product.nutriments.sugar.toString(),
+                    fiber = product.nutriments.fiber.toString(),
+                    alcohol = product.nutriments.alcohol.toString(),
+                    energy = product.nutriments.kcal.toString()
+                )
+            )
+        }
+        validate()
     }
 }

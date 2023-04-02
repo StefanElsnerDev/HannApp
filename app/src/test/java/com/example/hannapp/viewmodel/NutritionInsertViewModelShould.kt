@@ -231,5 +231,60 @@ class NutritionInsertViewModelShould {
             nutritionDataViewModel.search("apple juice")
 
         }
+
+        @Test
+        fun selectProduct(){
+            val expectedNutritionModel = NutritionModel(
+                id = null,
+                name = "Delicious green Apple",
+                kcal = "123.5",
+                protein = "68.5",
+                fad = "1.1",
+                carbohydrates = "2.2",
+                sugar = "3.3",
+                fiber = "4.4",
+                alcohol = "5.5",
+                energy = "123.5"
+            )
+
+            val selectedProduct = Product(
+                code = "123",
+                productName = "Delicious green Apple",
+                nutriments = Nutriments(123.5, 68.5, 1.1, 2.2, 3.3, 4.4, 5.5)
+            )
+
+            Assertions.assertEquals(
+                NutritionModel(),
+                nutritionDataViewModel.uiState.value.nutrition
+            )
+
+            nutritionDataViewModel.select(selectedProduct)
+
+            Assertions.assertEquals(
+                expectedNutritionModel,
+                nutritionDataViewModel.uiState.value.nutrition
+            )
+        }
+
+        @Test
+        fun validateOnProductSelection(){
+            val selectedProduct = Product(
+                code = "123",
+                productName = "Delicious green Apple",
+                nutriments = Nutriments(123.5, 68.5, 1.1, 2.2, 3.3, 4.4, 5.5)
+            )
+
+            Assertions.assertEquals(
+                false,
+                nutritionDataViewModel.uiState.value.isValid
+            )
+
+            nutritionDataViewModel.select(selectedProduct)
+
+            Assertions.assertEquals(
+                true,
+                nutritionDataViewModel.uiState.value.isValid
+            )
+        }
     }
 }
