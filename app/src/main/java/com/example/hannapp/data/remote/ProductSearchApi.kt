@@ -11,7 +11,7 @@ interface ProductSearchApi {
         @Query("search_terms") searchString: String,
         @Query("page") page: Int,
         @Query("json") json: Int = 1,
-        @Query("fields") fields: String = "code,product_name,nutriments",
+        @Query("fields") fields: String = "code,product_name,nutriments,image_front_thumb_url",
         @Query("page_size") pageSize: Int = 24
     ): Response<ProductSearchResult>
 }

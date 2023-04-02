@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.hannapp.R
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
@@ -35,11 +36,17 @@ fun ProductCard(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val painter = if(product.image.isNullOrBlank()) painterResource(id = R.drawable.food) else rememberAsyncImagePainter(
+                model = product.image
+            )
+
             Image(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(96.dp),
-                painter = painterResource(id = R.drawable.food), contentDescription = null
+                    .width(100.dp)
+                    .padding(12.dp),
+                painter = painter,
+                contentDescription = null
             )
             Column(
                 modifier = Modifier.fillMaxWidth()
