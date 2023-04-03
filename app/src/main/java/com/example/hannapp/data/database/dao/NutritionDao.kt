@@ -1,5 +1,6 @@
 package com.example.hannapp.data.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.example.hannapp.Constants.FOOD_NAME
 import com.example.hannapp.Constants.NUTRITION_TABLE
@@ -13,7 +14,7 @@ interface NutritionDao {
     suspend fun insert(nutrition: Nutrition): Long
 
     @Query("SELECT * FROM $NUTRITION_TABLE")
-    fun getAll(): Flow<List<Nutrition>>
+    fun getAll(): PagingSource<Int, Nutrition>
 
     @Query("SELECT uid, $FOOD_NAME FROM $NUTRITION_TABLE")
     fun getFood(): Flow<List<Food>?>
