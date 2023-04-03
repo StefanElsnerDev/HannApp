@@ -7,4 +7,6 @@ class GetFoodUseCase @Inject constructor(
     private val repository: NutritionRepository,
 ) {
     operator fun invoke() = repository.getFood()
+
+    fun getAllNutriments() = repository.getAll()
 }
