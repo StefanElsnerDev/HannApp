@@ -7,4 +7,6 @@ class GetNutritionUseCase @Inject constructor(
     private val repository: NutritionRepository,
 ) {
     suspend operator fun invoke(id: Int) = repository.get(id)
+
+    fun getAll() = repository.getAll()
 }
