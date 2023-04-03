@@ -41,6 +41,7 @@ fun SelectionContent(
     pagingItems: LazyPagingItems<Nutrition>,
     onAdd: (String) -> Unit,
     navController: NavHostController,
+    onClickBoxClick: ()->Unit,
     onItemSelected: (String) -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
@@ -95,7 +96,9 @@ fun SelectionContent(
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { expanded = true },
+                        .clickable {
+                            onClickBoxClick()
+                            expanded = true },
                     color = Color.Transparent,
                 ) {}
             }
@@ -140,13 +143,14 @@ fun SelectionScreen(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val nutriments = viewModel.allNutritions.collectAsLazyPagingItems()
+    val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
 
     SelectionContent(
         uiState = uiState,
         pagingItems = nutriments,
         onAdd = onAdd,
         navController = navController,
+        onClickBoxClick = { viewModel.getAll() },
         onItemSelected = { }
     )
 }
@@ -159,6 +163,7 @@ fun SelectionContent_LightMode() {
             uiState = NutritionUiState(),
             pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
             onAdd = {},
+            onClickBoxClick = {},
             navController = rememberNavController(),
             onItemSelected = {}
         )
