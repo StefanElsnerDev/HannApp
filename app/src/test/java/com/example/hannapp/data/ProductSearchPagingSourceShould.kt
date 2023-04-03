@@ -75,7 +75,7 @@ class ProductSearchPagingSourceShould {
     }
 
     @Test
-    fun loadProductsWithOnePageSuccessfully() = runTest {
+    fun loadProductsWithFirstPageSuccessfully() = runTest {
 
         val result = productSearchPagingSource.load(loadParams)
 
@@ -83,13 +83,14 @@ class ProductSearchPagingSourceShould {
             PagingSource.LoadResult.Page(
                 data = products,
                 prevKey = null,
-                nextKey = null
+                nextKey = 2
             ),
             result
         )
     }
 
     // TODO: Test multiple pages
+    // TODO: Test nextKey for last page
 
     @Test
     fun returnErrorLoadResultOnFailure() = runTest {
