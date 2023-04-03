@@ -3,7 +3,7 @@ package com.example.hannapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.hannapp.data.model.Food
+import androidx.paging.cachedIn
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetFoodUseCase
@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 data class NutritionUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val foodList: List<Food> = emptyList()  //TODO ViewModel State
+    val errorMessage: String? = null
 )
 
 @HiltViewModel
@@ -28,37 +27,25 @@ class NutritionViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
 
-    val allNutritions = flowOf(
-        PagingData.from(
-            listOf(Nutrition(uid = 0, name = "Apple"), Nutrition(uid = 1, name = "Orange"))
-        )
-    )
+    private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
+    val nutriments =
+        _nutriments.cachedIn(viewModelScope)
 
-    init {
-        getAll()
-    }
-
-    private fun getAll() {
+    fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getFoodUseCase()
+            getFoodUseCase.getAllNutriments()
                 .catch { throwable ->
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,
-                            foodList = emptyList(),
                             errorMessage = throwable.message ?: "Something went wrong"
                         )
                     }
                 }
-                .collect { names ->
-                    _uiState.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            foodList = names ?: emptyList()
-                        )
-                    }
+                .collectLatest { nutriments ->
+                    _nutriments.emit(nutriments)
                 }
         }
     }
