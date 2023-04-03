@@ -140,10 +140,11 @@ fun SelectionScreen(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val nutriments = viewModel.allNutritions.collectAsLazyPagingItems()
 
     SelectionContent(
         uiState = uiState,
-        pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
+        pagingItems = nutriments,
         onAdd = onAdd,
         navController = navController,
         onItemSelected = { }

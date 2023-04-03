@@ -2,7 +2,9 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.hannapp.data.model.Food
+import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetFoodUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +27,12 @@ class NutritionViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
+
+    val allNutritions = flowOf(
+        PagingData.from(
+            listOf(Nutrition(uid = 0, name = "Apple"), Nutrition(uid = 1, name = "Orange"))
+        )
+    )
 
     init {
         getAll()
