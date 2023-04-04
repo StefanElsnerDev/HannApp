@@ -14,13 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.mapComponentToModelProperty
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
 fun NutritionDataGroup(
-    nutritionModel: NutritionModel,
+    nutritionUiModel: NutritionUiModel,
     errors: Set<NutritionDataComponent>,
     uiComponents: List<NutritionComponent>,
     showErrors: Boolean,
@@ -37,7 +37,7 @@ fun NutritionDataGroup(
             val isError = errors.contains(component.type)  && showErrors
 
             InputField(
-                value = mapComponentToModelProperty(component.type, nutritionModel),
+                value = mapComponentToModelProperty(component.type, nutritionUiModel),
                 onValueChange = {
                     onComponentValueChange(component, it)
                     onReset(component.type)
@@ -64,7 +64,7 @@ fun NutritionDataGroup(
 fun FoodDataGroup_Preview_Portrait_LightMode() {
     HannAppTheme {
         NutritionDataGroup(
-            nutritionModel = NutritionModel(123, "Apple", "123 kcal"),
+            nutritionUiModel = NutritionUiModel(123, "Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
@@ -90,7 +90,7 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
 fun FoodDataGroup_Preview_LandScape_LightMode() {
     HannAppTheme {
         NutritionDataGroup(
-            nutritionModel = NutritionModel(123, "Apple", "123 kcal"),
+            nutritionUiModel = NutritionUiModel(123, "Apple", "123 kcal"),
             uiComponents = listOf(
                 Kcal(),
                 Protein(),

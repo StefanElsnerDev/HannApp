@@ -1,11 +1,11 @@
 package com.example.hannapp.ui
 
 import com.example.hannapp.data.distinct.NutritionDataComponent
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 
 fun mapComponentToModelProperty(
     type: NutritionDataComponent,
-    model: NutritionModel
+    model: NutritionUiModel
 ) = when (type) {
     NutritionDataComponent.NAME -> model.name
     NutritionDataComponent.KCAL -> model.kcal

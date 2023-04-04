@@ -19,7 +19,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
 import com.example.hannapp.navigation.NavigationActions
@@ -27,10 +27,10 @@ import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.AppTopBar
 import com.example.hannapp.ui.components.NavigationBar
-import com.example.hannapp.ui.input.NutritionDataGroup
-import com.example.hannapp.ui.input.SearchBar
 import com.example.hannapp.ui.components.ProductCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
+import com.example.hannapp.ui.input.NutritionDataGroup
+import com.example.hannapp.ui.input.SearchBar
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun NutritionInsertContent(
     navController: NavHostController = rememberNavController(),
-    nutritionModel: NutritionModel = NutritionModel(),
+    nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     uiComponents: List<NutritionComponent> = listOf(
         Name(),
         Kcal(),
@@ -108,7 +108,7 @@ fun NutritionInsertContent(
                     onComponentValueChange = onComponentValueChange,
                     onReset = onReset,
                     uiComponents = uiComponents,
-                    nutritionModel = nutritionModel,
+                    nutritionUiModel = nutritionUiModel,
                     errors = errors,
                     showErrors = showErrors
                 )
@@ -151,7 +151,7 @@ fun NutritionInsertScreen(
     ) {
         NutritionInsertContent(
             navController = navController,
-            nutritionModel = uiState.nutrition,
+            nutritionUiModel = uiState.nutritionUiModel,
             uiComponents = uiComponents,
             pagingItems = pagingItems,
             errors = uiState.errors,
