@@ -60,8 +60,7 @@ class NutritionViewModelShould {
         Assertions.assertEquals(
             NutritionUiState(
                 isLoading = false,
-                errorMessage = null,
-                foodList = foodList
+                errorMessage = null
             ),
             nutritionViewModel.uiState.first()
         )
@@ -81,8 +80,7 @@ class NutritionViewModelShould {
         Assertions.assertEquals(
             NutritionUiState(
                 isLoading = false,
-                errorMessage = null,
-                foodList = emptyList()
+                errorMessage = null
             ),
             nutritionViewModel.uiState.first()
         )
@@ -105,8 +103,7 @@ class NutritionViewModelShould {
         Assertions.assertEquals(
             NutritionUiState(
                 isLoading = false,
-                errorMessage = errorMessage,
-                foodList = emptyList()
+                errorMessage = errorMessage
             ),
             nutritionViewModel.uiState.first()
         )
