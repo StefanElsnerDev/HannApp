@@ -23,7 +23,7 @@ import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.input.NutritionDataGroup
-import com.example.hannapp.ui.selection.SimpleDropDownMenu
+import com.example.hannapp.ui.dropdown.SimpleDropDownMenu
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel

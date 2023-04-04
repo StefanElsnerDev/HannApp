@@ -1,4 +1,4 @@
-package com.example.hannapp.ui.selection
+package com.example.hannapp.ui.dropdown
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.background
