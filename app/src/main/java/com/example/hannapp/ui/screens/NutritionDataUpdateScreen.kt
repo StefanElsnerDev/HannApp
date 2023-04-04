@@ -3,12 +3,9 @@ package com.example.hannapp.ui.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,8 +16,10 @@ import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
+import com.example.hannapp.ui.dropdown.DropDownDialog
+import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.input.NutritionDataGroup
-import com.example.hannapp.ui.selection.DropDownField
+import com.example.hannapp.ui.selection.SimpleDropDownMenu
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
@@ -49,11 +48,34 @@ fun NutritionDataUpdateContent(
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            DropDownField(
-                modifier = Modifier.fillMaxWidth(),
-                items = items,
-                onItemSelected = { onItemSelected(it) },
-                onDeleteSelected = { onDeleteSelected(it) })
+            var selectedItem by rememberSaveable { mutableStateOf("") }
+            var expanded by remember { mutableStateOf(false) }
+
+            SimpleDropDownMenu(
+                selected = selectedItem,
+                isExpanded = expanded
+            ) {
+                expanded = true
+            }
+
+            if (expanded) {
+                DropDownDialog(
+                    pagingItems = pagingItems,
+                    onDismiss = { expanded = false },
+                    itemContent = { nutrition ->
+                        SimpleDropDownItem(
+                            item = nutrition,
+                            onClick = {
+                                onItemSelected(it)
+                                selectedItem = it.toString()
+                                expanded = false
+                            },
+                            onLongClick = { onDeleteSelected(it) }
+                        )
+                    }
+                )
+            }
+
             NutritionDataGroup(
                 nutritionModel = uiState.nutritionModel,
                 onComponentValueChange = onComponentValueChange,
