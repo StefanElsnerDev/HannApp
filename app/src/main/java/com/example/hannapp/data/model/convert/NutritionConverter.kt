@@ -2,8 +2,9 @@ package com.example.hannapp.data.model.convert
 
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
+import javax.inject.Inject
 
-class NutritionConverter {
+class NutritionConverter @Inject constructor() {
 
     fun model(nutritionModel: NutritionModel) = InnerNutritionModel(nutritionModel)
     fun entity(nutrition: Nutrition) = InnerNutrition(nutrition)
