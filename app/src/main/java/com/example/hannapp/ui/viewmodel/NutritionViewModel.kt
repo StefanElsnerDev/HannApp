@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
-import com.example.hannapp.domain.GetFoodUseCase
+import com.example.hannapp.domain.GetNutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -20,7 +20,7 @@ data class NutritionUiState(
 
 @HiltViewModel
 class NutritionViewModel @Inject constructor(
-    private val getFoodUseCase: GetFoodUseCase,
+    private val getNutritionUseCase: GetNutritionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -28,14 +28,13 @@ class NutritionViewModel @Inject constructor(
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
 
     private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
-    val nutriments =
-        _nutriments.cachedIn(viewModelScope)
+    val nutriments = _nutriments.cachedIn(viewModelScope)
 
     fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getFoodUseCase.getAllNutriments()
+            getNutritionUseCase.getAll()
                 .catch { throwable ->
                     _uiState.update { state ->
                         state.copy(
