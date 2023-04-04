@@ -8,14 +8,14 @@ import com.example.hannapp.Constants.NUTRITION_TABLE
 
 @Entity(tableName = NUTRITION_TABLE)
 data class Nutrition(
-    @PrimaryKey(autoGenerate = true) val uid: Int = 0,
+    @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = FOOD_NAME) val name: String? = null,
-    @ColumnInfo(name = "kcal per 100 g/ml") val kcal: String? = null,
-    @ColumnInfo(name = "protein per 100 g/ml") val protein: String? = null,
-    @ColumnInfo(name = "fad per 100 g/ml") val fad: String? = null,
-    @ColumnInfo(name = "carbohydrates per 100 g/ml") val carbohydrates: String? = null,
-    @ColumnInfo(name = "sugar of carbohydrates per 100 g/ml") val sugar: String? = null,
-    @ColumnInfo(name = "fiber per 100 g/ml") val fiber: String? = null,
-    @ColumnInfo(name = "alcohol per 100 g/ml") val alcohol: String? = null,
-    @ColumnInfo(name = "energy density per 100 g/ml") val energyDensity: String? = null
+    @ColumnInfo(name = "kcal per 100 g/ml") val kcal: Double? = null,
+    @ColumnInfo(name = "protein per 100 g/ml") val protein: Double? = null,
+    @ColumnInfo(name = "fat per 100 g/ml") val fat: Double? = null,
+    @ColumnInfo(name = "carbohydrates per 100 g/ml") val carbohydrates: Double? = null,
+    @ColumnInfo(name = "sugar of carbohydrates per 100 g/ml") val sugar: Double? = null,
+    @ColumnInfo(name = "fiber per 100 g/ml") val fiber: Double? = null,
+    @ColumnInfo(name = "alcohol per 100 g/ml") val alcohol: Double? = null,
+    @ColumnInfo(name = "energy density per 100 g/ml") val energyDensity: Double? = null
 )
