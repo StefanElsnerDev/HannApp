@@ -40,9 +40,14 @@ fun NutritionDataUpdateContent(
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
 ) {
+    var selectedItem by rememberSaveable { mutableStateOf("") }
+
     AppScaffold(
         floatingActionButton = {
-            FAB({ Icon(painterResource(id = R.drawable.change), "") }) { onUpdate() }
+            FAB({ Icon(painterResource(id = R.drawable.change), "") }) {
+                selectedItem = uiState.nutritionModel.toString()
+                onUpdate()
+            }
         }
     ) {
         Column(
@@ -53,7 +58,6 @@ fun NutritionDataUpdateContent(
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var selectedItem by rememberSaveable { mutableStateOf("") }
             var expanded by remember { mutableStateOf(false) }
 
             SimpleDropDownMenu(
