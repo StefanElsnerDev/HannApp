@@ -64,7 +64,7 @@ class Kcal : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.kcal.isBlank()) {
+        return if (nutritionUiModel.kcal.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.KCAL)
         } else {
             removeError(errors, NutritionDataComponent.KCAL)
@@ -83,7 +83,7 @@ class Protein : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.protein.isBlank()) {
+        return if (nutritionUiModel.protein.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.PROTEIN)
         } else {
             removeError(errors, NutritionDataComponent.PROTEIN)
@@ -102,7 +102,7 @@ class Fat : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.fat.isBlank()) {
+        return if (nutritionUiModel.fat.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.FAT)
         } else {
             removeError(errors, NutritionDataComponent.FAT)
@@ -121,7 +121,7 @@ class Carbohydrates : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.carbohydrates.isBlank()) {
+        return if (nutritionUiModel.carbohydrates.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.CARBOHYDRATES)
         } else {
             removeError(errors, NutritionDataComponent.CARBOHYDRATES)
@@ -140,7 +140,7 @@ class Sugar : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.sugar.isBlank()) {
+        return if (nutritionUiModel.sugar.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.SUGAR)
         } else {
             removeError(errors, NutritionDataComponent.SUGAR)
@@ -159,7 +159,7 @@ class Fiber : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.fiber.isBlank()) {
+        return if (nutritionUiModel.fiber.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.FIBER)
         } else {
             removeError(errors, NutritionDataComponent.FIBER)
@@ -178,7 +178,7 @@ class Alcohol : NutritionComponent {
         nutritionUiModel: NutritionUiModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionUiModel.alcohol.isBlank()) {
+        return if (nutritionUiModel.alcohol.toDoubleOrNull() == null) {
             addError(errors, NutritionDataComponent.ALCOHOL)
         } else {
             removeError(errors, NutritionDataComponent.ALCOHOL)
