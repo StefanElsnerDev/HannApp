@@ -12,8 +12,8 @@ import com.example.hannapp.ui.screens.NutritionInsertScreen
 import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.selection.SelectionScreen
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
+import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
-import com.example.hannapp.ui.viewmodel.NutritionViewModel
 
 enum class Destination(val value: String) {
     CALCULATION("calculation"),
@@ -33,7 +33,7 @@ fun NavigationGraph (
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Destination.SELECTION.value) {
-            val viewModel = hiltViewModel <NutritionViewModel>()
+            val viewModel = hiltViewModel <NutritionSelectViewModel>()
 
             SelectionScreen(
                 viewModel = viewModel,

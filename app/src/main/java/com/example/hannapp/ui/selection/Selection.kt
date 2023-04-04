@@ -30,8 +30,8 @@ import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.HannAppTheme
+import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
-import com.example.hannapp.ui.viewmodel.NutritionViewModel
 import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,7 +138,7 @@ fun SelectionContent(
 
 @Composable
 fun SelectionScreen(
-    viewModel: NutritionViewModel = hiltViewModel(),
+    viewModel: NutritionSelectViewModel = hiltViewModel(),
     onAdd: (String) -> Unit = {},
     navController: NavHostController
 ) {

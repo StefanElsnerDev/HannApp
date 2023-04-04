@@ -3,8 +3,8 @@ package com.example.hannapp.viewmodel
 import androidx.paging.PagingData
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.GetNutritionUseCase
+import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
-import com.example.hannapp.ui.viewmodel.NutritionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -20,9 +20,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class NutritionViewModelShould {
+class NutritionSelectViewModelShould {
 
-    private lateinit var nutritionViewModel: NutritionViewModel
+    private lateinit var nutritionViewModel: NutritionSelectViewModel
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -42,7 +42,7 @@ class NutritionViewModelShould {
             nutrimentsFlow
         )
 
-        nutritionViewModel = NutritionViewModel(
+        nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
             testDispatcher
         )
@@ -62,7 +62,7 @@ class NutritionViewModelShould {
 
     @Test
     fun produceUIStateWithLoadingStateOnInstantiation() = runTest {
-        nutritionViewModel = NutritionViewModel(
+        nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
             testDispatcher
         )

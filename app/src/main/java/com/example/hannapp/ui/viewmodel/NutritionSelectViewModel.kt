@@ -19,7 +19,7 @@ data class NutritionUiState(
 )
 
 @HiltViewModel
-class NutritionViewModel @Inject constructor(
+class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
