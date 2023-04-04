@@ -2,10 +2,12 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.convert.NutritionConverter
+import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetFoodUseCase
@@ -26,7 +28,7 @@ data class NutritionUpdateUiState(
         Name(), Kcal(), Protein(), Fad(), Carbohydrates(), Sugar(), Fiber(), Alcohol(), Energy()
     ),
     val errors: Set<NutritionDataComponent> = emptySet()
-    )
+)
 
 @HiltViewModel
 class NutritionUpdateViewModel @Inject constructor(
@@ -39,6 +41,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
+    val nutriments = getNutritionUseCase.getAll().cachedIn(viewModelScope)
 
     var currentListIndex = 0
 
@@ -95,16 +98,33 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    fun update(){
+    fun selectItem(nutrition: Nutrition) {
+        // TODO: Error Handling
+        viewModelScope.launch(dispatcher) {
+            _uiState.update { state ->
+                state.copy(
+                    nutritionModel = NutritionConverter().entity(nutrition).toModel()
+                )
+            }
+        }
+    }
+
+    fun update() {
         viewModelScope.launch(dispatcher) {
             try {
                 val isSuccess = NutritionConverter().model(_uiState.value.nutritionModel).toEntity()
                     .let { updateNutritionUseCase(it) }
 
                 if (!isSuccess) _uiState.update { it.copy(errorMessage = "Update failed") }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
             }
+        }
+    }
+
+    fun delete(nutrition: Nutrition) {
+        viewModelScope.launch(dispatcher) {
+            deleteNutritionUseCase(nutrition)
         }
     }
 
