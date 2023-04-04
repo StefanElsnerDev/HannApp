@@ -1,8 +1,7 @@
 package com.example.hannapp.ui.dropdown
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -33,9 +32,7 @@ fun <T : Any> DropDownDialog(
             shape = RoundedCornerShape(12.dp)
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(0.8f)
-                    .padding(8.dp)
+                modifier = Modifier.fillMaxWidth(0.8f)
             ) {
                 items(pagingItems) { item ->
                     item?.let {
