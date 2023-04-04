@@ -22,7 +22,7 @@ data class NutritionUpdateUiState(
     val errorMessage: String? = null,
     val nutritionModel: NutritionModel = NutritionModel(),
     val components: List<NutritionComponent> = listOf(
-        Name(), Kcal(), Protein(), Fad(), Carbohydrates(), Sugar(), Fiber(), Alcohol(), Energy()
+        Name(), Kcal(), Protein(), Fat(), Carbohydrates(), Sugar(), Fiber(), Alcohol(), Energy()
     ),
     val errors: Set<NutritionDataComponent> = emptySet()
 )

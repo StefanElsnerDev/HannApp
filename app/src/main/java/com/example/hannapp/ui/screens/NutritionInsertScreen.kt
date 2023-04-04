@@ -45,7 +45,7 @@ fun NutritionInsertContent(
         Name(),
         Kcal(),
         Protein(),
-        Fad(),
+        Fat(),
         Carbohydrates(),
         Sugar(),
         Fiber(),

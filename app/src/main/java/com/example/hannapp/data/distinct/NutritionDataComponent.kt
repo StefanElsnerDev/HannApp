@@ -6,7 +6,7 @@ enum class NutritionDataComponent(val text: String) {
     NAME(Constants.FOOD_NAME),
     KCAL(Constants.KCAL),
     PROTEIN(Constants.PROTEIN),
-    FAD(Constants.FAD),
+    FAT(Constants.FAT),
     CARBOHYDRATES(Constants.CARBOHYDRATES),
     SUGAR(Constants.SUGAR),
     FIBER(Constants.FIBER),

@@ -91,21 +91,21 @@ class Protein : NutritionComponent {
     }
 }
 
-class Fad : NutritionComponent {
-    override var type = NutritionDataComponent.FAD
-    override var text = "Fad"
+class Fat : NutritionComponent {
+    override var type = NutritionDataComponent.FAT
+    override var text = "Fat"
 
     override fun update(nutritionModel: NutritionModel, value: String) =
-        nutritionModel.copy(fad = value)
+        nutritionModel.copy(fat = value)
 
     override fun validate(
         nutritionModel: NutritionModel,
         errors: Set<NutritionDataComponent>
     ): Set<NutritionDataComponent> {
-        return if (nutritionModel.fad.isBlank()) {
-            addError(errors, NutritionDataComponent.FAD)
+        return if (nutritionModel.fat.isBlank()) {
+            addError(errors, NutritionDataComponent.FAT)
         } else {
-            removeError(errors, NutritionDataComponent.FAD)
+            removeError(errors, NutritionDataComponent.FAT)
         }
     }
 }

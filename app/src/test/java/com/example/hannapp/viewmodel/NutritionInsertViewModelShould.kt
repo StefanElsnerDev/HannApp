@@ -66,10 +66,10 @@ class NutritionInsertViewModelShould {
 
     @Test
     fun emitUiStateOnEvent() {
-        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(energy = "987.6"))
+        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(fat = "987.6"))
 
         nutritionDataViewModel.onNutritionChange(
-            Energy(), "987.6"
+            Fat(), "987.6"
         )
 
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
@@ -78,15 +78,14 @@ class NutritionInsertViewModelShould {
     @Test
     fun copyStateOnEvent() {
         val expectedUiState = NutritionInsertState(nutrition = NutritionModel(
-            fad = "123.4",
-            energy = "987.6"
+            fat = "123.4"
         ))
 
         nutritionDataViewModel.onNutritionChange(
             Energy(), "987.6"
         )
         nutritionDataViewModel.onNutritionChange(
-            Fad(), "123.4"
+            Fat(), "123.4"
         )
 
         Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
@@ -102,7 +101,7 @@ class NutritionInsertViewModelShould {
                     NutritionDataComponent.NAME,
                     NutritionDataComponent.KCAL,
                     NutritionDataComponent.PROTEIN,
-                    NutritionDataComponent.FAD,
+                    NutritionDataComponent.FAT,
                     NutritionDataComponent.CARBOHYDRATES,
                     NutritionDataComponent.SUGAR,
                     NutritionDataComponent.FIBER,
@@ -122,7 +121,7 @@ class NutritionInsertViewModelShould {
                 errors = setOf(
                     NutritionDataComponent.KCAL,
                     NutritionDataComponent.PROTEIN,
-                    NutritionDataComponent.FAD,
+                    NutritionDataComponent.FAT,
                     NutritionDataComponent.CARBOHYDRATES,
                     NutritionDataComponent.SUGAR,
                     NutritionDataComponent.FIBER,
@@ -161,7 +160,7 @@ class NutritionInsertViewModelShould {
                 Energy(), "987.6"
             )
             nutritionDataViewModel.onNutritionChange(
-                Fad(), "123.4"
+                Fat(), "123.4"
             )
 
             nutritionDataViewModel.clearState()
@@ -174,7 +173,7 @@ class NutritionInsertViewModelShould {
                 Name(),
                 Kcal(),
                 Protein(),
-                Fad(),
+                Fat(),
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),
@@ -239,7 +238,7 @@ class NutritionInsertViewModelShould {
                 name = "Delicious green Apple",
                 kcal = "123.5",
                 protein = "68.5",
-                fad = "1.1",
+                fat = "1.1",
                 carbohydrates = "2.2",
                 sugar = "3.3",
                 fiber = "4.4",

@@ -68,7 +68,7 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
-                Fad(),
+                Fat(),
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),
@@ -95,7 +95,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode() {
             uiComponents = listOf(
                 Kcal(),
                 Protein(),
-                Fad(),
+                Fat(),
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),

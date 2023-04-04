@@ -7,7 +7,7 @@ object Constants {
 
     const val KCAL = "kcal"
     const val PROTEIN = "protein"
-    const val FAD = "fad"
+    const val FAT = "fat"
     const val CARBOHYDRATES = "carbohydrates"
     const val SUGAR = "sugar"
     const val FIBER = "fiber"

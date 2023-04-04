@@ -10,7 +10,7 @@ fun mapComponentToModelProperty(
     NutritionDataComponent.NAME -> model.name
     NutritionDataComponent.KCAL -> model.kcal
     NutritionDataComponent.PROTEIN -> model.protein
-    NutritionDataComponent.FAD -> model.fad
+    NutritionDataComponent.FAT -> model.fat
     NutritionDataComponent.CARBOHYDRATES -> model.carbohydrates
     NutritionDataComponent.SUGAR -> model.sugar
     NutritionDataComponent.FIBER -> model.fiber
