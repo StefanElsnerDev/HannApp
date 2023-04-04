@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Product
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionInsertState(
-    val nutrition: NutritionModel = NutritionModel(),
+    val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val errors: Set<NutritionDataComponent> = emptySet(),
     val isValid: Boolean = false,
     val showErrors: Boolean = false
@@ -65,14 +65,14 @@ class NutritionInsertViewModel @Inject constructor(
             // TODO error handling on failing insertion
             insertNutritionUseCase(
                 Nutrition(
-                    name = _uiState.value.nutrition.name,
-                    kcal = _uiState.value.nutrition.kcal,
-                    protein = _uiState.value.nutrition.protein,
-                    fat = _uiState.value.nutrition.fat,
-                    carbohydrates = _uiState.value.nutrition.carbohydrates,
-                    sugar = _uiState.value.nutrition.sugar,
-                    fiber = _uiState.value.nutrition.fiber,
-                    alcohol = _uiState.value.nutrition.alcohol
+                    name = _uiState.value.nutritionUiModel.name,
+                    kcal = _uiState.value.nutritionUiModel.kcal.toDouble(),
+                    protein = _uiState.value.nutritionUiModel.protein.toDouble(),
+                    fat = _uiState.value.nutritionUiModel.fat.toDouble(),
+                    carbohydrates = _uiState.value.nutritionUiModel.carbohydrates.toDouble(),
+                    sugar = _uiState.value.nutritionUiModel.sugar.toDouble(),
+                    fiber = _uiState.value.nutritionUiModel.fiber.toDouble(),
+                    alcohol = _uiState.value.nutritionUiModel.alcohol.toDouble()
                 )
             )
             clearState()
@@ -81,7 +81,7 @@ class NutritionInsertViewModel @Inject constructor(
 
     fun onNutritionChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
-            state.copy(nutrition = nutritionComponent.update(state.nutrition, value))
+            state.copy(nutritionUiModel = nutritionComponent.update(state.nutritionUiModel, value))
         }
     }
 
@@ -89,7 +89,7 @@ class NutritionInsertViewModel @Inject constructor(
         _uiComponents.value.forEach {
             _uiState.update { state ->
                 state.copy(
-                    errors = it.validate(state.nutrition, state.errors),
+                    errors = it.validate(state.nutritionUiModel, state.errors),
                     isValid = state.errors.isEmpty()
                 )
             }
@@ -116,7 +116,7 @@ class NutritionInsertViewModel @Inject constructor(
     fun select(product: Product) {
         _uiState.update { state ->
             state.copy(
-                nutrition = NutritionModel(
+                nutritionUiModel = NutritionUiModel(
                     name = product.productName,
                     kcal = product.nutriments.kcal.toString(),
                     protein = product.nutriments.protein.toString(),

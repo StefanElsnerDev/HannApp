@@ -2,7 +2,7 @@ package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
 import com.example.hannapp.domain.GetProductSearchResultsUseCase
@@ -46,14 +46,14 @@ class NutritionInsertViewModelShould {
 
     @Test
     fun updateStateOnCallback() {
-        val expectedNutritionState = NutritionModel(name = "Apple Juice", kcal = "12346.78")
+        val expectedNutritionState = NutritionUiModel(name = "Apple Juice", kcal = "12346.78")
 
         nutritionDataViewModel.onNutritionChange(Name(), "Apple Juice")
         nutritionDataViewModel.onNutritionChange(Kcal(), "12346.78")
 
         Assertions.assertEquals(
             expectedNutritionState,
-            nutritionDataViewModel.uiState.value.nutrition
+            nutritionDataViewModel.uiState.value.nutritionUiModel
         )
     }
 
@@ -66,7 +66,7 @@ class NutritionInsertViewModelShould {
 
     @Test
     fun emitUiStateOnEvent() {
-        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(fat = "987.6"))
+        val expectedUiState = NutritionInsertState(nutritionUiModel = NutritionUiModel(fat = "987.6"))
 
         nutritionDataViewModel.onNutritionChange(
             Fat(), "987.6"
@@ -77,7 +77,7 @@ class NutritionInsertViewModelShould {
 
     @Test
     fun copyStateOnEvent() {
-        val expectedUiState = NutritionInsertState(nutrition = NutritionModel(
+        val expectedUiState = NutritionInsertState(nutritionUiModel = NutritionUiModel(
             fat = "123.4"
         ))
 
@@ -224,7 +224,7 @@ class NutritionInsertViewModelShould {
 
         @Test
         fun selectProduct(){
-            val expectedNutritionModel = NutritionModel(
+            val expectedNutritionUiModel = NutritionUiModel(
                 id = null,
                 name = "Delicious green Apple",
                 kcal = "123.5",
@@ -243,15 +243,15 @@ class NutritionInsertViewModelShould {
             )
 
             Assertions.assertEquals(
-                NutritionModel(),
-                nutritionDataViewModel.uiState.value.nutrition
+                NutritionUiModel(),
+                nutritionDataViewModel.uiState.value.nutritionUiModel
             )
 
             nutritionDataViewModel.select(selectedProduct)
 
             Assertions.assertEquals(
-                expectedNutritionModel,
-                nutritionDataViewModel.uiState.value.nutrition
+                expectedNutritionUiModel,
+                nutritionDataViewModel.uiState.value.nutritionUiModel
             )
         }
 
