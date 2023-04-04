@@ -15,13 +15,13 @@ class NutritionConverter @Inject constructor() {
             Nutrition(
                 uid = it.id ?: -1,
                 name = it.name.ifBlank { null },
-                kcal = it.kcal.ifBlank { null },
-                protein = it.protein.ifBlank { null },
-                fat = it.fat.ifBlank { null },
-                carbohydrates = it.carbohydrates.ifBlank { null },
-                sugar = it.sugar.ifBlank { null },
-                fiber = it.fiber.ifBlank { null },
-                alcohol = it.alcohol.ifBlank { null }
+                kcal = it.kcal,
+                protein = it.protein,
+                fat = it.fat,
+                carbohydrates = it.carbohydrates,
+                sugar = it.sugar,
+                fiber = it.fiber,
+                alcohol = it.alcohol
             )
         }
     }
@@ -32,13 +32,13 @@ class NutritionConverter @Inject constructor() {
             NutritionModel(
                 id = it.uid,
                 name = it.name ?: "",
-                kcal = it.kcal ?: "",
-                protein = it.protein ?: "",
-                fat = it.fat ?: "",
-                carbohydrates = it.carbohydrates ?: "",
-                sugar = it.sugar ?: "",
-                fiber = it.fiber ?: "",
-                alcohol = it.alcohol ?: ""
+                kcal = it.kcal ?: 0.0,
+                protein = it.protein ?: 0.0,
+                fat = it.fat ?: 0.0,
+                carbohydrates = it.carbohydrates ?: 0.0,
+                sugar = it.sugar ?: 0.0,
+                fiber = it.fiber ?: 0.0,
+                alcohol = it.alcohol ?: 0.0
             )
         }
     }
