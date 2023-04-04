@@ -17,7 +17,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.dropdown.DropDownDialog
@@ -32,10 +32,10 @@ import kotlinx.coroutines.flow.flowOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutritionDataUpdateContent(
-    pagingItems: LazyPagingItems<NutritionModel>,
+    pagingItems: LazyPagingItems<NutritionUiModel>,
     uiState: NutritionUpdateUiState,
-    onItemSelected: (NutritionModel) -> Unit,
-    onDeleteSelected: (NutritionModel) -> Unit,
+    onItemSelected: (NutritionUiModel) -> Unit,
+    onDeleteSelected: (NutritionUiModel) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
@@ -45,7 +45,7 @@ fun NutritionDataUpdateContent(
     AppScaffold(
         floatingActionButton = {
             FAB({ Icon(painterResource(id = R.drawable.change), "") }) {
-                selectedItem = uiState.nutritionModel.toString()
+                selectedItem = uiState.nutritionUiModel.toString()
                 onUpdate()
             }
         }
@@ -86,7 +86,7 @@ fun NutritionDataUpdateContent(
             }
 
             NutritionDataGroup(
-                nutritionModel = uiState.nutritionModel,
+                nutritionUiModel = uiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
                 uiComponents = uiState.components,
@@ -131,7 +131,7 @@ fun NutritionDataUpdateScreen(
 fun NutritionDataUpdate_LightMode() {
     HannAppTheme {
         NutritionDataUpdateContent(
-            pagingItems = flowOf(PagingData.from(listOf(NutritionModel()))).collectAsLazyPagingItems(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             uiState = NutritionUpdateUiState(),
             onItemSelected = {},
             onDeleteSelected = {},
