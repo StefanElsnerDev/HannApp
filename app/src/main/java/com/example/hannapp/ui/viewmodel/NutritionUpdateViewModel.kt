@@ -57,27 +57,12 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    fun selectItem(listIndex: Int) {
-        // TODO: Error Handling
-        viewModelScope.launch(dispatcher) {
-            val nutrition = getNutritionUseCase(_uiState.value.foodList[listIndex].uid)
-
-            nutrition?.let {
-                _uiState.update { state ->
-                    state.copy(
-                        nutritionModel = NutritionConverter().entity(nutrition).toModel()
-                    )
-                }
-            }
-        }
-    }
-
-    fun selectItem(nutrition: Nutrition) {
+    fun selectItem(nutrition: NutritionModel) {
         // TODO: Error Handling
         viewModelScope.launch(dispatcher) {
             _uiState.update { state ->
                 state.copy(
-                    nutritionModel = NutritionConverter().entity(nutrition).toModel()
+                    nutritionModel = nutrition
                 )
             }
         }
@@ -96,20 +81,9 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    fun delete(nutrition: Nutrition) {
+    fun delete(nutrition: NutritionModel) {
         viewModelScope.launch(dispatcher) {
-            deleteNutritionUseCase(nutrition)
-        }
-    }
-
-    fun delete(listIndex: Int) {
-        viewModelScope.launch(dispatcher) {
-            val nutrition = getNutritionUseCase(_uiState.value.foodList[listIndex].uid)
-
-            if (nutrition != null) {
-                deleteNutritionUseCase(nutrition)
-                fetchAndSelectFood()
-            }
+            deleteNutritionUseCase(NutritionConverter().model(nutrition).toEntity())
         }
     }
 }

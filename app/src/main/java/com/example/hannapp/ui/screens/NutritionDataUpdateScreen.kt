@@ -17,13 +17,13 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.dropdown.SimpleDropDownItem
-import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.dropdown.SimpleDropDownMenu
+import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
@@ -32,10 +32,10 @@ import kotlinx.coroutines.flow.flowOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutritionDataUpdateContent(
-    pagingItems: LazyPagingItems<Nutrition>,
+    pagingItems: LazyPagingItems<NutritionModel>,
     uiState: NutritionUpdateUiState,
-    onItemSelected: (Nutrition) -> Unit,
-    onDeleteSelected: (Nutrition) -> Unit,
+    onItemSelected: (NutritionModel) -> Unit,
+    onDeleteSelected: (NutritionModel) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
@@ -127,7 +127,7 @@ fun NutritionDataUpdateScreen(
 fun NutritionDataUpdate_LightMode() {
     HannAppTheme {
         NutritionDataUpdateContent(
-            pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionModel()))).collectAsLazyPagingItems(),
             uiState = NutritionUpdateUiState(),
             onItemSelected = {},
             onDeleteSelected = {},
