@@ -1,14 +1,14 @@
 package com.example.hannapp.data.model
 
 data class NutritionModel(
-    val id: Int? = null,
+    val id: Long? = null,
     val name: String = "",
-    val kcal: String = "",
-    val protein: String = "",
-    val fad: String = "",
-    val carbohydrates: String = "",
-    val sugar: String = "",
-    val fiber: String = "",
-    val alcohol: String = "",
-    val energy: String = ""
+    val kcal: Double  = 0.0,
+    val protein: Double  = 0.0,
+    val fat: Double  = 0.0,
+    val carbohydrates: Double  = 0.0,
+    val sugar: Double  = 0.0,
+    val fiber: Double  = 0.0,
+    val alcohol: Double  = 0.0,
+    val energy: Double  = 0.0
 )
