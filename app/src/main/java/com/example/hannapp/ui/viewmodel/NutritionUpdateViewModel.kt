@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutritionUseCase
@@ -20,7 +20,7 @@ import javax.inject.Inject
 data class NutritionUpdateUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val nutritionModel: NutritionModel = NutritionModel(),
+    val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val components: List<NutritionComponent> = listOf(
         Name(), Kcal(), Protein(), Fat(), Carbohydrates(), Sugar(), Fiber(), Alcohol()
     ),
@@ -51,21 +51,21 @@ class NutritionUpdateViewModel @Inject constructor(
                 )
             }
         }
-        .map { nutriments -> nutriments.map { nutritionConverter.entity(it).toModel() } }
+        .map { nutriments -> nutriments.map { nutritionConverter.entity(it).toUiModel() } }
         .cachedIn(viewModelScope)
 
     fun onNutritionChange(nutritionComponent: NutritionComponent, value: String) {
         _uiState.update { state ->
-            state.copy(nutritionModel = nutritionComponent.update(state.nutritionModel, value))
+            state.copy(nutritionUiModel = nutritionComponent.update(state.nutritionUiModel, value))
         }
     }
 
-    fun selectItem(nutrition: NutritionModel) {
+    fun selectItem(nutritionUiModel: NutritionUiModel) {
         // TODO: Error Handling
         viewModelScope.launch(dispatcher) {
             _uiState.update { state ->
                 state.copy(
-                    nutritionModel = nutrition
+                    nutritionUiModel = nutritionUiModel
                 )
             }
         }
@@ -74,7 +74,7 @@ class NutritionUpdateViewModel @Inject constructor(
     fun update() {
         viewModelScope.launch(dispatcher) {
             try {
-                val isSuccess = NutritionConverter().model(_uiState.value.nutritionModel).toEntity()
+                val isSuccess = NutritionConverter().uiModel(_uiState.value.nutritionUiModel).toEntity()
                     .let { updateNutritionUseCase(it) }
 
                 if (!isSuccess) _uiState.update { it.copy(errorMessage = "Update failed") }
@@ -84,9 +84,9 @@ class NutritionUpdateViewModel @Inject constructor(
         }
     }
 
-    fun delete(nutrition: NutritionModel) {
+    fun delete(nutritionUiModel: NutritionUiModel) {
         viewModelScope.launch(dispatcher) {
-            deleteNutritionUseCase(nutritionConverter.model(nutrition).toEntity())
+            deleteNutritionUseCase(nutritionConverter.uiModel(nutritionUiModel).toEntity())
         }
     }
 }
