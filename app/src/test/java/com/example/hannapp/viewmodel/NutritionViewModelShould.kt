@@ -1,7 +1,8 @@
 package com.example.hannapp.viewmodel
 
-import com.example.hannapp.data.model.Food
-import com.example.hannapp.domain.GetFoodUseCase
+import androidx.paging.PagingData
+import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import com.example.hannapp.ui.viewmodel.NutritionViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,17 +23,29 @@ import org.mockito.kotlin.whenever
 class NutritionViewModelShould {
 
     private lateinit var nutritionViewModel: NutritionViewModel
-    private val getFoodUseCase = mock(GetFoodUseCase::class.java)
+    private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val foodList = listOf(Food(1, "Apple"), Food(2, "Banana"), Food(3, "Grapefruit"))
+
+    private val nutritions = listOf(
+        Nutrition(uid = 100, name = "Apple", kcal = "12kcal"),
+        Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
+    )
+
+    private val pagingData = PagingData.from(nutritions)
+    private val nutrimentsFlow = flowOf(pagingData)
 
     @BeforeEach
     fun beforeEach() {
-        whenever(getFoodUseCase.invoke()).thenReturn(
-            flowOf(foodList)
+        Dispatchers.setMain(testDispatcher)
+
+        whenever(getNutritionUseCase.getAll()).thenReturn(
+            nutrimentsFlow
         )
 
-        Dispatchers.setMain(testDispatcher)
+        nutritionViewModel = NutritionViewModel(
+            getNutritionUseCase,
+            testDispatcher
+        )
     }
 
     @AfterEach
@@ -41,45 +54,22 @@ class NutritionViewModelShould {
     }
 
     @Test
-    fun invokeUseCaseOnInstantiation() = runTest {
-        nutritionViewModel = NutritionViewModel(
-            getFoodUseCase,
-            testDispatcher
-        )
+    fun invokeGetNutritionUseCaseOn() = runTest {
+        nutritionViewModel.getAll()
 
-        verify(getFoodUseCase).invoke()
+        verify(getNutritionUseCase).getAll()
     }
 
     @Test
-    fun transformDataToUIStateOnInstantiation() = runTest {
+    fun produceUIStateWithLoadingStateOnInstantiation() = runTest {
         nutritionViewModel = NutritionViewModel(
-            getFoodUseCase,
+            getNutritionUseCase,
             testDispatcher
         )
 
         Assertions.assertEquals(
             NutritionUiState(
-                isLoading = false,
-                errorMessage = null
-            ),
-            nutritionViewModel.uiState.first()
-        )
-    }
-
-    @Test
-    fun produceUIStateWithEmptyData() = runTest {
-        whenever(getFoodUseCase.invoke()).thenReturn(
-            flowOf(null)
-        )
-
-        nutritionViewModel = NutritionViewModel(
-            getFoodUseCase,
-            testDispatcher
-        )
-
-        Assertions.assertEquals(
-            NutritionUiState(
-                isLoading = false,
+                isLoading = true,
                 errorMessage = null
             ),
             nutritionViewModel.uiState.first()
@@ -89,16 +79,13 @@ class NutritionViewModelShould {
     @Test
     fun produceErrorUIStateOnException() = runTest {
         val errorMessage = "error"
-        whenever(getFoodUseCase.invoke()).thenReturn(
+        whenever(getNutritionUseCase.getAll()).thenReturn(
             flow {
                 throw RuntimeException(errorMessage)
             }
         )
 
-        nutritionViewModel = NutritionViewModel(
-            getFoodUseCase,
-            testDispatcher
-        )
+        nutritionViewModel.getAll()
 
         Assertions.assertEquals(
             NutritionUiState(
