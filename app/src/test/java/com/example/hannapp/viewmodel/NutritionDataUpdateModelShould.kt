@@ -1,5 +1,6 @@
 package com.example.hannapp.viewmodel
 
+import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
@@ -46,6 +47,9 @@ class NutritionDataUpdateModelShould {
 
         whenever(getFoodUseCase.invoke()).thenReturn(
             flowOf(food)
+        )
+        whenever(getNutritionUseCase.getAll()).thenReturn(
+            flowOf(PagingData.empty())
         )
         whenever(getNutritionUseCase.invoke(100)).thenReturn(nutritions.first())
         whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
