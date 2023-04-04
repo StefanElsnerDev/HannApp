@@ -15,5 +15,4 @@ fun mapComponentToModelProperty(
     NutritionDataComponent.SUGAR -> model.sugar
     NutritionDataComponent.FIBER -> model.fiber
     NutritionDataComponent.ALCOHOL -> model.alcohol
-    NutritionDataComponent.ENERGY -> model.energy
 }

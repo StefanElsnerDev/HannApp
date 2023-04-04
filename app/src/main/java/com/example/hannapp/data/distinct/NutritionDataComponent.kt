@@ -10,6 +10,5 @@ enum class NutritionDataComponent(val text: String) {
     CARBOHYDRATES(Constants.CARBOHYDRATES),
     SUGAR(Constants.SUGAR),
     FIBER(Constants.FIBER),
-    ALCOHOL(Constants.ALCOHOL),
-    ENERGY(Constants.ENERGY)
+    ALCOHOL(Constants.ALCOHOL)
 }

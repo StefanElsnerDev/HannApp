@@ -185,22 +185,3 @@ class Alcohol : NutritionComponent {
         }
     }
 }
-
-class Energy : NutritionComponent {
-    override var type = NutritionDataComponent.ENERGY
-    override var text = "Energy"
-
-    override fun update(nutritionModel: NutritionModel, value: String) =
-        nutritionModel.copy(energy = value)
-
-    override fun validate(
-        nutritionModel: NutritionModel,
-        errors: Set<NutritionDataComponent>
-    ): Set<NutritionDataComponent> {
-        return if (nutritionModel.energy.isBlank()) {
-            addError(errors, NutritionDataComponent.ENERGY)
-        } else {
-            removeError(errors, NutritionDataComponent.ENERGY)
-        }
-    }
-}

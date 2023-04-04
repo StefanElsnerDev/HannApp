@@ -43,8 +43,7 @@ class NutritionInsertViewModel @Inject constructor(
             Carbohydrates(),
             Sugar(),
             Fiber(),
-            Alcohol(),
-            Energy()
+            Alcohol()
         )
     )
     val uiComponents = _uiComponents.asStateFlow()
@@ -73,8 +72,7 @@ class NutritionInsertViewModel @Inject constructor(
                     carbohydrates = _uiState.value.nutrition.carbohydrates,
                     sugar = _uiState.value.nutrition.sugar,
                     fiber = _uiState.value.nutrition.fiber,
-                    alcohol = _uiState.value.nutrition.alcohol,
-                    energyDensity = _uiState.value.nutrition.energy
+                    alcohol = _uiState.value.nutrition.alcohol
                 )
             )
             clearState()
@@ -127,7 +125,6 @@ class NutritionInsertViewModel @Inject constructor(
                     sugar = product.nutriments.sugar.toString(),
                     fiber = product.nutriments.fiber.toString(),
                     alcohol = product.nutriments.alcohol.toString(),
-                    energy = product.nutriments.kcal.toString()
                 )
             )
         }

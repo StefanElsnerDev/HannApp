@@ -49,8 +49,7 @@ fun NutritionInsertContent(
         Carbohydrates(),
         Sugar(),
         Fiber(),
-        Alcohol(),
-        Energy()
+        Alcohol()
     ),
     pagingItems: LazyPagingItems<Product> = flowOf(
         PagingData.from(

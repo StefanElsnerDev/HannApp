@@ -9,6 +9,5 @@ data class NutritionModel(
     val carbohydrates: Double  = 0.0,
     val sugar: Double  = 0.0,
     val fiber: Double  = 0.0,
-    val alcohol: Double  = 0.0,
-    val energy: Double  = 0.0
+    val alcohol: Double  = 0.0
 )

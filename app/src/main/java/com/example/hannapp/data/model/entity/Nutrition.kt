@@ -16,6 +16,5 @@ data class Nutrition(
     @ColumnInfo(name = "carbohydrates per 100 g/ml") val carbohydrates: Double? = null,
     @ColumnInfo(name = "sugar of carbohydrates per 100 g/ml") val sugar: Double? = null,
     @ColumnInfo(name = "fiber per 100 g/ml") val fiber: Double? = null,
-    @ColumnInfo(name = "alcohol per 100 g/ml") val alcohol: Double? = null,
-    @ColumnInfo(name = "energy density per 100 g/ml") val energyDensity: Double? = null
+    @ColumnInfo(name = "alcohol per 100 g/ml") val alcohol: Double? = null
 )

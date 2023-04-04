@@ -21,8 +21,7 @@ class NutritionConverter @Inject constructor() {
                 carbohydrates = it.carbohydrates.ifBlank { null },
                 sugar = it.sugar.ifBlank { null },
                 fiber = it.fiber.ifBlank { null },
-                alcohol = it.alcohol.ifBlank { null },
-                energyDensity = it.energy.ifBlank { null }
+                alcohol = it.alcohol.ifBlank { null }
             )
         }
     }
@@ -39,8 +38,7 @@ class NutritionConverter @Inject constructor() {
                 carbohydrates = it.carbohydrates ?: "",
                 sugar = it.sugar ?: "",
                 fiber = it.fiber ?: "",
-                alcohol = it.alcohol ?: "",
-                energy = it.energyDensity ?: ""
+                alcohol = it.alcohol ?: ""
             )
         }
     }

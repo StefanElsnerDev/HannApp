@@ -72,8 +72,7 @@ fun FoodDataGroup_Preview_Portrait_LightMode() {
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),
-                Alcohol(),
-                Energy()
+                Alcohol()
             ),
             errors = emptySet(),
             showErrors = false,
@@ -99,8 +98,7 @@ fun FoodDataGroup_Preview_LandScape_LightMode() {
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),
-                Alcohol(),
-                Energy()
+                Alcohol()
             ),
             errors = emptySet(),
             showErrors = false,

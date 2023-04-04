@@ -82,9 +82,6 @@ class NutritionInsertViewModelShould {
         ))
 
         nutritionDataViewModel.onNutritionChange(
-            Energy(), "987.6"
-        )
-        nutritionDataViewModel.onNutritionChange(
             Fat(), "123.4"
         )
 
@@ -105,8 +102,7 @@ class NutritionInsertViewModelShould {
                     NutritionDataComponent.CARBOHYDRATES,
                     NutritionDataComponent.SUGAR,
                     NutritionDataComponent.FIBER,
-                    NutritionDataComponent.ALCOHOL,
-                    NutritionDataComponent.ENERGY
+                    NutritionDataComponent.ALCOHOL
                 )
             )
 
@@ -125,8 +121,7 @@ class NutritionInsertViewModelShould {
                     NutritionDataComponent.CARBOHYDRATES,
                     NutritionDataComponent.SUGAR,
                     NutritionDataComponent.FIBER,
-                    NutritionDataComponent.ALCOHOL,
-                    NutritionDataComponent.ENERGY
+                    NutritionDataComponent.ALCOHOL
                 )
             )
 
@@ -157,9 +152,6 @@ class NutritionInsertViewModelShould {
             val expectedUiState = NutritionInsertState()
 
             nutritionDataViewModel.onNutritionChange(
-                Energy(), "987.6"
-            )
-            nutritionDataViewModel.onNutritionChange(
                 Fat(), "123.4"
             )
 
@@ -177,8 +169,7 @@ class NutritionInsertViewModelShould {
                 Carbohydrates(),
                 Sugar(),
                 Fiber(),
-                Alcohol(),
-                Energy()
+                Alcohol()
             ).forEach{
                 this.onNutritionChange(
                     it, "String"
@@ -242,8 +233,7 @@ class NutritionInsertViewModelShould {
                 carbohydrates = "2.2",
                 sugar = "3.3",
                 fiber = "4.4",
-                alcohol = "5.5",
-                energy = "123.5"
+                alcohol = "5.5"
             )
 
             val selectedProduct = Product(

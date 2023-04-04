@@ -12,5 +12,4 @@ object Constants {
     const val SUGAR = "sugar"
     const val FIBER = "fiber"
     const val ALCOHOL = "alcohol"
-    const val ENERGY = "energy"
 }
