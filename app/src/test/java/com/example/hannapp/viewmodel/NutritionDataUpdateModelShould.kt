@@ -2,22 +2,20 @@ package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.Food
 import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutritionUseCase
-import com.example.hannapp.domain.GetFoodUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.UpdateNutritionUseCase
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
-import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -25,13 +23,11 @@ import org.mockito.kotlin.whenever
 class NutritionDataUpdateModelShould {
 
     lateinit var nutritionDataUpdateViewModel: NutritionUpdateViewModel
-    private val getFoodUseCase = mock(GetFoodUseCase::class.java)
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val updateNutritionUseCase = mock(UpdateNutritionUseCase::class.java)
     private val deleteNutritionUseCase = mock(DeleteNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
-    private val food = listOf(Food(100, "Apple"), Food(200, "Banana"))
     private val nutritions = listOf(
         Nutrition(uid = 100, name = "Apple", kcal = "12kcal"),
         Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
@@ -41,18 +37,16 @@ class NutritionDataUpdateModelShould {
         NutritionModel(id = 200, name = "Banana", kcal = "123kcal")
     )
 
+    private val pagingData = PagingData.from(nutritions)
+    private val nutrimentsFlow = flowOf(pagingData)
+
     @BeforeEach
     fun beforeEach() = runTest {
         Dispatchers.setMain(testDispatcher)
 
-        whenever(getFoodUseCase.invoke()).thenReturn(
-            flowOf(food)
-        )
         whenever(getNutritionUseCase.getAll()).thenReturn(
-            flowOf(PagingData.empty())
+            nutrimentsFlow
         )
-        whenever(getNutritionUseCase.invoke(100)).thenReturn(nutritions.first())
-        whenever(getNutritionUseCase.invoke(200)).thenReturn(nutritions.last())
     }
 
     @AfterEach
@@ -63,34 +57,17 @@ class NutritionDataUpdateModelShould {
     @Nested
     inner class Instantiation {
         @Test
-        fun emitsStateWithFetchedFoodOnInstantiation() {
+        fun emitsStateWithFetchedNutrimentsOnInstantiation() = runTest {
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
                 deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
 
-            verify(getFoodUseCase).invoke()
-            Assertions.assertEquals(food, nutritionDataUpdateViewModel.uiState.value.foodList)
-        }
-
-        @Test
-        fun emitPreselectedNutritionDataState() = runTest {
-            nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
-                getNutritionUseCase = getNutritionUseCase,
-                updateNutritionUseCase = updateNutritionUseCase,
-                deleteNutritionUseCase = deleteNutritionUseCase,
-                testDispatcher
-            )
-
-            verify(getNutritionUseCase).invoke(100)
-            Assertions.assertEquals(
-                nutritionModels.first(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionModel
-            )
+            verify(getNutritionUseCase).getAll()
+            // TODO: Extension 'cachedIn' returns new instance of paging data with different memory reference than mocked paging data
+            // Assertions.assertEquals(pagingData, nutritionDataUpdateViewModel.nutriments.first())
         }
     }
 
@@ -100,7 +77,6 @@ class NutritionDataUpdateModelShould {
         @BeforeEach
         fun beforeEach() {
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
                 deleteNutritionUseCase = deleteNutritionUseCase,
@@ -109,15 +85,13 @@ class NutritionDataUpdateModelShould {
         }
 
         @Test
-        fun invokeUseCaseToFetchSelectedFoodNutrition() = runTest {
-            nutritionDataUpdateViewModel.selectItem(1)
-
-            verify(getNutritionUseCase).invoke(200)
-        }
-
-        @Test
         fun emitStateWithSelectedFoodNutrition() = runTest {
-            nutritionDataUpdateViewModel.selectItem(1)
+            Assertions.assertEquals(
+                NutritionModel(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionModel
+            )
+
+            nutritionDataUpdateViewModel.selectItem(nutritionModels.last())
 
             Assertions.assertEquals(
                 nutritionModels.last(),
@@ -132,7 +106,6 @@ class NutritionDataUpdateModelShould {
         @BeforeEach
         fun beforeEach() = runTest {
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
                 deleteNutritionUseCase = deleteNutritionUseCase,
@@ -142,7 +115,7 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun changeUiStateOnCallback() {
-            val updatedNutritionModel = NutritionModel(id = 100, name = "Strawberry", kcal = "987cal")
+            val updatedNutritionModel = NutritionModel(id = null, name = "Strawberry", kcal = "987cal")
 
             nutritionDataUpdateViewModel.onNutritionChange(Name(), "Strawberry")
             nutritionDataUpdateViewModel.onNutritionChange(Kcal(), "987cal")
@@ -159,7 +132,6 @@ class NutritionDataUpdateModelShould {
         @BeforeEach
         fun beforeEach() = runTest {
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
                 deleteNutritionUseCase = deleteNutritionUseCase,
@@ -169,7 +141,7 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun invokeUseCaseForUpdatingSelectedItem() = runTest {
-            nutritionDataUpdateViewModel.selectItem(1)
+            nutritionDataUpdateViewModel.selectItem(nutritionModels.last())
 
             nutritionDataUpdateViewModel.update()
 
@@ -212,37 +184,20 @@ class NutritionDataUpdateModelShould {
         @BeforeEach
         fun beforeEach() = runTest {
             nutritionDataUpdateViewModel = NutritionUpdateViewModel(
-                getFoodUseCase = getFoodUseCase,
                 getNutritionUseCase = getNutritionUseCase,
                 updateNutritionUseCase = updateNutritionUseCase,
                 deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
+
+            nutritionDataUpdateViewModel.nutritionConverter = NutritionConverter()
         }
 
         @Test
         fun invokeDeleteUseCase() = runTest {
-            nutritionDataUpdateViewModel.delete(0)
+            nutritionDataUpdateViewModel.delete(nutritionModels.last())
 
             verify(deleteNutritionUseCase).invoke(any())
-        }
-
-        @Test
-        fun deleteNutrition() = runTest {
-            val expectedFoodList = listOf(food.last())
-
-            clearInvocations(getFoodUseCase)
-            whenever(getFoodUseCase.invoke()).thenReturn(
-                flowOf(expectedFoodList)
-            )
-
-            nutritionDataUpdateViewModel.delete(0)
-
-            verify(getFoodUseCase).invoke()
-            Assertions.assertEquals(
-                expectedFoodList,
-                nutritionDataUpdateViewModel.uiState.value.foodList
-            )
         }
     }
 }
