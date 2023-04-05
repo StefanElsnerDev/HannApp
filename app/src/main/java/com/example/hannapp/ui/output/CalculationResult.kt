@@ -24,6 +24,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculationScreen(
+    modifier: Modifier = Modifier,
     mood: Mood, navController: NavHostController = rememberNavController()
 ) {
     AppScaffold(
@@ -60,9 +61,11 @@ fun CalculationScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun CalculationPreview_DarkMode(){
+fun CalculationPreview_DarkMode() {
     HannAppTheme {
-        CalculationScreen(Mood.GREEN)
+        CalculationScreen(
+            mood = Mood.GREEN
+        )
     }
 }
 
@@ -73,8 +76,10 @@ fun CalculationPreview_DarkMode(){
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun CalculationPreview_LightMode(){
+fun CalculationPreview_LightMode() {
     HannAppTheme {
-        CalculationScreen(Mood.YELLOW)
+        CalculationScreen(
+            mood = Mood.YELLOW
+        )
     }
 }
