@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Product
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetProductSearchResultsUseCase
 import com.example.hannapp.domain.InsertNutritionUseCase
@@ -63,18 +63,7 @@ class NutritionInsertViewModel @Inject constructor(
     fun insert() {
         viewModelScope.launch(dispatcher) {
             // TODO error handling on failing insertion
-            insertNutritionUseCase(
-                Nutrition(
-                    name = _uiState.value.nutritionUiModel.name,
-                    kcal = _uiState.value.nutritionUiModel.kcal.toDouble(),
-                    protein = _uiState.value.nutritionUiModel.protein.toDouble(),
-                    fat = _uiState.value.nutritionUiModel.fat.toDouble(),
-                    carbohydrates = _uiState.value.nutritionUiModel.carbohydrates.toDouble(),
-                    sugar = _uiState.value.nutritionUiModel.sugar.toDouble(),
-                    fiber = _uiState.value.nutritionUiModel.fiber.toDouble(),
-                    alcohol = _uiState.value.nutritionUiModel.alcohol.toDouble()
-                )
-            )
+            insertNutritionUseCase( NutritionConverter().uiModel(_uiState.value.nutritionUiModel).toEntity())
             clearState()
         }
     }

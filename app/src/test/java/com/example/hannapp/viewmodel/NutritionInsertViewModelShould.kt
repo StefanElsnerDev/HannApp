@@ -23,14 +23,14 @@ import org.mockito.kotlin.whenever
 @OptIn(ExperimentalCoroutinesApi::class)
 class NutritionInsertViewModelShould {
 
-    lateinit var nutritionDataViewModel: NutritionInsertViewModel
+    lateinit var nutritionInsertViewModel: NutritionInsertViewModel
     private val insertNutritionUseCase = mock(InsertNutritionUseCase::class.java)
     private val getProductSearchResultsUseCase = mock(GetProductSearchResultsUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @BeforeEach
     fun beforeEach() = runTest {
-        nutritionDataViewModel = NutritionInsertViewModel(
+        nutritionInsertViewModel = NutritionInsertViewModel(
             insertNutritionUseCase,
             getProductSearchResultsUseCase,
             testDispatcher
@@ -48,18 +48,18 @@ class NutritionInsertViewModelShould {
     fun updateStateOnCallback() {
         val expectedNutritionState = NutritionUiModel(name = "Apple Juice", kcal = "12346.78")
 
-        nutritionDataViewModel.onNutritionChange(Name(), "Apple Juice")
-        nutritionDataViewModel.onNutritionChange(Kcal(), "12346.78")
+        nutritionInsertViewModel.onNutritionChange(Name(), "Apple Juice")
+        nutritionInsertViewModel.onNutritionChange(Kcal(), "12346.78")
 
         Assertions.assertEquals(
             expectedNutritionState,
-            nutritionDataViewModel.uiState.value.nutritionUiModel
+            nutritionInsertViewModel.uiState.value.nutritionUiModel
         )
     }
 
     @Test
     fun invokeInsertUseCase() = runTest {
-        nutritionDataViewModel.insert()
+        nutritionInsertViewModel.insert()
 
         verify(insertNutritionUseCase).invoke(any())
     }
@@ -68,11 +68,11 @@ class NutritionInsertViewModelShould {
     fun emitUiStateOnEvent() {
         val expectedUiState = NutritionInsertState(nutritionUiModel = NutritionUiModel(fat = "987.6"))
 
-        nutritionDataViewModel.onNutritionChange(
+        nutritionInsertViewModel.onNutritionChange(
             Fat(), "987.6"
         )
 
-        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
     }
 
     @Test
@@ -81,11 +81,11 @@ class NutritionInsertViewModelShould {
             fat = "123.4"
         ))
 
-        nutritionDataViewModel.onNutritionChange(
+        nutritionInsertViewModel.onNutritionChange(
             Fat(), "123.4"
         )
 
-        Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
     }
 
     @Nested
@@ -106,9 +106,9 @@ class NutritionInsertViewModelShould {
                 )
             )
 
-            nutritionDataViewModel.validate()
+            nutritionInsertViewModel.validate()
 
-            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
         }
 
         @Test
@@ -125,39 +125,39 @@ class NutritionInsertViewModelShould {
                 )
             )
 
-            nutritionDataViewModel.validate()
+            nutritionInsertViewModel.validate()
 
-            nutritionDataViewModel.resetError(NutritionDataComponent.NAME)
+            nutritionInsertViewModel.resetError(NutritionDataComponent.NAME)
 
-            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
         }
 
         @Test
         fun emitInvalidDataState() {
-            nutritionDataViewModel.validate()
-            Assertions.assertEquals(false, nutritionDataViewModel.uiState.value.isValid)
+            nutritionInsertViewModel.validate()
+            Assertions.assertEquals(false, nutritionInsertViewModel.uiState.value.isValid)
         }
 
         @Test
         fun emitValidDataState() {
-            nutritionDataViewModel.fakeCompletion()
+            nutritionInsertViewModel.fakeCompletion()
 
-            nutritionDataViewModel.validate()
+            nutritionInsertViewModel.validate()
 
-            Assertions.assertEquals(true, nutritionDataViewModel.uiState.value.isValid)
+            Assertions.assertEquals(true, nutritionInsertViewModel.uiState.value.isValid)
         }
 
         @Test
         fun clearUiStateOnInsert() {
             val expectedUiState = NutritionInsertState()
 
-            nutritionDataViewModel.onNutritionChange(
+            nutritionInsertViewModel.onNutritionChange(
                 Fat(), "123.4"
             )
 
-            nutritionDataViewModel.clearState()
+            nutritionInsertViewModel.clearState()
 
-            Assertions.assertEquals(expectedUiState, nutritionDataViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
         }
 
         private fun NutritionInsertViewModel.fakeCompletion(){
@@ -172,7 +172,7 @@ class NutritionInsertViewModelShould {
                 Alcohol()
             ).forEach{
                 this.onNutritionChange(
-                    it, "String"
+                    it, "123.4"
                 )
             }
         }
@@ -210,7 +210,7 @@ class NutritionInsertViewModelShould {
 
         @Test
         fun callUseCase() = runTest {
-            nutritionDataViewModel.search("apple juice")
+            nutritionInsertViewModel.search("apple juice")
 
             verify(getProductSearchResultsUseCase).search(any(), any())
         }
@@ -218,7 +218,7 @@ class NutritionInsertViewModelShould {
         @Ignore("Due to 'cachedIn'-extension the receiving flow is internally manipulated and complicated to test")
         @Test
         fun fetchProductFlow() = runTest {
-            nutritionDataViewModel.search("apple juice")
+            nutritionInsertViewModel.search("apple juice")
 
         }
 
@@ -244,14 +244,14 @@ class NutritionInsertViewModelShould {
 
             Assertions.assertEquals(
                 NutritionUiModel(),
-                nutritionDataViewModel.uiState.value.nutritionUiModel
+                nutritionInsertViewModel.uiState.value.nutritionUiModel
             )
 
-            nutritionDataViewModel.select(selectedProduct)
+            nutritionInsertViewModel.select(selectedProduct)
 
             Assertions.assertEquals(
                 expectedNutritionUiModel,
-                nutritionDataViewModel.uiState.value.nutritionUiModel
+                nutritionInsertViewModel.uiState.value.nutritionUiModel
             )
         }
 
@@ -265,14 +265,14 @@ class NutritionInsertViewModelShould {
 
             Assertions.assertEquals(
                 false,
-                nutritionDataViewModel.uiState.value.isValid
+                nutritionInsertViewModel.uiState.value.isValid
             )
 
-            nutritionDataViewModel.select(selectedProduct)
+            nutritionInsertViewModel.select(selectedProduct)
 
             Assertions.assertEquals(
                 true,
-                nutritionDataViewModel.uiState.value.isValid
+                nutritionInsertViewModel.uiState.value.isValid
             )
         }
     }
