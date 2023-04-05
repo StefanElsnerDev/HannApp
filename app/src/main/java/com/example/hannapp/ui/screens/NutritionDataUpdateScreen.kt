@@ -25,7 +25,7 @@ import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.dropdown.SimpleDropDownMenu
 import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
+import com.example.hannapp.ui.viewmodel.ComponentUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import kotlinx.coroutines.flow.flowOf
 
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun NutritionDataUpdateContent(
     pagingItems: LazyPagingItems<NutritionUiModel>,
-    uiState: NutritionUpdateUiState,
+    componentUiState: ComponentUiState,
     uiComponents: List<NutritionComponent>,
     onItemSelected: (NutritionUiModel) -> Unit,
     onDeleteSelected: (NutritionUiModel) -> Unit,
@@ -46,7 +46,7 @@ fun NutritionDataUpdateContent(
     AppScaffold(
         floatingActionButton = {
             FAB({ Icon(painterResource(id = R.drawable.change), "") }) {
-                selectedItem = uiState.nutritionUiModel.toString()
+                selectedItem = componentUiState.nutritionUiModel.toString()
                 onUpdate()
             }
         }
@@ -87,12 +87,12 @@ fun NutritionDataUpdateContent(
             }
 
             NutritionDataGroup(
-                nutritionUiModel = uiState.nutritionUiModel,
+                nutritionUiModel = componentUiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
                 uiComponents = uiComponents,
-                errors = uiState.errors,
-                showErrors = uiState.showErrors
+                errors = componentUiState.errors,
+                showErrors = componentUiState.showErrors
             )
         }
     }
@@ -102,13 +102,13 @@ fun NutritionDataUpdateContent(
 fun NutritionDataUpdateScreen(
     viewModel: NutritionUpdateViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val componentUiState by viewModel.uiComponentState.collectAsState()
     val uiComponents by viewModel.uiComponents.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
 
     NutritionDataUpdateContent(
         pagingItems = nutriments,
-        uiState = uiState,
+        componentUiState = componentUiState,
         uiComponents = uiComponents,
         onItemSelected = {
             viewModel.selectItem(it)
@@ -123,7 +123,7 @@ fun NutritionDataUpdateScreen(
         },
         onReset = { viewModel.resetError(it) },
         onUpdate = {
-            if (uiState.isValid) {
+            if (componentUiState.isValid) {
                 viewModel.update()
             } else {
                 viewModel.validate()
@@ -143,7 +143,7 @@ fun NutritionDataUpdate_LightMode() {
     HannAppTheme {
         NutritionDataUpdateContent(
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
-            uiState = NutritionUpdateUiState(),
+            componentUiState = ComponentUiState(),
             uiComponents = listOf(
                 Name(),
                 Kcal(),
