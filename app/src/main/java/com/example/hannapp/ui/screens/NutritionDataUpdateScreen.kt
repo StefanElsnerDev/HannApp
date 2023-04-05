@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.flowOf
 fun NutritionDataUpdateContent(
     pagingItems: LazyPagingItems<NutritionUiModel>,
     uiState: NutritionUpdateUiState,
+    uiComponents: List<NutritionComponent>,
     onItemSelected: (NutritionUiModel) -> Unit,
     onDeleteSelected: (NutritionUiModel) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
@@ -89,9 +90,9 @@ fun NutritionDataUpdateContent(
                 nutritionUiModel = uiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
-                uiComponents = uiState.components,
+                uiComponents = uiComponents,
                 errors = uiState.errors,
-                showErrors = false
+                showErrors = uiState.showErrors
             )
         }
     }
@@ -133,6 +134,16 @@ fun NutritionDataUpdate_LightMode() {
         NutritionDataUpdateContent(
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             uiState = NutritionUpdateUiState(),
+            uiComponents = listOf(
+                Name(),
+                Kcal(),
+                Protein(),
+                Fat(),
+                Carbohydrates(),
+                Sugar(),
+                Fiber(),
+                Alcohol()
+            ),
             onItemSelected = {},
             onDeleteSelected = {},
             onComponentValueChange = { _, _ -> },

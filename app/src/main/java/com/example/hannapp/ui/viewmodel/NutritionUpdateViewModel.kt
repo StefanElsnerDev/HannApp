@@ -21,10 +21,9 @@ data class NutritionUpdateUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
-    val components: List<NutritionComponent> = listOf(
-        Name(), Kcal(), Protein(), Fat(), Carbohydrates(), Sugar(), Fiber(), Alcohol()
-    ),
-    val errors: Set<NutritionDataComponent> = emptySet()
+    val isValid: Boolean = false,
+    val errors: Set<NutritionDataComponent> = emptySet(),
+    val showErrors: Boolean = false
 )
 
 @HiltViewModel
@@ -40,6 +39,20 @@ class NutritionUpdateViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
+
+    private val _uiComponents = MutableStateFlow(
+        listOf(
+            Name(),
+            Kcal(),
+            Protein(),
+            Fat(),
+            Carbohydrates(),
+            Sugar(),
+            Fiber(),
+            Alcohol()
+        )
+    )
+    val uiComponents = _uiComponents.asStateFlow()
 
     val nutriments = getNutritionUseCase
         .getAll()
