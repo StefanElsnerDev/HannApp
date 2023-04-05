@@ -18,7 +18,7 @@ class NutritionConverter @Inject constructor() {
         fun toEntity() = nutritionModel.let {
             Nutrition(
                 uid = it.id ?: -1,
-                name = it.name.ifBlank { null },
+                name = it.name,
                 kcal = it.kcal,
                 protein = it.protein,
                 fat = it.fat,
@@ -55,14 +55,14 @@ class NutritionConverter @Inject constructor() {
         fun toModel() = nutrition.let {
             NutritionModel(
                 id = it.uid,
-                name = it.name ?: "",
-                kcal = it.kcal ?: 0.0,
-                protein = it.protein ?: 0.0,
-                fat = it.fat ?: 0.0,
-                carbohydrates = it.carbohydrates ?: 0.0,
-                sugar = it.sugar ?: 0.0,
-                fiber = it.fiber ?: 0.0,
-                alcohol = it.alcohol ?: 0.0
+                name = it.name,
+                kcal = it.kcal,
+                protein = it.protein,
+                fat = it.fat,
+                carbohydrates = it.carbohydrates,
+                sugar = it.sugar,
+                fiber = it.fiber,
+                alcohol = it.alcohol
             )
         }
 
