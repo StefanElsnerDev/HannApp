@@ -103,11 +103,13 @@ fun NutritionDataUpdateScreen(
     viewModel: NutritionUpdateViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val uiComponents by viewModel.uiComponents.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
 
     NutritionDataUpdateContent(
         pagingItems = nutriments,
         uiState = uiState,
+        uiComponents = uiComponents,
         onItemSelected = {
             viewModel.selectItem(it)
         },
@@ -117,9 +119,17 @@ fun NutritionDataUpdateScreen(
                 component,
                 value
             )
+            viewModel.validate()
         },
-        onReset = {},
-        onUpdate = { viewModel.update() }
+        onReset = { viewModel.resetError(it) },
+        onUpdate = {
+            if (uiState.isValid) {
+                viewModel.update()
+            } else {
+                viewModel.validate()
+                viewModel.showErrors()
+            }
+        }
     )
 }
 

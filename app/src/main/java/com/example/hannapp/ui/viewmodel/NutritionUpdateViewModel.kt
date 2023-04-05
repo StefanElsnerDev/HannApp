@@ -102,4 +102,28 @@ class NutritionUpdateViewModel @Inject constructor(
             deleteNutritionUseCase(nutritionConverter.uiModel(nutritionUiModel).toEntity())
         }
     }
+
+    fun validate() {
+        _uiComponents.value.forEach {
+            _uiState.update { state ->
+                state.copy(
+                    errors = it.validate(state.nutritionUiModel, state.errors),
+                    isValid = state.errors.isEmpty()
+                )
+            }
+        }
+        _uiState.update { state ->
+            state.copy(isValid = state.errors.isEmpty())
+        }
+    }
+
+    fun showErrors() = _uiState.update { state -> state.copy(showErrors = true) }
+
+    fun resetError(nutritionDataComponent: NutritionDataComponent) {
+        _uiState.update { state ->
+            val errors = state.errors.toMutableSet()
+            errors.remove(nutritionDataComponent)
+            state.copy(errors = errors.toSet())
+        }
+    }
 }
