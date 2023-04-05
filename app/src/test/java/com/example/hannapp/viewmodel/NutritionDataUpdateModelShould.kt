@@ -88,14 +88,14 @@ class NutritionDataUpdateModelShould {
         fun emitStateWithSelectedFoodNutrition() = runTest {
             Assertions.assertEquals(
                 NutritionUiModel(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
 
             nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
 
             Assertions.assertEquals(
                 nutritionUiModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
         }
     }
@@ -123,7 +123,7 @@ class NutritionDataUpdateModelShould {
 
             Assertions.assertEquals(
                 updatedNutritionUiModel,
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
         }
     }
@@ -148,7 +148,7 @@ class NutritionDataUpdateModelShould {
 
             Assertions.assertEquals(
                 nutritionUiModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
             verify(updateNutritionUseCase).invoke(nutritions.last())
         }

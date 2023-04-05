@@ -7,7 +7,7 @@ import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
 import com.example.hannapp.domain.GetProductSearchResultsUseCase
 import com.example.hannapp.domain.InsertNutritionUseCase
-import com.example.hannapp.ui.viewmodel.NutritionInsertState
+import com.example.hannapp.ui.viewmodel.ComponentUiState
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,7 +53,7 @@ class NutritionInsertViewModelShould {
 
         Assertions.assertEquals(
             expectedNutritionState,
-            nutritionInsertViewModel.uiState.value.nutritionUiModel
+            nutritionInsertViewModel.uiComponentState.value.nutritionUiModel
         )
     }
 
@@ -66,18 +66,18 @@ class NutritionInsertViewModelShould {
 
     @Test
     fun emitUiStateOnEvent() {
-        val expectedUiState = NutritionInsertState(nutritionUiModel = NutritionUiModel(fat = "987.6"))
+        val expectedUiState = ComponentUiState(nutritionUiModel = NutritionUiModel(fat = "987.6"))
 
         nutritionInsertViewModel.onNutritionChange(
             Fat(), "987.6"
         )
 
-        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
+        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
     }
 
     @Test
     fun copyStateOnEvent() {
-        val expectedUiState = NutritionInsertState(nutritionUiModel = NutritionUiModel(
+        val expectedUiState = ComponentUiState(nutritionUiModel = NutritionUiModel(
             fat = "123.4"
         ))
 
@@ -85,7 +85,7 @@ class NutritionInsertViewModelShould {
             Fat(), "123.4"
         )
 
-        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
+        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
     }
 
     @Nested
@@ -93,7 +93,7 @@ class NutritionInsertViewModelShould {
 
         @Test
         fun emitErrorUiState(){
-            val expectedUiState = NutritionInsertState(
+            val expectedUiState = ComponentUiState(
                 errors = setOf(
                     NutritionDataComponent.NAME,
                     NutritionDataComponent.KCAL,
@@ -108,12 +108,12 @@ class NutritionInsertViewModelShould {
 
             nutritionInsertViewModel.validate()
 
-            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
         }
 
         @Test
         fun resetErrorOfComponent() {
-            val expectedUiState = NutritionInsertState(
+            val expectedUiState = ComponentUiState(
                 errors = setOf(
                     NutritionDataComponent.KCAL,
                     NutritionDataComponent.PROTEIN,
@@ -129,13 +129,13 @@ class NutritionInsertViewModelShould {
 
             nutritionInsertViewModel.resetError(NutritionDataComponent.NAME)
 
-            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
         }
 
         @Test
         fun emitInvalidDataState() {
             nutritionInsertViewModel.validate()
-            Assertions.assertEquals(false, nutritionInsertViewModel.uiState.value.isValid)
+            Assertions.assertEquals(false, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
         }
 
         @Test
@@ -144,12 +144,12 @@ class NutritionInsertViewModelShould {
 
             nutritionInsertViewModel.validate()
 
-            Assertions.assertEquals(true, nutritionInsertViewModel.uiState.value.isValid)
+            Assertions.assertEquals(true, nutritionInsertViewModel.uiComponentState.value.isValid)
         }
 
         @Test
         fun clearUiStateOnInsert() {
-            val expectedUiState = NutritionInsertState()
+            val expectedUiState = ComponentUiState()
 
             nutritionInsertViewModel.onNutritionChange(
                 Fat(), "123.4"
@@ -157,7 +157,7 @@ class NutritionInsertViewModelShould {
 
             nutritionInsertViewModel.clearState()
 
-            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiState.value)
+            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value)
         }
 
         private fun NutritionInsertViewModel.fakeCompletion(){
@@ -244,14 +244,14 @@ class NutritionInsertViewModelShould {
 
             Assertions.assertEquals(
                 NutritionUiModel(),
-                nutritionInsertViewModel.uiState.value.nutritionUiModel
+                nutritionInsertViewModel.uiComponentState.value.nutritionUiModel
             )
 
             nutritionInsertViewModel.select(selectedProduct)
 
             Assertions.assertEquals(
                 expectedNutritionUiModel,
-                nutritionInsertViewModel.uiState.value.nutritionUiModel
+                nutritionInsertViewModel.uiComponentState.value.nutritionUiModel
             )
         }
 
@@ -265,14 +265,14 @@ class NutritionInsertViewModelShould {
 
             Assertions.assertEquals(
                 false,
-                nutritionInsertViewModel.uiState.value.isValid
+                nutritionInsertViewModel.uiComponentState.value.isValid
             )
 
             nutritionInsertViewModel.select(selectedProduct)
 
             Assertions.assertEquals(
                 true,
-                nutritionInsertViewModel.uiState.value.isValid
+                nutritionInsertViewModel.uiComponentState.value.isValid
             )
         }
     }
