@@ -2,7 +2,7 @@ package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
-import com.example.hannapp.data.model.NutritionModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutritionUseCase
@@ -29,12 +29,12 @@ class NutritionDataUpdateModelShould {
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
-        Nutrition(uid = 100, name = "Apple", kcal = "12kcal"),
-        Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
+        Nutrition(uid = 100, name = "Apple", kcal = 1.2),
+        Nutrition(uid = 200, name = "Banana", kcal = 3.4)
     )
-    private val nutritionModels = listOf(
-        NutritionModel(id = 100, name = "Apple", kcal = "12kcal"),
-        NutritionModel(id = 200, name = "Banana", kcal = "123kcal")
+    private val nutritionUiModels = listOf(
+        NutritionUiModel(id = 100, name = "Apple", kcal = "12"),
+        NutritionUiModel(id = 200, name = "Banana", kcal = "3.4")
     )
 
     private val pagingData = PagingData.from(nutritions)
@@ -87,15 +87,15 @@ class NutritionDataUpdateModelShould {
         @Test
         fun emitStateWithSelectedFoodNutrition() = runTest {
             Assertions.assertEquals(
-                NutritionModel(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionModel
+                NutritionUiModel(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
             )
 
-            nutritionDataUpdateViewModel.selectItem(nutritionModels.last())
+            nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
 
             Assertions.assertEquals(
-                nutritionModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionModel
+                nutritionUiModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
             )
         }
     }
@@ -115,14 +115,15 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun changeUiStateOnCallback() {
-            val updatedNutritionModel = NutritionModel(id = null, name = "Strawberry", kcal = "987cal")
+            val updatedNutritionUiModel =
+                NutritionUiModel(id = null, name = "Strawberry", kcal = "987cal")
 
             nutritionDataUpdateViewModel.onNutritionChange(Name(), "Strawberry")
             nutritionDataUpdateViewModel.onNutritionChange(Kcal(), "987cal")
 
             Assertions.assertEquals(
-                updatedNutritionModel,
-                nutritionDataUpdateViewModel.uiState.value.nutritionModel
+                updatedNutritionUiModel,
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
             )
         }
     }
@@ -141,13 +142,13 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun invokeUseCaseForUpdatingSelectedItem() = runTest {
-            nutritionDataUpdateViewModel.selectItem(nutritionModels.last())
+            nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
 
             nutritionDataUpdateViewModel.update()
 
             Assertions.assertEquals(
-                nutritionModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionModel
+                nutritionUiModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
             )
             verify(updateNutritionUseCase).invoke(nutritions.last())
         }
@@ -195,7 +196,7 @@ class NutritionDataUpdateModelShould {
 
         @Test
         fun invokeDeleteUseCase() = runTest {
-            nutritionDataUpdateViewModel.delete(nutritionModels.last())
+            nutritionDataUpdateViewModel.delete(nutritionUiModels.last())
 
             verify(deleteNutritionUseCase).invoke(any())
         }

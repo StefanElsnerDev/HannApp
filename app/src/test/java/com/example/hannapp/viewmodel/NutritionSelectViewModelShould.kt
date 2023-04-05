@@ -27,8 +27,8 @@ class NutritionSelectViewModelShould {
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
-        Nutrition(uid = 100, name = "Apple", kcal = "12kcal"),
-        Nutrition(uid = 200, name = "Banana", kcal = "123kcal")
+        Nutrition(uid = 100, name = "Apple", kcal = 1.2),
+        Nutrition(uid = 200, name = "Banana", kcal = 3.4)
     )
 
     private val pagingData = PagingData.from(nutritions)
