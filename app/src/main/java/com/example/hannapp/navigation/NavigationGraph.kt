@@ -5,9 +5,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.hannapp.ui.screens.NutrimentLogScreen
 import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.screens.NutritionInsertScreen
-import com.example.hannapp.ui.selection.SelectionScreen
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
@@ -27,7 +27,7 @@ fun NavigationGraph (
         composable(Destination.SELECTION.value) {
             val viewModel = hiltViewModel <NutritionSelectViewModel>()
 
-            SelectionScreen(
+            NutrimentLogScreen(
                 viewModel = viewModel,
                 onAdd = {
                     /*TODO 'it' used by viewModel*/
