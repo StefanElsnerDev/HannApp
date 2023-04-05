@@ -66,12 +66,6 @@ private fun navigationItems(navController: NavHostController): List<NavigationIt
             Destination.SELECTION.value,
             navigationActions.navigateToSelection
         ),
-        NavigationItem(
-            R.string.calculation,
-            R.drawable.calculate,
-            Destination.CALCULATION.value,
-            navigationActions.navigateToCalculation
-        ),
         NavigationItem(R.string.level, R.drawable.sum),
         NavigationItem(R.string.guide, R.drawable.help)
     )
