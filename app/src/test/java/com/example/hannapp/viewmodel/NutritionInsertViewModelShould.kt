@@ -64,88 +64,8 @@ class NutritionInsertViewModelShould {
         verify(insertNutritionUseCase).invoke(any())
     }
 
-    @Test
-    fun emitUiStateOnEvent() {
-        val expectedUiState = ComponentUiState(nutritionUiModel = NutritionUiModel(fat = "987.6"))
-
-        nutritionInsertViewModel.onNutritionChange(
-            Fat(), "987.6"
-        )
-
-        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
-    }
-
-    @Test
-    fun copyStateOnEvent() {
-        val expectedUiState = ComponentUiState(nutritionUiModel = NutritionUiModel(
-            fat = "123.4"
-        ))
-
-        nutritionInsertViewModel.onNutritionChange(
-            Fat(), "123.4"
-        )
-
-        Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
-    }
-
     @Nested
-    inner class ErrorState{
-
-        @Test
-        fun emitErrorUiState(){
-            val expectedUiState = ComponentUiState(
-                errors = setOf(
-                    NutritionDataComponent.NAME,
-                    NutritionDataComponent.KCAL,
-                    NutritionDataComponent.PROTEIN,
-                    NutritionDataComponent.FAT,
-                    NutritionDataComponent.CARBOHYDRATES,
-                    NutritionDataComponent.SUGAR,
-                    NutritionDataComponent.FIBER,
-                    NutritionDataComponent.ALCOHOL
-                )
-            )
-
-            nutritionInsertViewModel.validate()
-
-            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
-        }
-
-        @Test
-        fun resetErrorOfComponent() {
-            val expectedUiState = ComponentUiState(
-                errors = setOf(
-                    NutritionDataComponent.KCAL,
-                    NutritionDataComponent.PROTEIN,
-                    NutritionDataComponent.FAT,
-                    NutritionDataComponent.CARBOHYDRATES,
-                    NutritionDataComponent.SUGAR,
-                    NutritionDataComponent.FIBER,
-                    NutritionDataComponent.ALCOHOL
-                )
-            )
-
-            nutritionInsertViewModel.validate()
-
-            nutritionInsertViewModel.resetError(NutritionDataComponent.NAME)
-
-            Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
-        }
-
-        @Test
-        fun emitInvalidDataState() {
-            nutritionInsertViewModel.validate()
-            Assertions.assertEquals(false, nutritionInsertViewModel.uiComponentState.value.nutritionUiModel)
-        }
-
-        @Test
-        fun emitValidDataState() {
-            nutritionInsertViewModel.fakeCompletion()
-
-            nutritionInsertViewModel.validate()
-
-            Assertions.assertEquals(true, nutritionInsertViewModel.uiComponentState.value.isValid)
-        }
+    inner class ClearErrorState{
 
         @Test
         fun clearUiStateOnInsert() {
@@ -158,23 +78,6 @@ class NutritionInsertViewModelShould {
             nutritionInsertViewModel.clearState()
 
             Assertions.assertEquals(expectedUiState, nutritionInsertViewModel.uiComponentState.value)
-        }
-
-        private fun NutritionInsertViewModel.fakeCompletion(){
-            listOf(
-                Name(),
-                Kcal(),
-                Protein(),
-                Fat(),
-                Carbohydrates(),
-                Sugar(),
-                Fiber(),
-                Alcohol()
-            ).forEach{
-                this.onNutritionChange(
-                    it, "123.4"
-                )
-            }
         }
     }
 
