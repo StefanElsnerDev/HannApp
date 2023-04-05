@@ -1,6 +1,7 @@
 package com.example.hannapp.ui.output
 
-import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,32 +39,22 @@ fun CalculationContent(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFD0BCFF,
-    heightDp = 800,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun CalculationPreview_DarkMode() {
-    HannAppTheme {
-        CalculationContent(
-            mood = Mood.GREEN
-        )
-    }
-}
-
-@Preview(
-    backgroundColor = 0xFFD0BCFF,
-    heightDp = 800,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait", uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun CalculationPreview_LightMode() {
     HannAppTheme {
         CalculationContent(
             mood = Mood.YELLOW
+        )
+    }
+}
+
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun CalculationPreview_DarkMode() {
+    HannAppTheme {
+        CalculationContent(
+            mood = Mood.GREEN
         )
     }
 }
