@@ -48,15 +48,6 @@ class NutritionConverterShould {
     }
 
     @Test
-    fun throwOnMissingId(){
-       val incorrectNutritionUiModel = NutritionUiModel(name = name, kcal = kcal.toString(), protein = protein.toString())
-
-        Assertions.assertThrows(IllegalArgumentException::class.java){
-            nutritionConverter.uiModel(incorrectNutritionUiModel).toEntity()
-        }
-    }
-
-    @Test
     fun convertEntityToUiNutritionModel(){
         val result = nutritionConverter.entity(nutritionEntity).toUiModel()
 

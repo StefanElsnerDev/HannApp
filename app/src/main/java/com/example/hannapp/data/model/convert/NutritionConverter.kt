@@ -33,11 +33,8 @@ class NutritionConverter @Inject constructor() {
     class InnerNutritionUiModel(private val nutritionUiModel: NutritionUiModel) {
 
         fun toEntity() = nutritionUiModel.let {
-
-            require(it.id != null){"Conversion failed due to missing entity ID"}
-
             Nutrition(
-                uid = it.id,
+                uid = it.id ?: 0,
                 name = it.name.ifBlank { null },
                 kcal = it.kcal.toDoubleOrNull(),
                 protein = it.protein.toDoubleOrNull(),
