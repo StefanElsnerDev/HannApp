@@ -138,7 +138,7 @@ fun NutritionInsertScreen(
     viewModel: NutritionInsertViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val componentUiState by viewModel.uiComponentState.collectAsState()
     val uiComponents by viewModel.uiComponents.collectAsState()
     val pagingItems = viewModel.products.collectAsLazyPagingItems()
 
@@ -151,11 +151,11 @@ fun NutritionInsertScreen(
     ) {
         NutritionInsertContent(
             navController = navController,
-            nutritionUiModel = uiState.nutritionUiModel,
+            nutritionUiModel = componentUiState.nutritionUiModel,
             uiComponents = uiComponents,
             pagingItems = pagingItems,
-            errors = uiState.errors,
-            showErrors = uiState.showErrors,
+            errors = componentUiState.errors,
+            showErrors = componentUiState.showErrors,
             onComponentValueChange = { component, value ->
                 viewModel.onNutritionChange(
                     component,
@@ -165,7 +165,7 @@ fun NutritionInsertScreen(
             },
             onReset = { viewModel.resetError(it) },
             onAdd = {
-                if (uiState.isValid) {
+                if (componentUiState.isValid) {
                     viewModel.insert()
                 } else {
                     viewModel.validate()
