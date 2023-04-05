@@ -21,7 +21,7 @@ import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.mood.Mood
-import com.example.hannapp.ui.output.CalculationScreen
+import com.example.hannapp.ui.output.CalculationContent
 import com.example.hannapp.ui.selection.SelectionContent
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
@@ -60,7 +60,7 @@ fun NutrimentLogContent(
                 onAdd
             )
 
-            CalculationScreen(
+            CalculationContent(
                 modifier = Modifier.fillMaxWidth(0.5f),
                 mood = Mood.GREEN
             )
