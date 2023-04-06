@@ -1,7 +1,6 @@
 package com.example.hannapp.ui.input
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ fun InputField(
     supportingText: String = ""
     ) {
     OutlinedTextField(
+        modifier = modifier,
         value = value,
         onValueChange = {
             onValueChange(it)
@@ -28,7 +28,6 @@ fun InputField(
         label = { Text(label) },
         supportingText = { Text(text = supportingText)},
         isError = isError,
-        modifier = modifier.background(MaterialTheme.colorScheme.background),
         textStyle = MaterialTheme.typography.labelMedium,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )

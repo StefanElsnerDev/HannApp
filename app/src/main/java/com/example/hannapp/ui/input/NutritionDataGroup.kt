@@ -36,21 +36,22 @@ fun NutritionDataGroup(
 
             val isError = errors.contains(component.type)  && showErrors
 
-            InputField(
-                value = mapComponentToModelProperty(component.type, nutritionUiModel),
-                onValueChange = {
-                    onComponentValueChange(component, it)
-                    onReset(component.type)
-                },
-                modifier = Modifier.padding(12.dp),
-                label = component.text,
-                isError = isError,
-                supportingText = if (isError) {
-                    stringResource(id = R.string.fill_field)
-                } else {
-                    ""
-                }
-            )
+                InputField(
+                    value = mapComponentToModelProperty(component.type, nutritionUiModel),
+                    onValueChange = {
+                        onComponentValueChange(component, it)
+                        onReset(component.type)
+                    },
+                    modifier = Modifier.padding(PADDING),
+                    label = component.text,
+                    isError = isError,
+                    supportingText = if (isError) {
+                        stringResource(id = R.string.fill_field)
+                    } else {
+                        ""
+                    }
+                )
+            }
         }
     }
 }
