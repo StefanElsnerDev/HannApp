@@ -31,7 +31,7 @@ fun SearchBar(
         .height(56.dp)
         .fillMaxWidth(),
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
