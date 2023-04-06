@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,6 +18,7 @@ import com.example.hannapp.R
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.mapComponentToModelProperty
+import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
@@ -27,14 +30,18 @@ fun NutritionDataGroup(
     onReset: (NutritionDataComponent) -> Unit,
     onComponentValueChange: (NutritionComponent, String) -> Unit,
 ) {
-    LazyVerticalGrid(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        columns = GridCells.Adaptive(300.dp)
+    Surface(
+        modifier = Modifier.padding(PADDING),
+        shape = RoundedCornerShape(10)
     ) {
+        LazyVerticalGrid(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(PADDING),
+            columns = GridCells.Adaptive(300.dp),
+        ) {
 
-        items(uiComponents) { component ->
+            items(uiComponents) { component ->
 
-            val isError = errors.contains(component.type)  && showErrors
+                val isError = errors.contains(component.type) && showErrors
 
                 InputField(
                     value = mapComponentToModelProperty(component.type, nutritionUiModel),
