@@ -4,7 +4,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -29,9 +28,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, text: String) {
     Row(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .width(192.dp),
+        modifier = modifier.width(192.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -42,7 +39,6 @@ fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, te
             modifier = Modifier
                 .size(52.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.onSurface)
         )
         OutlinedTextField(
             value = text, onValueChange = {},
@@ -52,7 +48,7 @@ fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, te
     }
 }
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
+@Preview(uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun OutputCardPreview_LightMode(){
     HannAppTheme {
@@ -65,7 +61,7 @@ fun OutputCardPreview_LightMode(){
     }
 }
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun OutputCardPreview_DarkMode(){
     HannAppTheme {
