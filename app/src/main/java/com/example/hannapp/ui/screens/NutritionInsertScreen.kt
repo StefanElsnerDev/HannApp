@@ -1,17 +1,22 @@
 package com.example.hannapp.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +36,7 @@ import com.example.hannapp.ui.components.ProductCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.input.SearchBar
+import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -97,7 +103,7 @@ fun NutritionInsertContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SearchBar(
-                    modifier = Modifier.padding(horizontal = 48.dp),
+                    modifier = Modifier.padding(horizontal = PADDING),
                     onSearch = {
                         expanded = true
                         onSearch(it)
