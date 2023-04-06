@@ -106,6 +106,7 @@ fun HannAppTheme(
 
     MaterialTheme(
         colorScheme = LightColorScheme,
+        shapes = shapes,
         typography = Typography,
         content = content
     )
