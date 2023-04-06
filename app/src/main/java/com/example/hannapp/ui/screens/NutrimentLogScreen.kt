@@ -23,6 +23,7 @@ import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationContent
 import com.example.hannapp.ui.selection.SelectionContent
+import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
@@ -47,21 +48,20 @@ fun NutrimentLogContent(
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             SelectionContent(
-                modifier = Modifier.fillMaxWidth(0.5f),
+                modifier = Modifier.fillMaxWidth(0.5f).padding(horizontal = PADDING),
                 uiState,
                 snackBarHost,
                 onClickBoxClick,
                 pagingItems,
-                onItemSelected,
-                onAdd
+                onItemSelected
             )
 
             CalculationContent(
-                modifier = Modifier.fillMaxWidth(0.5f),
+                modifier = Modifier.fillMaxWidth(0.5f).padding(horizontal = PADDING),
                 mood = Mood.GREEN
             )
         }
