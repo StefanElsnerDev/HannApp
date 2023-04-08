@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
@@ -16,8 +17,11 @@ enum class Mood(val value: String, @DrawableRes val drawable: Int) {
 }
 
 @Composable
-fun MoodLight(mood: Mood) {
+fun MoodLight(
+    modifier: Modifier = Modifier,
+    mood: Mood) {
     Icon(
+        modifier = modifier,
         painter = painterResource(id = mood.drawable),
         contentDescription = mood.value,
         tint = MaterialTheme.colorScheme.onSurfaceVariant

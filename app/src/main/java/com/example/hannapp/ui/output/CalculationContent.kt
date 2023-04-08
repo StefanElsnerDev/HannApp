@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.hannapp.R
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.mood.MoodLight
@@ -50,7 +51,11 @@ fun CalculationContent(
                 text = "1234.56 g",
                 label = "Maltozugabe"
             )
-            MoodLight(mood = mood)
+            MoodLight(
+                modifier = Modifier.size(128.dp)
+                    .padding(PADDING),
+
+                mood = mood)
         }
     }
 }
