@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hannapp.R
@@ -41,7 +42,7 @@ fun CalculationContent(
                     .padding(PADDING),
                 drawable = R.drawable.liter,
                 text = "1234.56 ml",
-                label = "Milchausschuss"
+                label = stringResource(id = R.string.milk_discard)
             )
             OutputCard(
                 modifier = Modifier
@@ -49,7 +50,7 @@ fun CalculationContent(
                     .padding(PADDING),
                 drawable = R.drawable.spoon,
                 text = "1234.56 g",
-                label = "Maltozugabe"
+                label = stringResource(id = R.string.malto_addition)
             )
             MoodLight(
                 modifier = Modifier.size(128.dp)

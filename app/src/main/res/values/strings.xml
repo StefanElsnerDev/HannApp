@@ -10,4 +10,6 @@
     <string name="food_name">Food Name</string>
     <string name="fill_field">Please fill this field</string>
     <string name="search">Search</string>
+    <string name="milk_discard">Milk Discard</string>
+    <string name="malto_addition">Malto Addition</string>
 </resources>
