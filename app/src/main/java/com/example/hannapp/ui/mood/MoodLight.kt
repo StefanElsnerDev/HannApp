@@ -16,9 +16,9 @@ import com.example.hannapp.R
 import com.example.hannapp.ui.theme.HannAppTheme
 
 enum class Mood(val value: String, val color: Color, @DrawableRes val drawable: Int){
-    RED("neutral", Color.Red, R.drawable.sentiment_neutral),
-    YELLOW("satisfied", Color.Yellow, R.drawable.sentiment_satisfied),
-    GREEN("very satisfied", Color.Green, R.drawable.sentiment_very_satisfied)
+    RED("concerned", Color.Red, R.drawable.concerned),
+    YELLOW("neutral", Color.Yellow, R.drawable.neutral),
+    GREEN("satisfied", Color.Green, R.drawable.smiling)
 }
 
 @Composable
