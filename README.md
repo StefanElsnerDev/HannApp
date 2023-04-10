@@ -85,7 +85,10 @@ prescribed diet limits or exceeding.
 
 # Credits
 
-HannApp is fetching nutriments from a open database named [Open Food Facts](https://world.openfoodfacts.org/), whichs is a non-profit project developed by thousands of volunteers. Thanks to their enthusiasm it is possible to search and to add food in such a handy way.
+HannApp is fetching nutriments from a open database
+named [Open Food Facts](https://world.openfoodfacts.org/), whichs is a non-profit project developed
+by thousands of volunteers. Thanks to their enthusiasm it is possible to search and to add food in
+such a handy way.
 
 # Licence
 
