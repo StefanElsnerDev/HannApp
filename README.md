@@ -10,6 +10,16 @@ HannApp is for mobile Android devices to capture the meals in a handy way withou
 
 The application is currently in development. Therefore some functions and UI components are not fully implemented yet. Moreover the captured application data are still bound to a single device.
 
+# Table of Contents
+1. [Prerequisity](#prerequisity)
+2. [Installation](#installation)
+3. [Getting Started](#getting-started)
+4. [Usage](#usage)
+5. [Run Tests](#run-tests)
+6. [Credits](#credits)
+7. [Licence](#licence)
+8. [Contact](#contact)
+
 # Prerequisity
 
 Make sure you have installed the current [Gradle](https://gradle.org/install/) version
@@ -28,31 +38,29 @@ Use the latest [Gradle](https://gradle.org) version to build the application
 
 `./gradlew build`
 
+# Getting Started
+
+![search](docs/gettingStarted.gif)
+
 # Usage
 
 ## Search for food nutriments
 
 Search for food with a query using the searchbar. Suggested food can be selected and be stored in the local database.
 
-![search](docs/search.gif)
-
 ## Insert nutriments indivdually
 
-![insert](docs/insert.gif)
+Food can be entered manually by filling in all fields completely. Empty fields, *null* and *non-digits* are not valid and therefore not possible to add.
 
-## Modify locally stored food
+## Modify or delete locally stored food
 
-![modify](docs/modify.gif)
+By selecting the *edit* icon, a locally stored food can be selected and in regard to its nutriments be modified.
+A long press on a food deletes it from the local storage.
 
 ## Capture a meal or daily ration
 
 The components of a meal can be selected and logged. Based on the selection and amount, the total of the recorded nutriments will be calculated. (not implemented yet)
-
-![select](docs/select.gif)
-
-The application warns if the captured amount is getting close to the prescribed diet limits or exceeding.
-
-![search](docs/mood.gif)
+The application warns visually if the captured amount is getting close to the prescribed diet limits or exceeding.
 
 # Run Tests
 
