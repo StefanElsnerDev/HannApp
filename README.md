@@ -16,10 +16,11 @@ components are not fully implemented yet. Moreover the captured application data
 a single device.
 
 # Table of Contents
+
 1. [Prerequisity](#prerequisity)
 2. [Installation](#installation)
 3. [Getting Started](#getting-started)
-4. [Usage](#usage)
+4. [Features](#features)
 5. [Run Tests](#run-tests)
 6. [Credits](#credits)
 7. [Licence](#licence)
@@ -47,25 +48,36 @@ Use the latest [Gradle](https://gradle.org) version to build the application
 
 ![search](docs/gettingStarted.gif)
 
-# Usage
+# Features
 
-## Search for food nutriments
+## Food Storage
 
-Search for food with a query using the searchbar. Suggested food can be selected and be stored in the local database.
+### Search and store food
 
-## Insert nutriments indivdually
+Search for food with a query using the search bar. Suggested food can be selected and be stored in
+the local database.
 
-Food can be entered manually by filling in all fields completely. Empty fields, *null* and *non-digits* are not valid and therefore not possible to add.
+### Enter food manually
 
-## Modify or delete locally stored food
+Food can be entered manually by filling in all nutriment fields completely. Empty fields, *null*
+and *non-digits* are not valid and therefore not possible to add.
 
-By selecting the *edit* icon, a locally stored food can be selected and in regard to its nutriments be modified.
+### Modify or delete locally stored food
+
+By selecting the *edit* icon, a locally stored food can be selected and modified.
 A long press on a food deletes it from the local storage.
 
-## Capture a meal or daily ration
+## Track Meals and Nutriments
 
-The components of a meal can be selected and logged. Based on the selection and amount, the total of the recorded nutriments will be calculated. (not implemented yet)
-The application warns visually if the captured amount is getting close to the prescribed diet limits or exceeding.
+### Capture a meal
+
+The components of a meal can be selected and logged. Based on the selection and amount, the total
+amount of nutriments will be calculated. (not implemented yet)
+
+### Nutrition Limit Indication
+
+The application indicates visually if the captured amount of nutriments is getting close to the
+prescribed diet limits or exceeding.
 
 # Run Tests
 
