@@ -4,11 +4,16 @@
 
 # HannApp
 
-HannApp is an application to combine and track meals over individually selectable time ranges. It helps to follow a diet plan where particular nutrients must not exceed a limit, but reach a minimum.
-The application is motivated by a friends daughter with name Hanna, whose metabolism needs to receive a precise amount of nutrients throughout the day.
-HannApp is for mobile Android devices to capture the meals in a handy way without dependency to a location or a person. It just needs a mobile device and an internet connection.
+HannApp is an Android application for following a specific diet plan.
 
-The application is currently in development. Therefore some functions and UI components are not fully implemented yet. Moreover the captured application data are still bound to a single device.
+The application is motivated by a friends daughter named Hanna, whose metabolism needs to receive a
+precise amount of nutrients throughout the day.
+It helps to track meals, determine the exact nutritional values and calculate any necessary
+nutritional supplements.
+
+Please note that the application is currently in development. Therefore some functions and UI
+components are not fully implemented yet. Moreover the captured application data are still bound to
+a single device.
 
 # Table of Contents
 1. [Prerequisity](#prerequisity)
