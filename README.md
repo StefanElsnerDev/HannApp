@@ -1,7 +1,11 @@
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/240px-Kotlin_Icon.svg.png" alt= “Kotlin” height="35">
+
+![android](https://forthebadge.com/images/badges/built-for-android.svg)
+![android](https://forthebadge.com/images/badges/built-with-love.svg)
+
 ![version](https://img.shields.io/badge/Gradle-8.0.2%2B-blue)
 ![version](https://img.shields.io/badge/version-0.0.1-green)
 ![license](https://img.shields.io/badge/license-MIT-blue)
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/240px-Kotlin_Icon.svg.png" alt= “Kotlin” height="20">
 
 # HannApp
 
