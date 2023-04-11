@@ -16,4 +16,6 @@
     <string name="fad">fad</string>
     <string name="energy">energy</string>
     <string name="time">time</string>
+    <string name="nothing_selected">nothing selected</string>
+    <string name="selection">Selection</string>
 </resources>

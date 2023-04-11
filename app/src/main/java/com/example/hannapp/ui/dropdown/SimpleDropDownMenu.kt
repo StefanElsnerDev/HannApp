@@ -10,7 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hannapp.R
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.ui.theme.HannAppTheme
 
@@ -28,14 +30,14 @@ fun SimpleDropDownMenu(
             .background(MaterialTheme.colorScheme.surface)
     ) {
         OutlinedTextField(
-            value = selected.ifBlank { "No Data" },
+            value = selected.ifBlank { stringResource(id = R.string.nothing_selected) },
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface),
             readOnly = true,
             textStyle = MaterialTheme.typography.titleMedium,
-            label = { Text(text = "Auswahl") },
+            label = { Text(text = stringResource(id = R.string.selection)) },
             trailingIcon = {
                 if (!isExpanded) Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
             }
