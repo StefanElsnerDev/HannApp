@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -120,6 +121,31 @@ class NutritionSelectViewModelShould {
             nutritionViewModel.add(nutritionUiModel = nutritionUiModel, quantity = quantity)
 
             verify(insertNutrimentLogUseCase).invoke(any())
+        }
+
+        @Test
+        fun emitsErrorStateOnFailingInsertion() = runTest {
+            whenever(insertNutrimentLogUseCase.invoke(any())).thenReturn(false)
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isNull()
+
+            nutritionViewModel.add(NutritionUiModel(), 1.23)
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isNotBlank()
+        }
+
+        @Test
+        fun emitsErrorStateOnThrowingInsertion() = runTest {
+            val errorMessage = "Insertion failed!"
+            whenever(insertNutrimentLogUseCase.invoke(any())).thenThrow(
+                RuntimeException(
+                    errorMessage
+                )
+            )
+
+            nutritionViewModel.add(NutritionUiModel(), 1.23)
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
         }
     }
 }
