@@ -17,13 +17,17 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.hannapp.data.model.NutrimentUiLogModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NavigationBar
+import com.example.hannapp.ui.history.NutrimentHistoryContent
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationContent
 import com.example.hannapp.ui.selection.SelectionContent
 import com.example.hannapp.ui.theme.Constraints.PADDING
+import com.example.hannapp.ui.theme.Constraints.SPACE_VERTICAL
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
@@ -51,17 +55,32 @@ fun NutrimentLogContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            SelectionContent(
-                modifier = Modifier.fillMaxWidth(0.5f).padding(horizontal = PADDING),
-                uiState,
-                snackBarHost,
-                onClickBoxClick,
-                pagingItems,
-                onItemSelected
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(horizontal = PADDING)
+            ) {
+                SelectionContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    uiState,
+                    snackBarHost,
+                    onClickBoxClick,
+                    pagingItems,
+                    onItemSelected
+                )
+
+                Spacer(modifier = Modifier.height(SPACE_VERTICAL))
+
+                NutrimentHistoryContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    nutriments = uiState.nutrimentLog
+                )
+            }
 
             CalculationContent(
-                modifier = Modifier.fillMaxWidth(0.5f).padding(horizontal = PADDING),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(horizontal = PADDING),
                 mood = Mood.GREEN
             )
         }
@@ -94,7 +113,34 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutritionUiState(),
+            uiState = NutritionUiState(
+                nutrimentLog = listOf(
+                    NutrimentUiLogModel(
+                        nutrition = NutritionUiModel(
+                            name = "Peach"
+                        ),
+                        quantity = 123.4,
+                        unit = "g",
+                        timeStamp = 1681801313
+                    ),
+                    NutrimentUiLogModel(
+                        nutrition = NutritionUiModel(
+                            name = "Apple"
+                        ),
+                        quantity = 123.4,
+                        unit = "g",
+                        timeStamp = 1681801313
+                    ),
+                    NutrimentUiLogModel(
+                        nutrition = NutritionUiModel(
+                            name = "Chocolate"
+                        ),
+                        quantity = 123.4,
+                        unit = "g",
+                        timeStamp = 1681801313
+                    )
+                )
+            ),
             pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
             onAdd = {},
             onClickBoxClick = {},

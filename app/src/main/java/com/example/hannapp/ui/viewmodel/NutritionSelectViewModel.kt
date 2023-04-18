@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -14,10 +15,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUiState(
+    val nutrimentLog: List<NutrimentUiLogModel> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
-
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,

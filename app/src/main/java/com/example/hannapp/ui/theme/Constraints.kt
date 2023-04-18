@@ -5,4 +5,5 @@ import androidx.compose.ui.unit.dp
 
 object Constraints {
     val PADDING: Dp = 15.dp
+    val SPACE_VERTICAL: Dp = 32.dp
 }
