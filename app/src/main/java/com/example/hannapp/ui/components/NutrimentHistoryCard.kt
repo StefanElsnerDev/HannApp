@@ -29,12 +29,13 @@ import java.util.Locale
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 fun NutrimentHistoryCard(
+    modifier: Modifier,
     nutrimentUiLogModel: NutrimentUiLogModel,
     onClick: (NutrimentUiLogModel) -> Unit,
     onLongClick: (NutrimentUiLogModel) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .combinedClickable(
                 onClick = { onClick(nutrimentUiLogModel) },
                 onLongClick = { onLongClick(nutrimentUiLogModel) })
@@ -127,6 +128,7 @@ fun NutrimentHistoryCard(
 fun NutrimentHistoryCard_LightMode() {
     HannAppTheme {
         NutrimentHistoryCard(
+            modifier = Modifier,
             nutrimentUiLogModel = NutrimentUiLogModel(
                 nutrition = NutritionUiModel(
                     name = "Cola",
