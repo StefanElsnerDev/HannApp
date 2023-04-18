@@ -1,8 +1,10 @@
 package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.GetNutritionUseCase
+import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +16,10 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -24,6 +28,7 @@ class NutritionSelectViewModelShould {
 
     private lateinit var nutritionViewModel: NutritionSelectViewModel
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
+    private val insertNutrimentLogUseCase = mock(InsertNutrimentLogUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
@@ -44,6 +49,7 @@ class NutritionSelectViewModelShould {
 
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
+            insertNutrimentLogUseCase,
             testDispatcher
         )
     }
@@ -64,6 +70,7 @@ class NutritionSelectViewModelShould {
     fun produceUIStateWithLoadingStateOnInstantiation() = runTest {
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
+            insertNutrimentLogUseCase,
             testDispatcher
         )
 
@@ -94,5 +101,25 @@ class NutritionSelectViewModelShould {
             ),
             nutritionViewModel.uiState.first()
         )
+    }
+
+    @Nested
+    inner class AddToLog {
+
+        private val nutritionUiModel = NutritionUiModel(
+            name = "Cola",
+            kcal = "123",
+            protein = "0.1",
+            fat = "0.0"
+        )
+
+        @Test
+        fun callsUseCaseForAddingNutriment() = runTest {
+            val quantity = 56.78
+
+            nutritionViewModel.add(nutritionUiModel = nutritionUiModel, quantity = quantity)
+
+            verify(insertNutrimentLogUseCase).invoke(any())
+        }
     }
 }

@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutrimentUiLogModel
+import com.example.hannapp.data.model.NutritionUiModel
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetNutritionUseCase
+import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -22,6 +26,7 @@ data class NutritionUiState(
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
+    private val insertNutrimentLogUseCase: InsertNutrimentLogUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -47,6 +52,19 @@ class NutritionSelectViewModel @Inject constructor(
                 .collectLatest { nutriments ->
                     _nutriments.emit(nutriments)
                 }
+        }
+    }
+
+    fun add(nutritionUiModel: NutritionUiModel, quantity: Double) {
+        viewModelScope.launch(dispatcher) {
+            insertNutrimentLogUseCase(
+                nutrimentLogModel = NutrimentLogModel(
+                    nutrition = NutritionConverter().uiModel(nutritionUiModel).toEntity(),
+                    quantity = quantity,
+                    createdAt = System.currentTimeMillis(),
+                    modifiedAt = null
+                )
+            )
         }
     }
 }
