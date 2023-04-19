@@ -1,8 +1,10 @@
 package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
+import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
@@ -30,6 +32,7 @@ class NutritionSelectViewModelShould {
     private lateinit var nutritionViewModel: NutritionSelectViewModel
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val insertNutrimentLogUseCase = mock(InsertNutrimentLogUseCase::class.java)
+    private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
@@ -51,6 +54,7 @@ class NutritionSelectViewModelShould {
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
             insertNutrimentLogUseCase,
+            getNutrimentLogUseCase,
             testDispatcher
         )
     }
@@ -72,6 +76,7 @@ class NutritionSelectViewModelShould {
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
             insertNutrimentLogUseCase,
+            getNutrimentLogUseCase,
             testDispatcher
         )
 

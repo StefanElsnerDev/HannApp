@@ -10,6 +10,7 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
+import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ data class NutritionUiState(
 class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
     private val insertNutrimentLogUseCase: InsertNutrimentLogUseCase,
+    getNutrimentLogUseCase: GetNutrimentLogUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
