@@ -24,4 +24,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideNutritionDao(db: AppDatabase) = db.nutritionDao()
+
+    @Provides
+    @Singleton
+    fun provideNutritionLogDao(db: AppDatabase) = db.nutrimentLogDao()
 }
