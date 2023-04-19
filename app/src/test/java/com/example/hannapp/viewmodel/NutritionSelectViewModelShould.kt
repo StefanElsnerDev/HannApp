@@ -43,12 +43,31 @@ class NutritionSelectViewModelShould {
     private val pagingData = PagingData.from(nutritions)
     private val nutrimentsFlow = flowOf(pagingData)
 
+    private val nutrimentLog = listOf(
+        NutrimentLogModel(
+            nutrition = Nutrition(),
+            quantity = 1.1,
+            createdAt = 1681839531,
+            modifiedAt = null
+        ),
+        NutrimentLogModel(
+            nutrition = Nutrition(),
+            quantity = 2.2,
+            createdAt = 1681234731,
+            modifiedAt = null
+        )
+    )
+
     @BeforeEach
     fun beforeEach() {
         Dispatchers.setMain(testDispatcher)
 
         whenever(getNutritionUseCase.getAll()).thenReturn(
             nutrimentsFlow
+        )
+
+        whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
+            flowOf(nutrimentLog)
         )
 
         nutritionViewModel = NutritionSelectViewModel(
@@ -107,6 +126,34 @@ class NutritionSelectViewModelShould {
             ),
             nutritionViewModel.uiState.first()
         )
+    }
+
+    @Nested
+    inner class NutrimentLogFlow {
+
+        @Test
+        fun emitsNutrimentLog() = runTest {
+            assertThat(nutritionViewModel.nutrimentLog.first()).isEqualTo(nutrimentLog)
+        }
+
+        @Test
+        fun emitsErrorStateOnFailingNutrimentLog() = runTest {
+            val errorMessage = "Error"
+            whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
+                flow {
+                    throw RuntimeException(errorMessage)
+                }
+            )
+
+            nutritionViewModel = NutritionSelectViewModel(
+                getNutritionUseCase,
+                insertNutrimentLogUseCase,
+                getNutrimentLogUseCase,
+                testDispatcher
+            )
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).contains(errorMessage)
+        }
     }
 
     @Nested

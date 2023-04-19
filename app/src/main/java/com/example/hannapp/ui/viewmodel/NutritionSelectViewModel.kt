@@ -15,7 +15,15 @@ import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +45,20 @@ class NutritionSelectViewModel @Inject constructor(
 
     private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
     val nutriments = _nutriments.cachedIn(viewModelScope)
+
+    val nutrimentLog = getNutrimentLogUseCase.observeNutrimentLog()
+        .catch {
+            _uiState.update { state ->
+                state.copy(
+                    isLoading = false,
+                    errorMessage = it.message
+                )
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            _uiState.value.nutrimentLog
+        )
 
     fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
