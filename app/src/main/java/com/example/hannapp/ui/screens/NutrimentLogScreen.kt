@@ -38,11 +38,11 @@ import kotlinx.coroutines.flow.flowOf
 fun NutrimentLogContent(
     modifier: Modifier,
     uiState: NutritionUiState,
-    pagingItems: LazyPagingItems<Nutrition>,
+    pagingItems: LazyPagingItems<NutritionUiModel>,
     onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (NutritionUiModel) -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
 
@@ -113,35 +113,8 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutritionUiState(
-                nutrimentLog = listOf(
-                    NutrimentUiLogModel(
-                        nutrition = NutritionUiModel(
-                            name = "Peach"
-                        ),
-                        quantity = 123.4,
-                        unit = "g",
-                        timeStamp = 1681801313
-                    ),
-                    NutrimentUiLogModel(
-                        nutrition = NutritionUiModel(
-                            name = "Apple"
-                        ),
-                        quantity = 123.4,
-                        unit = "g",
-                        timeStamp = 1681801313
-                    ),
-                    NutrimentUiLogModel(
-                        nutrition = NutritionUiModel(
-                            name = "Chocolate"
-                        ),
-                        quantity = 123.4,
-                        unit = "g",
-                        timeStamp = 1681801313
-                    )
-                )
-            ),
-            pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
+            uiState = NutritionUiState( ),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(), ,
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),

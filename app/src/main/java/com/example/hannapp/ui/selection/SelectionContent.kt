@@ -17,7 +17,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.R
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.input.InputField
@@ -34,8 +34,8 @@ fun SelectionContent(
     uiState: NutritionUiState,
     snackBarHost: SnackbarHostState,
     onClickBoxClick: () -> Unit,
-    pagingItems: LazyPagingItems<Nutrition>,
-    onItemSelected: (String) -> Unit
+    pagingItems: LazyPagingItems<NutritionUiModel>,
+    onItemSelected: (NutritionUiModel) -> Unit
 ) {
     Surface(
         modifier = modifier.wrapContentHeight(),
@@ -111,7 +111,7 @@ fun SelectionContent(
                         SimpleDropDownItem(
                             item = it,
                             onClick = { item ->
-                                onItemSelected(item.toString())
+                                onItemSelected(item)
                                 selectedItem = item.toString()
                                 expanded = false
                             }
@@ -131,7 +131,7 @@ fun SelectionContent_LightMode() {
             modifier = Modifier,
             uiState = NutritionUiState(),
             snackBarHost = SnackbarHostState(),
-            pagingItems = flowOf(PagingData.from(listOf(Nutrition()))).collectAsLazyPagingItems(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             onClickBoxClick = {},
             onItemSelected = {}
         )

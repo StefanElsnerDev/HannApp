@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUiState(
-    val nutrimentLog: List<NutrimentUiLogModel> = emptyList(),
+    val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -40,11 +40,16 @@ class NutritionSelectViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    @Inject
+    lateinit var nutritionConverter: NutritionConverter
+
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
 
     private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
-    val nutriments = _nutriments.cachedIn(viewModelScope)
+    val nutriments = _nutriments
+        .map { nutriments -> nutriments.map { nutritionConverter.entity(it).toUiModel() } }
+        .cachedIn(viewModelScope)
 
     val nutrimentLog = getNutrimentLogUseCase.observeNutrimentLog()
         .catch {
