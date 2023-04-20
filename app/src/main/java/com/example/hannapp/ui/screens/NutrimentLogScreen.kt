@@ -39,6 +39,7 @@ fun NutrimentLogContent(
     modifier: Modifier,
     uiState: NutritionUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
+    loggedNutriments: List<NutrimentUiLogModel>,
     onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
@@ -73,7 +74,7 @@ fun NutrimentLogContent(
 
                 NutrimentHistoryContent(
                     modifier = Modifier.fillMaxWidth(),
-                    nutriments = uiState.nutrimentLog
+                    nutriments = loggedNutriments
                 )
             }
 
@@ -95,11 +96,13 @@ fun NutrimentLogScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
+    val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
 
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
         pagingItems = nutriments,
+        loggedNutriments = logged,
         onAdd = onAdd,
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
@@ -113,8 +116,35 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutritionUiState( ),
-            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(), ,
+            uiState = NutritionUiState(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
+            loggedNutriments =
+            listOf(
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Peach"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                ),
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Apple"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                ),
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Chocolate"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                )
+            ),
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),

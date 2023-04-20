@@ -2,6 +2,7 @@ package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
 import com.example.hannapp.data.model.NutrimentLogModel
+import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.GetNutrimentLogUseCase
@@ -45,16 +46,39 @@ class NutritionSelectViewModelShould {
 
     private val nutrimentLog = listOf(
         NutrimentLogModel(
-            nutrition = Nutrition(),
+            nutrition = Nutrition(
+                uid = 123
+            ),
             quantity = 1.1,
             createdAt = 1681839531,
             modifiedAt = null
         ),
         NutrimentLogModel(
-            nutrition = Nutrition(),
+            nutrition = Nutrition(
+                uid = 456
+            ),
             quantity = 2.2,
             createdAt = 1681234731,
             modifiedAt = null
+        )
+    )
+
+    private val nutrimentUiLog = listOf(
+        NutrimentUiLogModel(
+            nutrition = NutritionUiModel(
+                id = 123
+            ),
+            quantity = 1.1,
+            unit = "",
+            timeStamp = 1681839531
+        ),
+        NutrimentUiLogModel(
+            nutrition = NutritionUiModel(
+                id = 456
+            ),
+            quantity = 2.2,
+            unit = "",
+            timeStamp = 1681234731
         )
     )
 
@@ -133,7 +157,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitsNutrimentLog() = runTest {
-            assertThat(nutritionViewModel.nutrimentLog.first()).isEqualTo(nutrimentLog)
+            assertThat(nutritionViewModel.nutrimentLog.first()).isEqualTo(nutrimentUiLog)
         }
 
         @Test
