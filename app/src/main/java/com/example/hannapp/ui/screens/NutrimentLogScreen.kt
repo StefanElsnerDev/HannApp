@@ -106,7 +106,7 @@ fun NutrimentLogScreen(
         onAdd = onAdd,
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
-        onItemSelected = { }
+        onItemSelected = { viewModel.select(it) }
     )
 }
 

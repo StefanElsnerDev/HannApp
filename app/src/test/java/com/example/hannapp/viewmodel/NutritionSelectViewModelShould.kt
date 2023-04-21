@@ -203,6 +203,29 @@ class NutritionSelectViewModelShould {
     }
 
     @Nested
+    inner class Select {
+
+        private val nutritionUiModel = NutritionUiModel(
+            name = "Cola",
+            kcal = "123",
+            protein = "0.1",
+            fat = "0.0"
+        )
+
+        @Test
+        fun emitUiStateWithEmptyNutrimentUiModel(){
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(NutritionUiModel())
+        }
+
+        @Test
+        fun emitUiStateWithSelectedNutrimentUiModel(){
+            nutritionViewModel.select(nutritionUiModel)
+
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(nutritionUiModel)
+        }
+    }
+
+    @Nested
     inner class AddToLog {
 
         private val nutritionUiModel = NutritionUiModel(

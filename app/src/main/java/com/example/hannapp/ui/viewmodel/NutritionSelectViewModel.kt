@@ -95,6 +95,14 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
+    fun select(nutritionUiModel: NutritionUiModel) {
+        _uiState.update { state ->
+            state.copy(
+                nutritionUiModel = nutritionUiModel
+            )
+        }
+    }
+
     fun add(nutritionUiModel: NutritionUiModel, quantity: Double) {
         viewModelScope.launch(dispatcher) {
             try {
