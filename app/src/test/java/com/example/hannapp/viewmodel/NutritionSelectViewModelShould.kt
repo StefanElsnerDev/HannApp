@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -34,6 +35,7 @@ class NutritionSelectViewModelShould {
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val insertNutrimentLogUseCase = mock(InsertNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
+    private val nutritionConverter = mock(NutritionConverter::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
@@ -41,22 +43,31 @@ class NutritionSelectViewModelShould {
         Nutrition(uid = 200, name = "Banana", kcal = 3.4)
     )
 
+    private val nutritionUiModels = listOf(
+        NutritionUiModel(
+            id = 100,
+            name = "Apple",
+            kcal = "1.2"
+        ),
+        NutritionUiModel(
+            id = 200,
+            name = "Banana",
+            kcal = "3.4"
+        )
+    )
+
     private val pagingData = PagingData.from(nutritions)
     private val nutrimentsFlow = flowOf(pagingData)
 
     private val nutrimentLog = listOf(
         NutrimentLogModel(
-            nutrition = Nutrition(
-                uid = 123
-            ),
+            nutrition = nutritions.first(),
             quantity = 1.1,
             createdAt = 1681839531,
             modifiedAt = null
         ),
         NutrimentLogModel(
-            nutrition = Nutrition(
-                uid = 456
-            ),
+            nutrition = nutritions.last(),
             quantity = 2.2,
             createdAt = 1681234731,
             modifiedAt = null
@@ -65,17 +76,13 @@ class NutritionSelectViewModelShould {
 
     private val nutrimentUiLog = listOf(
         NutrimentUiLogModel(
-            nutrition = NutritionUiModel(
-                id = 123
-            ),
+            nutrition = nutritionUiModels.first(),
             quantity = 1.1,
             unit = "",
             timeStamp = 1681839531
         ),
         NutrimentUiLogModel(
-            nutrition = NutritionUiModel(
-                id = 456
-            ),
+            nutrition = nutritionUiModels.last(),
             quantity = 2.2,
             unit = "",
             timeStamp = 1681234731
@@ -94,10 +101,23 @@ class NutritionSelectViewModelShould {
             flowOf(nutrimentLog)
         )
 
+        whenever(nutritionConverter.entity(nutritions.first())).thenReturn(
+            NutritionConverter.InnerNutrition(
+                nutritions.first()
+            )
+        )
+
+        whenever(nutritionConverter.entity(nutritions.last())).thenReturn(
+            NutritionConverter.InnerNutrition(
+                nutritions.last()
+            )
+        )
+
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase,
             insertNutrimentLogUseCase,
             getNutrimentLogUseCase,
+            nutritionConverter,
             testDispatcher
         )
     }
@@ -120,6 +140,7 @@ class NutritionSelectViewModelShould {
             getNutritionUseCase,
             insertNutrimentLogUseCase,
             getNutrimentLogUseCase,
+            nutritionConverter,
             testDispatcher
         )
 
@@ -173,6 +194,7 @@ class NutritionSelectViewModelShould {
                 getNutritionUseCase,
                 insertNutrimentLogUseCase,
                 getNutrimentLogUseCase,
+                nutritionConverter,
                 testDispatcher
             )
 

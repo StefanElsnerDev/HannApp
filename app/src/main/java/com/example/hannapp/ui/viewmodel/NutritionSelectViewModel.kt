@@ -39,11 +39,10 @@ class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
     private val insertNutrimentLogUseCase: InsertNutrimentLogUseCase,
     getNutrimentLogUseCase: GetNutrimentLogUseCase,
+    private val nutritionConverter: NutritionConverter,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    @Inject
-    lateinit var nutritionConverter: NutritionConverter
 
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
@@ -101,7 +100,7 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 val isSuccess = insertNutrimentLogUseCase(
                     nutrimentLogModel = NutrimentLogModel(
-                        nutrition = NutritionConverter().uiModel(nutritionUiModel).toEntity(),
+                        nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel).toEntity(),
                         quantity = quantity,
                         createdAt = System.currentTimeMillis(),
                         modifiedAt = null
