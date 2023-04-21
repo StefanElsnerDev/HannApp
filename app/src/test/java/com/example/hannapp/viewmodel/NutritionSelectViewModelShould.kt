@@ -228,18 +228,20 @@ class NutritionSelectViewModelShould {
     @Nested
     inner class AddToLog {
 
-        private val nutritionUiModel = NutritionUiModel(
-            name = "Cola",
-            kcal = "123",
-            protein = "0.1",
-            fat = "0.0"
-        )
+        private val quantity = 56.78
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            whenever(nutritionConverter.uiModel(any())).thenReturn(
+                NutritionConverter.InnerNutritionUiModel(
+                    NutritionUiModel()
+                )
+            )
+        }
 
         @Test
         fun callsUseCaseForAddingNutriment() = runTest {
-            val quantity = 56.78
-
-            nutritionViewModel.add(nutritionUiModel = nutritionUiModel, quantity = quantity)
+            nutritionViewModel.add(quantity)
 
             verify(insertNutrimentLogUseCase).invoke(any())
         }
@@ -250,7 +252,7 @@ class NutritionSelectViewModelShould {
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isNull()
 
-            nutritionViewModel.add(NutritionUiModel(), 1.23)
+            nutritionViewModel.add(quantity)
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isNotBlank()
         }
@@ -264,7 +266,7 @@ class NutritionSelectViewModelShould {
                 )
             )
 
-            nutritionViewModel.add(NutritionUiModel(), 1.23)
+            nutritionViewModel.add(quantity)
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
         }

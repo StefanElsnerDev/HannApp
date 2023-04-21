@@ -103,7 +103,7 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
-    fun add(nutritionUiModel: NutritionUiModel, quantity: Double) {
+    fun add(quantity: Double) {
         viewModelScope.launch(dispatcher) {
             try {
                 val isSuccess = insertNutrimentLogUseCase(
