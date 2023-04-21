@@ -1,7 +1,10 @@
 package com.example.hannapp.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -11,7 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
@@ -19,7 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.history.NutrimentHistoryContent
@@ -40,7 +45,7 @@ fun NutrimentLogContent(
     uiState: NutritionUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
-    onAdd: (String) -> Unit,
+    onAdd: () -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
     onItemSelected: (NutritionUiModel) -> Unit
@@ -49,7 +54,12 @@ fun NutrimentLogContent(
 
     AppScaffold(
         bottomBar = { NavigationBar(navController) },
-        snackBarHost = { SnackbarHost(hostState = snackBarHost) }
+        snackBarHost = { SnackbarHost(hostState = snackBarHost) },
+        floatingActionButton = {
+            FAB({ Icon(Icons.Default.Add, null) }) {
+                onAdd()
+            }
+        }
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -91,7 +101,6 @@ fun NutrimentLogContent(
 @Composable
 fun NutrimentLogScreen(
     viewModel: NutritionSelectViewModel = hiltViewModel(),
-    onAdd: (String) -> Unit = {},
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -103,7 +112,7 @@ fun NutrimentLogScreen(
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
-        onAdd = onAdd,
+        onAdd = { viewModel.add(1.234) },  //TODO (remove hardcoded value)
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
         onItemSelected = { viewModel.select(it) }

@@ -29,9 +29,6 @@ fun NavigationGraph (
 
             NutrimentLogScreen(
                 viewModel = viewModel,
-                onAdd = {
-                    /*TODO 'it' used by viewModel*/
-                },
                 navController = navController
             )
         }
