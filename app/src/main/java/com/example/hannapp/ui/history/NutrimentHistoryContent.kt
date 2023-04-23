@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -21,12 +22,16 @@ fun NutrimentHistoryContent(
     modifier: Modifier,
     nutriments: List<NutrimentUiLogModel>
 ) {
+    val listState = rememberLazyListState()
+
     Surface(
-        modifier = modifier.wrapContentHeight(),
+        modifier = modifier
+            .wrapContentHeight(),
         shape = MaterialTheme.shapes.medium
     ) {
         LazyColumn(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant),
+            state = listState
         ) {
             items(nutriments) {
                 NutrimentHistoryCard(
