@@ -259,7 +259,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitsErrorStateOnThrowingInsertion() = runTest {
-            val errorMessage = "Insertion failed!"
+            val errorMessage = "Logging failed!"
             whenever(insertNutrimentLogUseCase.invoke(any())).thenThrow(
                 RuntimeException(
                     errorMessage

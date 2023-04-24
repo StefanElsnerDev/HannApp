@@ -82,12 +82,7 @@ class NutritionSelectViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             getNutritionUseCase.getAll()
                 .catch { throwable ->
-                    _uiState.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            errorMessage = throwable.message ?: "Something went wrong"
-                        )
-                    }
+                    updateErrorState(throwable.message ?: "Loading of nutriments from database failed")
                 }
                 .collectLatest { nutriments ->
                     _nutriments.emit(nutriments)
@@ -115,20 +110,10 @@ class NutritionSelectViewModel @Inject constructor(
                     )
                 )
                 if (!isSuccess){
-                    _uiState.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            errorMessage = "Nutriment could not be logged"
-                        )
-                    }
+                    updateErrorState("Nutriment could not be logged")
                 }
             } catch (e: Exception){
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        errorMessage = e.message
-                    )
-                }
+                updateErrorState(e.message ?: "ADdition of leg entry failed")
             }
         }
     }
@@ -146,4 +131,14 @@ class NutritionSelectViewModel @Inject constructor(
             }
         }
     }
+
+    private fun updateErrorState(message: String) {
+        _uiState.update { state ->
+            state.copy(
+                isLoading = false,
+                errorMessage = message
+            )
+        }
+    }
+
 }
