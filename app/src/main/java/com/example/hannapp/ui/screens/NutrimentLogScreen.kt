@@ -10,7 +10,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,19 +47,20 @@ fun NutrimentLogContent(
     uiState: NutritionUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
-    onAdd: () -> Unit,
+    onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
     onItemSelected: (NutritionUiModel) -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
+    var quantity by rememberSaveable { mutableStateOf("") }
 
     AppScaffold(
         bottomBar = { NavigationBar(navController) },
         snackBarHost = { SnackbarHost(hostState = snackBarHost) },
         floatingActionButton = {
             FAB({ Icon(Icons.Default.Add, null) }) {
-                onAdd()
+                onAdd(quantity)
             }
         }
     ) { paddingValues ->
@@ -74,11 +78,13 @@ fun NutrimentLogContent(
             ) {
                 SelectionContent(
                     modifier = Modifier.fillMaxWidth(),
-                    uiState,
-                    snackBarHost,
-                    onClickBoxClick,
-                    pagingItems,
-                    onItemSelected
+                    uiState = uiState,
+                    snackBarHost = snackBarHost,
+                    onClickBoxClick = onClickBoxClick,
+                    quantity = quantity,
+                    onQuantityChanged = { quantity = it },
+                    pagingItems = pagingItems,
+                    onItemSelected = onItemSelected
                 )
 
                 Spacer(modifier = Modifier.height(SPACE_VERTICAL))
@@ -113,11 +119,10 @@ fun NutrimentLogScreen(
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
-        onAdd = { viewModel.add(1.234) },  //TODO (remove hardcoded value)
+        onAdd = { toAdd -> viewModel.apply { castAsDouble(toAdd) { add(it) } } },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
-        onItemSelected = { viewModel.select(it) }
-    )
+        onItemSelected = { viewModel.select(it) })
 }
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape")

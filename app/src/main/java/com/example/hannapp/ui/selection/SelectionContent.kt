@@ -34,6 +34,8 @@ fun SelectionContent(
     uiState: NutritionUiState,
     snackBarHost: SnackbarHostState,
     onClickBoxClick: () -> Unit,
+    quantity: String,
+    onQuantityChanged: (String) -> Unit,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     onItemSelected: (NutritionUiModel) -> Unit
 ) {
@@ -48,7 +50,6 @@ fun SelectionContent(
                 .padding(PADDING),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var input by rememberSaveable { mutableStateOf("") }
             var selectedItem by rememberSaveable { mutableStateOf("") }
             var expanded by remember { mutableStateOf(false) }
 
@@ -96,8 +97,8 @@ fun SelectionContent(
             }
 
             InputField(
-                value = input,
-                onValueChange = { input = it },
+                value = quantity,
+                onValueChange = { onQuantityChanged(it) },
                 modifier = Modifier,
                 label = stringResource(id = R.string.quantity),
                 isError = false
@@ -131,6 +132,8 @@ fun SelectionContent_LightMode() {
             modifier = Modifier,
             uiState = NutritionUiState(),
             snackBarHost = SnackbarHostState(),
+            quantity = "",
+            onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             onClickBoxClick = {},
             onItemSelected = {}
