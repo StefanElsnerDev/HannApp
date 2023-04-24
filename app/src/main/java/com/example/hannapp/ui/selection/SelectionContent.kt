@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +35,7 @@ fun SelectionContent(
     onClickBoxClick: () -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
+    selectedNutriment: NutritionUiModel,
     onNutrimentChanged: (NutritionUiModel) -> Unit,
     pagingItems: LazyPagingItems<NutritionUiModel>,
 ) {
@@ -50,7 +50,6 @@ fun SelectionContent(
                 .padding(PADDING),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var selectedNutriment by rememberSaveable { mutableStateOf("") }
             var expanded by remember { mutableStateOf(false) }
 
             uiState.errorMessage?.let {
@@ -70,7 +69,7 @@ fun SelectionContent(
                     .height(IntrinsicSize.Min)
             ) {
                 OutlinedTextField(
-                    value = selectedNutriment.ifBlank { "No Data" },
+                    value = selectedNutriment.toString().ifBlank { "No Data" },
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
                     readOnly = true,
@@ -113,7 +112,6 @@ fun SelectionContent(
                             item = it,
                             onClick = { item ->
                                 onNutrimentChanged(item)
-                                selectedNutriment = it.toString()
                                 expanded = false
                             }
                         )
@@ -136,6 +134,7 @@ fun SelectionContent_LightMode() {
             onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             onClickBoxClick = {},
+            selectedNutriment = NutritionUiModel(),
             onNutrimentChanged = {}
         )
     }

@@ -50,7 +50,8 @@ fun NutrimentLogContent(
     onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
-    onItemSelected: (NutritionUiModel) -> Unit
+    selectedNutriment: NutritionUiModel,
+    onNutrimentSelected: (NutritionUiModel) -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
     var quantity by rememberSaveable { mutableStateOf("") }
@@ -84,7 +85,8 @@ fun NutrimentLogContent(
                     onClickBoxClick = onClickBoxClick,
                     quantity = quantity,
                     onQuantityChanged = { quantity = it },
-                    onNutrimentChanged = { onItemSelected(it) },
+                    selectedNutriment = selectedNutriment,
+                    onNutrimentChanged = { onNutrimentSelected(it) },
                     pagingItems = pagingItems,
                 )
 
@@ -123,7 +125,8 @@ fun NutrimentLogScreen(
         onAdd = { toAdd -> viewModel.apply { castAsDouble(toAdd) { add(it) } } },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
-        onItemSelected = { viewModel.select(it) })
+        selectedNutriment = uiState.nutritionUiModel,
+        onNutrimentSelected = { viewModel.select(it) })
 }
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape")
@@ -164,7 +167,8 @@ fun NutrimentLogScreen_LightMode() {
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
-            onItemSelected = {}
+            selectedNutriment = NutritionUiModel(),
+            onNutrimentSelected = {}
         )
     }
 }
