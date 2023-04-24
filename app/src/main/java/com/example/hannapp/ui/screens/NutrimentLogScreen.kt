@@ -83,8 +83,8 @@ fun NutrimentLogContent(
                     onClickBoxClick = onClickBoxClick,
                     quantity = quantity,
                     onQuantityChanged = { quantity = it },
+                    onNutrimentChanged = { onItemSelected(it) },
                     pagingItems = pagingItems,
-                    onItemSelected = onItemSelected
                 )
 
                 Spacer(modifier = Modifier.height(SPACE_VERTICAL))

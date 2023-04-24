@@ -36,8 +36,8 @@ fun SelectionContent(
     onClickBoxClick: () -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
+    onNutrimentChanged: (NutritionUiModel) -> Unit,
     pagingItems: LazyPagingItems<NutritionUiModel>,
-    onItemSelected: (NutritionUiModel) -> Unit
 ) {
     Surface(
         modifier = modifier.wrapContentHeight(),
@@ -50,7 +50,7 @@ fun SelectionContent(
                 .padding(PADDING),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var selectedItem by rememberSaveable { mutableStateOf("") }
+            var selectedNutriment by rememberSaveable { mutableStateOf("") }
             var expanded by remember { mutableStateOf(false) }
 
             uiState.errorMessage?.let {
@@ -70,7 +70,7 @@ fun SelectionContent(
                     .height(IntrinsicSize.Min)
             ) {
                 OutlinedTextField(
-                    value = selectedItem.ifBlank { "No Data" },
+                    value = selectedNutriment.ifBlank { "No Data" },
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
                     readOnly = true,
@@ -112,8 +112,8 @@ fun SelectionContent(
                         SimpleDropDownItem(
                             item = it,
                             onClick = { item ->
-                                onItemSelected(item)
-                                selectedItem = item.toString()
+                                onNutrimentChanged(item)
+                                selectedNutriment = it.toString()
                                 expanded = false
                             }
                         )
@@ -136,7 +136,7 @@ fun SelectionContent_LightMode() {
             onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             onClickBoxClick = {},
-            onItemSelected = {}
+            onNutrimentChanged = {}
         )
     }
 }
