@@ -34,6 +34,7 @@ data class NutritionUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
+
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
@@ -42,7 +43,6 @@ class NutritionSelectViewModel @Inject constructor(
     private val nutritionConverter: NutritionConverter,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
 
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
@@ -129,6 +129,20 @@ class NutritionSelectViewModel @Inject constructor(
                         errorMessage = e.message
                     )
                 }
+            }
+        }
+    }
+
+    fun castAsDouble(value: String, function: (Double)->Unit) {
+        val nullableValue = value.toDoubleOrNull()
+        if(nullableValue != null){
+            nullableValue.apply(function)
+        } else {
+            _uiState.update { state ->
+                state.copy(
+                    isLoading = false,
+                    errorMessage = "Invalid Input"
+                )
             }
         }
     }
