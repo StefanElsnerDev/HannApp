@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,6 +55,7 @@ fun NutrimentLogContent(
     onNutrimentSelected: (NutritionUiModel) -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
+    val focusManager = LocalFocusManager.current
     var quantity by rememberSaveable { mutableStateOf("") }
 
     AppScaffold(
@@ -63,6 +65,7 @@ fun NutrimentLogContent(
             FAB({ Icon(Icons.Default.Add, null) }) {
                 onAdd(quantity)
                 quantity = ""
+                focusManager.clearFocus()
             }
         }
     ) { paddingValues ->
