@@ -132,6 +132,17 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
+    fun isSelectionValid(function: () -> Unit): Boolean {
+        return if (_uiState.value.nutritionUiModel.id != null) {
+            function()
+            true
+        }
+        else {
+            updateErrorState("No selection made")
+            false
+        }
+    }
+
     private fun updateErrorState(message: String) {
         _uiState.update { state ->
             state.copy(

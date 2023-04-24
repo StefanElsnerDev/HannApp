@@ -122,7 +122,13 @@ fun NutrimentLogScreen(
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
-        onAdd = { toAdd -> viewModel.apply { castAsDouble(toAdd) { add(it) } } },
+        onAdd = { toAdd ->
+            viewModel.apply {
+                isSelectionValid {
+                    castAsDouble(toAdd) { add(it) }
+                }
+            }
+        },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.nutritionUiModel,
