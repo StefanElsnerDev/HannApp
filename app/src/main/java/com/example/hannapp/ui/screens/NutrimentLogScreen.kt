@@ -61,6 +61,7 @@ fun NutrimentLogContent(
         floatingActionButton = {
             FAB({ Icon(Icons.Default.Add, null) }) {
                 onAdd(quantity)
+                quantity = ""
             }
         }
     ) { paddingValues ->
