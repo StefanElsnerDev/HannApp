@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.hannapp.R
 import com.example.hannapp.data.model.NutritionUiModel
+import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 
 
@@ -36,7 +38,8 @@ fun NutrimentCard(
             .combinedClickable(
                 onClick = { onClick(nutritionUiModel) },
                 onLongClick = { onLongClick(nutritionUiModel) })
-            .height(IntrinsicSize.Min),
+            .height(IntrinsicSize.Min)
+            .padding(PADDING),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
