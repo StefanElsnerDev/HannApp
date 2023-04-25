@@ -28,13 +28,12 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NutrimentCard(
-    modifier: Modifier,
     nutritionUiModel: NutritionUiModel,
     onClick: (NutritionUiModel) -> Unit,
     onLongClick: (NutritionUiModel) -> Unit
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .combinedClickable(
                 onClick = { onClick(nutritionUiModel) },
                 onLongClick = { onLongClick(nutritionUiModel) })
@@ -91,8 +90,6 @@ fun NutrimentCard(
 fun NutrimentCard_LightMode() {
     HannAppTheme {
         NutrimentCard(
-            modifier = Modifier
-                .fillMaxWidth(),
             nutritionUiModel = NutritionUiModel(
                 name = "Cola",
                 protein = "1.23",
