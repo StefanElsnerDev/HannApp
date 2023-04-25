@@ -74,7 +74,7 @@ fun NutrimentCard(
             NutrimentTextField(
                 modifier = Modifier.fillMaxWidth(),
                 text = "${nutritionUiModel.fat} g",
-                label = { Text(text = stringResource(id = R.string.fad)) }
+                label = { Text(text = stringResource(id = R.string.fat)) }
             )
         }
     }

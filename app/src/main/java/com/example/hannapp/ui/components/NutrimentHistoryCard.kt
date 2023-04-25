@@ -70,7 +70,7 @@ fun NutrimentHistoryCard(
                 value = "${nutrimentUiLogModel.nutrition.fat} g",
                 onValueChange = { _ -> },
                 label = {
-                    Text(text = stringResource(id = R.string.fad))
+                    Text(text = stringResource(id = R.string.fat))
                 },
                 textStyle = MaterialTheme.typography.labelMedium,
                 enabled = false
