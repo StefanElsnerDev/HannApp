@@ -20,8 +20,8 @@ import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
+import com.example.hannapp.ui.components.NutrimentCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
-import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.dropdown.SimpleDropDownMenu
 import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -73,8 +73,8 @@ fun NutritionDataUpdateContent(
                     pagingItems = pagingItems,
                     onDismiss = { expanded = false },
                     itemContent = { nutrition ->
-                        SimpleDropDownItem(
-                            item = nutrition,
+                        NutrimentCard(
+                            nutritionUiModel = nutrition,
                             onClick = {
                                 onItemSelected(it)
                                 selectedItem = it.toString()
