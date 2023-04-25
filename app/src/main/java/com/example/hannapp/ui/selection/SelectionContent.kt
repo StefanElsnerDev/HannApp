@@ -17,8 +17,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.R
 import com.example.hannapp.data.model.NutritionUiModel
+import com.example.hannapp.ui.components.NutrimentCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
-import com.example.hannapp.ui.dropdown.SimpleDropDownItem
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -108,12 +108,13 @@ fun SelectionContent(
                     pagingItems = pagingItems,
                     onDismiss = { expanded = false },
                     itemContent = {
-                        SimpleDropDownItem(
-                            item = it,
-                            onClick = { item ->
-                                onNutrimentChanged(item)
+                        NutrimentCard(
+                            nutritionUiModel = it,
+                            onClick = { nutriment ->
+                                onNutrimentChanged(nutriment)
                                 expanded = false
-                            }
+                            },
+                            onLongClick = {}
                         )
                     }
                 )
