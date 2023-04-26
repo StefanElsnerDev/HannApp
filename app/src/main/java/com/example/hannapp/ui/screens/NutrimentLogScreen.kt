@@ -62,10 +62,12 @@ fun NutrimentLogContent(
         bottomBar = { NavigationBar(navController) },
         snackBarHost = { SnackbarHost(hostState = snackBarHost) },
         floatingActionButton = {
-            FAB({ Icon(Icons.Default.Add, null) }) {
-                onAdd(quantity)
-                quantity = ""
-                focusManager.clearFocus()
+            if (uiState.isSelectionValid) {
+                FAB({ Icon(Icons.Default.Add, null) }) {
+                    onAdd(quantity)
+                    quantity = ""
+                    focusManager.clearFocus()
+                }
             }
         }
     ) { paddingValues ->
