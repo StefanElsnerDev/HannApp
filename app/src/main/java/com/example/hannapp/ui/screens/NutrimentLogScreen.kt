@@ -126,8 +126,8 @@ fun NutrimentLogScreen(
         pagingItems = nutriments,
         loggedNutriments = logged,
         onAdd = { toAdd ->
-            viewModel.apply {
-                isSelectionValid {
+            if (uiState.isSelectionValid) {
+                viewModel.apply {
                     castAsDouble(toAdd) { add(it) }
                 }
             }

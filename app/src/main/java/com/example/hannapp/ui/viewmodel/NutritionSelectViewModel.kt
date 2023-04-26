@@ -33,7 +33,9 @@ data class NutritionUiState(
     val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
-)
+){
+    val isSelectionValid = nutritionUiModel.id != null
+}
 
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
@@ -91,10 +93,15 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     fun select(nutritionUiModel: NutritionUiModel) {
-        _uiState.update { state ->
-            state.copy(
-                nutritionUiModel = nutritionUiModel
-            )
+        nutritionUiModel.apply {
+            when (id) {
+                null -> updateErrorState("Invalid selection")
+                else -> _uiState.update { state ->
+                    state.copy(
+                        nutritionUiModel = this
+                    )
+                }
+            }
         }
     }
 
@@ -113,7 +120,7 @@ class NutritionSelectViewModel @Inject constructor(
                     updateErrorState("Nutriment could not be logged")
                 }
             } catch (e: Exception){
-                updateErrorState(e.message ?: "ADdition of leg entry failed")
+                updateErrorState(e.message ?: "Addition of log entry failed")
             }
         }
     }
@@ -129,17 +136,6 @@ class NutritionSelectViewModel @Inject constructor(
                     errorMessage = "Invalid Input"
                 )
             }
-        }
-    }
-
-    fun isSelectionValid(function: () -> Unit): Boolean {
-        return if (_uiState.value.nutritionUiModel.id != null) {
-            function()
-            true
-        }
-        else {
-            updateErrorState("No selection made")
-            false
         }
     }
 

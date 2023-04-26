@@ -206,6 +206,7 @@ class NutritionSelectViewModelShould {
     inner class Select {
 
         private val nutritionUiModel = NutritionUiModel(
+            id = 123,
             name = "Cola",
             kcal = "123",
             protein = "0.1",
@@ -218,10 +219,30 @@ class NutritionSelectViewModelShould {
         }
 
         @Test
+        fun emitUiStateWithErrorStateByDefault() {
+            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+        }
+
+        @Test
         fun emitUiStateWithSelectedNutrimentUiModel() {
             nutritionViewModel.select(nutritionUiModel)
 
             assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(nutritionUiModel)
+        }
+
+        @Test
+        fun emitUiStateWithValidationBasedOnModelId() {
+            nutritionViewModel.select(nutritionUiModel)
+
+            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isTrue
+        }
+
+        @Test
+        fun emitErrorStateOnInvalidSelection() {
+            nutritionViewModel.select(NutritionUiModel(id = null))
+
+            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("No valid selection")
         }
     }
 
@@ -305,44 +326,6 @@ class NutritionSelectViewModelShould {
             }
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).containsAnyOf("Invalid Input")
-        }
-    }
-
-    @Nested
-    inner class ValidateSelection {
-
-        @BeforeEach
-        fun beforeEach() {
-            nutritionViewModel.select(NutritionUiModel(id = 123))
-        }
-
-        @Test
-        fun validateSelectionBasedOnModelId() {
-            val result = nutritionViewModel.isSelectionValid {}
-
-            assertThat(result).isTrue
-        }
-
-        @Test
-        fun executeOnValidSelection() {
-            var result = -1.0
-            val expected = 123.456
-
-            nutritionViewModel.isSelectionValid {
-                result = expected
-            }
-
-            assertThat(result).isEqualTo(expected)
-        }
-
-        @Test
-        fun emitErrorStateOnInvalidSelection() {
-            nutritionViewModel.select(NutritionUiModel(id = null))
-
-            val result = nutritionViewModel.isSelectionValid {}
-
-            assertThat(result).isFalse
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("No selection made")
         }
     }
 }
