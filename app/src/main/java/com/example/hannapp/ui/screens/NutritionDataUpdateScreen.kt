@@ -22,7 +22,7 @@ import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NutrimentCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
-import com.example.hannapp.ui.dropdown.SimpleDropDownMenu
+import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.ComponentUiState
@@ -61,9 +61,8 @@ fun NutritionDataUpdateContent(
         ) {
             var expanded by remember { mutableStateOf(false) }
 
-            SimpleDropDownMenu(
-                selected = selectedItem,
-                isExpanded = expanded
+            EmptySelectionDropDownMenu(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 expanded = true
             }

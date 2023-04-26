@@ -13,33 +13,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
-import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleDropDownMenu(
-    modifier: Modifier = Modifier,
-    selected: String,
-    isExpanded: Boolean,
-    onClick: () -> Unit,
+fun EmptySelectionDropDownMenu(
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .background(MaterialTheme.colorScheme.surface)
     ) {
         OutlinedTextField(
-            value = selected.ifBlank { stringResource(id = R.string.nothing_selected) },
+            value = stringResource(id = R.string.nothing_selected),
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             readOnly = true,
             textStyle = MaterialTheme.typography.titleMedium,
             label = { Text(text = stringResource(id = R.string.selection)) },
             trailingIcon = {
-                if (!isExpanded) Icon(Icons.Filled.ArrowDropDown, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDown,
+                    contentDescription = null
+                )
             }
         )
         //ClickBox
@@ -60,10 +59,8 @@ fun SimpleDropDownMenu(
 @Composable
 fun DropDownField_LightMode() {
     HannAppTheme {
-        SimpleDropDownMenu(
-            modifier = Modifier,
-            selected = NutritionModel().toString(),
-            isExpanded = false
+        EmptySelectionDropDownMenu(
+            modifier = Modifier
         ) {}
     }
 }
