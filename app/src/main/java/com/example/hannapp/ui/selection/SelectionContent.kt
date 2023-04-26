@@ -68,31 +68,41 @@ fun SelectionContent(
                 modifier = Modifier
                     .height(IntrinsicSize.Min)
             ) {
-                OutlinedTextField(
-                    value = selectedNutriment.toString().ifBlank { "No Data" },
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    textStyle = MaterialTheme.typography.titleMedium,
-                    label = { Text(text = stringResource(id = R.string.food_selection)) },
-                    trailingIcon = {
-                        if (!expanded) Icon(
-                            Icons.Filled.ArrowDropDown,
-                            contentDescription = null
-                        )
-                    }
-                )
+                if (!uiState.isSelectionValid) {
+                    OutlinedTextField(
+                        value = stringResource(id = R.string.nothing_selected),
+                        onValueChange = {},
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = true,
+                        textStyle = MaterialTheme.typography.titleMedium,
+                        label = { Text(text = stringResource(id = R.string.food_selection)) },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowDropDown, contentDescription = null
+                            )
+                        }
+                    )
 
-                //ClickBox
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
+                    //ClickBox
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                onClickBoxClick()
+                                expanded = true
+                            },
+                        color = Color.Transparent,
+                    ) {}
+                } else {
+                    NutrimentCard(
+                        nutritionUiModel = selectedNutriment,
+                        onClick = {
                             onClickBoxClick()
                             expanded = true
                         },
-                    color = Color.Transparent,
-                ) {}
+                        onLongClick = {}
+                    )
+                }
             }
 
             InputField(
