@@ -1,15 +1,22 @@
 package com.example.hannapp.ui.selection
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.PagingData
@@ -19,6 +26,7 @@ import com.example.hannapp.R
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.components.NutrimentCard
 import com.example.hannapp.ui.dropdown.DropDownDialog
+import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -27,7 +35,6 @@ import kotlinx.coroutines.flow.flowOf
 
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SelectionContent(
     modifier: Modifier,
     uiState: NutritionUiState,
@@ -64,45 +71,22 @@ fun SelectionContent(
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
-            ) {
-                if (!uiState.isSelectionValid) {
-                    OutlinedTextField(
-                        value = stringResource(id = R.string.nothing_selected),
-                        onValueChange = {},
-                        modifier = Modifier.fillMaxWidth(),
-                        readOnly = true,
-                        textStyle = MaterialTheme.typography.titleMedium,
-                        label = { Text(text = stringResource(id = R.string.food_selection)) },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowDropDown, contentDescription = null
-                            )
-                        }
-                    )
-
-                    //ClickBox
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                onClickBoxClick()
-                                expanded = true
-                            },
-                        color = Color.Transparent,
-                    ) {}
-                } else {
-                    NutrimentCard(
-                        nutritionUiModel = selectedNutriment,
-                        onClick = {
-                            onClickBoxClick()
-                            expanded = true
-                        },
-                        onLongClick = {}
-                    )
+            when (uiState.isSelectionValid) {
+                false -> EmptySelectionDropDownMenu(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    onClickBoxClick()
+                    expanded = true
                 }
+
+                true -> NutrimentCard(
+                    nutritionUiModel = selectedNutriment,
+                    onClick = {
+                        onClickBoxClick()
+                        expanded = true
+                    },
+                    onLongClick = {}
+                )
             }
 
             InputField(
