@@ -6,6 +6,7 @@ import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
@@ -35,6 +36,7 @@ class NutritionSelectViewModelShould {
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val insertNutrimentLogUseCase = mock(InsertNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
+    private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
     private val nutritionConverter = mock(NutritionConverter::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -114,11 +116,12 @@ class NutritionSelectViewModelShould {
         )
 
         nutritionViewModel = NutritionSelectViewModel(
-            getNutritionUseCase,
-            insertNutrimentLogUseCase,
-            getNutrimentLogUseCase,
-            nutritionConverter,
-            testDispatcher
+            getNutritionUseCase = getNutritionUseCase,
+            insertNutrimentLogUseCase = insertNutrimentLogUseCase,
+            deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+            getNutrimentLogUseCase = getNutrimentLogUseCase,
+            nutritionConverter = nutritionConverter,
+            dispatcher = testDispatcher
         )
     }
 
@@ -137,11 +140,12 @@ class NutritionSelectViewModelShould {
     @Test
     fun produceUIStateWithLoadingStateOnInstantiation() = runTest {
         nutritionViewModel = NutritionSelectViewModel(
-            getNutritionUseCase,
-            insertNutrimentLogUseCase,
-            getNutrimentLogUseCase,
-            nutritionConverter,
-            testDispatcher
+            getNutritionUseCase = getNutritionUseCase,
+            insertNutrimentLogUseCase = insertNutrimentLogUseCase,
+            deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+            getNutrimentLogUseCase = getNutrimentLogUseCase,
+            nutritionConverter = nutritionConverter,
+            dispatcher = testDispatcher
         )
 
         Assertions.assertEquals(
@@ -191,11 +195,12 @@ class NutritionSelectViewModelShould {
             )
 
             nutritionViewModel = NutritionSelectViewModel(
-                getNutritionUseCase,
-                insertNutrimentLogUseCase,
-                getNutrimentLogUseCase,
-                nutritionConverter,
-                testDispatcher
+                getNutritionUseCase = getNutritionUseCase,
+                insertNutrimentLogUseCase = insertNutrimentLogUseCase,
+                deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+                getNutrimentLogUseCase = getNutrimentLogUseCase,
+                nutritionConverter = nutritionConverter,
+                dispatcher = testDispatcher
             )
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).contains(errorMessage)
@@ -215,7 +220,9 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitUiStateWithEmptyNutrimentUiModel() {
-            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(NutritionUiModel())
+            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(
+                NutritionUiModel()
+            )
         }
 
         @Test
@@ -227,7 +234,9 @@ class NutritionSelectViewModelShould {
         fun emitUiStateWithSelectedNutrimentUiModel() {
             nutritionViewModel.select(nutritionUiModel)
 
-            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(nutritionUiModel)
+            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(
+                nutritionUiModel
+            )
         }
 
         @Test
@@ -326,6 +335,45 @@ class NutritionSelectViewModelShould {
             }
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).containsAnyOf("Invalid Input")
+        }
+    }
+
+    @Nested
+    inner class ResetHistory {
+
+        @Test
+        fun invokeDeleteLogUseCase() = runTest {
+            nutritionViewModel.clearHistory()
+
+            verify(deleteNutrimentLogUseCase).clear()
+        }
+
+        @Test
+        fun emitErrorStateOnFailingDeletion() = runTest {
+            whenever(deleteNutrimentLogUseCase.clear()).thenReturn(false)
+
+            nutritionViewModel.clearHistory()
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Deletion failed")
+        }
+
+        @Test
+        fun emitErrorStateWithExceptionMessageOnFailedDeletion() = runTest {
+            val errorMessage = "Any strange error"
+            whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException(errorMessage))
+
+            nutritionViewModel.clearHistory()
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
+        }
+
+        @Test
+        fun emitErrorStateOnUnexpectedErrorDuringDeletion() = runTest {
+            whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException())
+
+            nutritionViewModel.clearHistory()
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Unexpected error on deletion")
         }
     }
 }

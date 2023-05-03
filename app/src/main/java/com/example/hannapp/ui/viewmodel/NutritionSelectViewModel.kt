@@ -11,6 +11,7 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
+import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
@@ -41,6 +42,7 @@ data class NutritionUiState(
 class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
     private val insertNutrimentLogUseCase: InsertNutrimentLogUseCase,
+    private val deleteNutrimentLogUseCase: DeleteNutrimentLogUseCase,
     getNutrimentLogUseCase: GetNutrimentLogUseCase,
     private val nutritionConverter: NutritionConverter,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
@@ -148,4 +150,15 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
+    fun clearHistory() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                val isCleared = deleteNutrimentLogUseCase.clear()
+
+                if (!isCleared) updateErrorState("Deletion failed")
+            } catch (e: Exception) {
+                updateErrorState(e.message ?: "Unexpected error on deletion")
+            }
+        }
+    }
 }
