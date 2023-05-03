@@ -25,4 +25,7 @@ abstract class NutrimentLogDao {
     @Transaction
     @Query("SELECT * FROM NutrimentLog")
     abstract fun getLogs(): Flow<List<Log>>
+
+    @Query("DELETE FROM NutrimentLog")
+    abstract suspend fun deleteAll(): Int
 }

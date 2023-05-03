@@ -22,4 +22,9 @@ class NutrimentLogRepository @Inject constructor(
                 )
             }
         }
+
+    suspend fun clearLog(): Boolean {
+        val deletedRows = nutrimentLogDao.deleteAll()
+        return deletedRows > 0
+    }
 }
