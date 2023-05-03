@@ -56,7 +56,8 @@ fun NutrimentLogContent(
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
     selectedNutriment: NutritionUiModel,
-    onNutrimentSelected: (NutritionUiModel) -> Unit
+    onNutrimentSelected: (NutritionUiModel) -> Unit,
+    clear: () -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
@@ -64,9 +65,12 @@ fun NutrimentLogContent(
 
     AppScaffold(
         topBar = {
-            AppTopBar{
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(painter = painterResource(id = R.drawable.restore), contentDescription = null)
+            AppTopBar {
+                IconButton(onClick = { clear() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.restore),
+                        contentDescription = null
+                    )
                 }
             }
         },
@@ -148,7 +152,9 @@ fun NutrimentLogScreen(
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.cachedNutritionUiModel,
-        onNutrimentSelected = { viewModel.select(it) })
+        onNutrimentSelected = { viewModel.select(it) },
+        clear = { viewModel.clearHistory() }
+    )
 }
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape")
@@ -190,7 +196,7 @@ fun NutrimentLogScreen_LightMode() {
             onClickBoxClick = {},
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel(),
-            onNutrimentSelected = {}
-        )
+            onNutrimentSelected = {},
+            clear = {})
     }
 }
