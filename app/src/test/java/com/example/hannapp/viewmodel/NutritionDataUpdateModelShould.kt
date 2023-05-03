@@ -98,6 +98,21 @@ class NutritionDataUpdateModelShould {
                 nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
         }
+
+        @Test
+        fun emitStateWithCachedNutritionUiModel() = runTest {
+            Assertions.assertEquals(
+                NutritionUiModel(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+            )
+
+            nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
+
+            Assertions.assertEquals(
+                nutritionUiModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+            )
+        }
     }
 
     @Nested
@@ -151,6 +166,18 @@ class NutritionDataUpdateModelShould {
                 nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
             verify(updateNutritionUseCase).invoke(nutritions.last())
+        }
+
+        @Test
+        fun emitStateWithUpdatedNutritionUiModel(){
+            nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
+
+            nutritionDataUpdateViewModel.update()
+
+            Assertions.assertEquals(
+                nutritionUiModels.last(),
+                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+            )
         }
 
         @Test

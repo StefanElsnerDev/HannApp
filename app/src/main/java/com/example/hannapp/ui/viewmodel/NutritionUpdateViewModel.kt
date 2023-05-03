@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUpdateUiState(
+    val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -50,6 +51,8 @@ class NutritionUpdateViewModel @Inject constructor(
 
     fun selectItem(nutritionUiModel: NutritionUiModel) {
         // TODO: Error Handling
+        _uiState.update { state -> state.copy(nutritionUiModel = nutritionUiModel) }
+
         viewModelScope.launch(dispatcher) {
             _uiComponentState.update { state ->
                 state.copy(
@@ -62,12 +65,23 @@ class NutritionUpdateViewModel @Inject constructor(
     fun update() {
         viewModelScope.launch(dispatcher) {
             try {
-                val isSuccess = NutritionConverter().uiModel(_uiComponentState.value.nutritionUiModel).toEntity()
-                    .let { updateNutritionUseCase(it) }
+                val isSuccess =
+                    NutritionConverter().uiModel(_uiComponentState.value.nutritionUiModel)
+                        .toEntity()
+                        .let { updateNutritionUseCase(it) }
 
-                if (!isSuccess) _uiState.update { it.copy(errorMessage = "Update failed") }
+                updateNutritionUiState(isSuccess)
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    private fun updateNutritionUiState(isSuccess: Boolean) {
+        _uiState.apply {
+            when (isSuccess) {
+                true -> update { state -> state.copy(nutritionUiModel = _uiComponentState.value.nutritionUiModel) }
+                false -> update { state -> state.copy(errorMessage = "Update failed") }
             }
         }
     }

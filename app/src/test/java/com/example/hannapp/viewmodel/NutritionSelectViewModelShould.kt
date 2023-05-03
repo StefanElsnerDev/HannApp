@@ -242,7 +242,7 @@ class NutritionSelectViewModelShould {
             nutritionViewModel.select(NutritionUiModel(id = null))
 
             assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("No valid selection")
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Invalid selection")
         }
     }
 

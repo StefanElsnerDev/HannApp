@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +25,7 @@ import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.NutritionDataGroup
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.ComponentUiState
+import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import kotlinx.coroutines.flow.flowOf
 
@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.flowOf
 fun NutritionDataUpdateContent(
     pagingItems: LazyPagingItems<NutritionUiModel>,
     componentUiState: ComponentUiState,
+    uiState: NutritionUpdateUiState,
     uiComponents: List<NutritionComponent>,
     onItemSelected: (NutritionUiModel) -> Unit,
     onDeleteSelected: (NutritionUiModel) -> Unit,
@@ -41,14 +42,9 @@ fun NutritionDataUpdateContent(
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
 ) {
-    var selectedItem by rememberSaveable { mutableStateOf("") }
-
     AppScaffold(
         floatingActionButton = {
-            FAB({ Icon(painterResource(id = R.drawable.change), "") }) {
-                selectedItem = componentUiState.nutritionUiModel.toString()
-                onUpdate()
-            }
+            FAB({ Icon(painterResource(id = R.drawable.change), "") }) { onUpdate() }
         }
     ) {
         Column(
@@ -76,7 +72,6 @@ fun NutritionDataUpdateContent(
                             nutritionUiModel = nutrition,
                             onClick = {
                                 onItemSelected(it)
-                                selectedItem = it.toString()
                                 expanded = false
                             },
                             onLongClick = { onDeleteSelected(it) }
@@ -102,6 +97,7 @@ fun NutritionDataUpdateScreen(
     viewModel: NutritionUpdateViewModel = hiltViewModel()
 ) {
     val componentUiState by viewModel.uiComponentState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val uiComponents by viewModel.uiComponents.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
 
@@ -109,6 +105,7 @@ fun NutritionDataUpdateScreen(
         pagingItems = nutriments,
         componentUiState = componentUiState,
         uiComponents = uiComponents,
+        uiState = uiState,
         onItemSelected = {
             viewModel.selectItem(it)
         },
@@ -143,6 +140,7 @@ fun NutritionDataUpdate_LightMode() {
         NutritionDataUpdateContent(
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             componentUiState = ComponentUiState(),
+            uiState = NutritionUpdateUiState(),
             uiComponents = listOf(
                 Name(),
                 Kcal(),
