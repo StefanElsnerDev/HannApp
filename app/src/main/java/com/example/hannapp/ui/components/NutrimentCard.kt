@@ -2,6 +2,7 @@ package com.example.hannapp.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +39,7 @@ fun NutrimentCard(
             .combinedClickable(
                 onClick = { onClick(nutritionUiModel) },
                 onLongClick = { onLongClick(nutritionUiModel) })
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .height(IntrinsicSize.Min)
             .padding(PADDING),
         verticalAlignment = Alignment.CenterVertically
@@ -46,7 +49,7 @@ fun NutrimentCard(
             text = nutritionUiModel.name,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
-            style = TextStyle(fontSize = 32.sp),
+            style = TextStyle(fontSize = 32.sp, color = MaterialTheme.colorScheme.onSurfaceVariant),
             maxLines = 1
         )
 
