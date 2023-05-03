@@ -57,10 +57,16 @@ fun NutritionDataUpdateContent(
         ) {
             var expanded by remember { mutableStateOf(false) }
 
-            EmptySelectionDropDownMenu(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                expanded = true
+            when (uiState.nutritionUiModel.isValid) {
+                true -> NutrimentCard(
+                    nutritionUiModel = uiState.nutritionUiModel,
+                    onClick = { expanded = true },
+                    onLongClick = {}
+                )
+
+                false -> EmptySelectionDropDownMenu(
+                    modifier = Modifier.fillMaxWidth()
+                ) { expanded = true }
             }
 
             if (expanded) {

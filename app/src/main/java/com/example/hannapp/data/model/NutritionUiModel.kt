@@ -10,4 +10,6 @@ data class NutritionUiModel(
     val sugar: String = "",
     val fiber: String = "",
     val alcohol: String = ""
-)
+) {
+    val isValid = id != null
+}
