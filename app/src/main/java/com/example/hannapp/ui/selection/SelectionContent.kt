@@ -84,8 +84,7 @@ fun SelectionContent(
                     onClick = {
                         onClickBoxClick()
                         expanded = true
-                    },
-                    onLongClick = {}
+                    }
                 )
             }
 
@@ -107,8 +106,7 @@ fun SelectionContent(
                             onClick = { nutriment ->
                                 onNutrimentChanged(nutriment)
                                 expanded = false
-                            },
-                            onLongClick = {}
+                            }
                         )
                     }
                 )

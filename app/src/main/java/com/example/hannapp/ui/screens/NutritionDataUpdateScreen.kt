@@ -60,8 +60,7 @@ fun NutritionDataUpdateContent(
             when (uiState.nutritionUiModel.isValid) {
                 true -> NutrimentCard(
                     nutritionUiModel = uiState.nutritionUiModel,
-                    onClick = { expanded = true },
-                    onLongClick = {}
+                    onClick = { expanded = true }
                 )
 
                 false -> EmptySelectionDropDownMenu(

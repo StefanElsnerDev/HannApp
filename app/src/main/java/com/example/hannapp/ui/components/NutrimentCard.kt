@@ -31,8 +31,8 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun NutrimentCard(
     nutritionUiModel: NutritionUiModel,
-    onClick: (NutritionUiModel) -> Unit,
-    onLongClick: (NutritionUiModel) -> Unit
+    onClick: (NutritionUiModel) -> Unit = {},
+    onLongClick: (NutritionUiModel) -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -98,9 +98,7 @@ fun NutrimentCard_LightMode() {
                 protein = "1.23",
                 fat = "5.6",
                 kcal = "8.9"
-            ),
-            onClick = {},
-            onLongClick = {}
+            )
         )
     }
 }
