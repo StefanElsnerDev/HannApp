@@ -104,6 +104,7 @@ class NutritionSelectViewModel @Inject constructor(
                 }
             }
         }
+        validateSelection()
     }
 
     fun add(quantity: Double) {
@@ -159,6 +160,8 @@ class NutritionSelectViewModel @Inject constructor(
                 updateErrorState(e.message ?: "Unexpected error on deletion")
             }
         }
+
+        validateSelection()
     }
 
     private fun validateSelection(){
