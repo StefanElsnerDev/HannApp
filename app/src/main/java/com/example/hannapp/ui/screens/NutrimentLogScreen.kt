@@ -151,7 +151,7 @@ fun NutrimentLogScreen(
         },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
-        selectedNutriment = uiState.cachedNutritionUiModel,
+        selectedNutriment = uiState.nutritionUiModel,
         onNutrimentSelected = { viewModel.select(it) },
         clear = { viewModel.clearAll() }
     )

@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUiState(
-    var cachedNutritionUiModel: NutritionUiModel = NutritionUiModel(),
+    var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     var isSelectionValid: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
@@ -99,7 +99,7 @@ class NutritionSelectViewModel @Inject constructor(
                 null -> updateErrorState("Invalid selection")
                 else -> _uiState.update { state ->
                     state.copy(
-                        cachedNutritionUiModel = this
+                        nutritionUiModel = this
                     )
                 }
             }
@@ -112,7 +112,7 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 val isSuccess = insertNutrimentLogUseCase(
                     nutrimentLogModel = NutrimentLogModel(
-                        nutrition = nutritionConverter.uiModel(_uiState.value.cachedNutritionUiModel).toEntity(),
+                        nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel).toEntity(),
                         quantity = quantity,
                         createdAt = System.currentTimeMillis(),
                         modifiedAt = null
@@ -170,13 +170,13 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     private fun unselect(){
-        _uiState.value.cachedNutritionUiModel = NutritionUiModel()
+        _uiState.value.nutritionUiModel = NutritionUiModel()
     }
 
     private fun validateSelection(){
         _uiState.update { state ->
             state.copy(
-                isSelectionValid = state.cachedNutritionUiModel.id != null
+                isSelectionValid = state.nutritionUiModel.id != null
             )
         }
     }

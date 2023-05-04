@@ -223,7 +223,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitUiStateWithEmptyNutrimentUiModel() {
-            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
                 NutritionUiModel()
             )
         }
@@ -237,7 +237,7 @@ class NutritionSelectViewModelShould {
         fun emitUiStateWithSelectedNutrimentUiModel() {
             nutritionViewModel.select(nutritionUiModel)
 
-            assertThat(nutritionViewModel.uiState.value.cachedNutritionUiModel).isEqualTo(
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
                 nutritionUiModel
             )
         }
