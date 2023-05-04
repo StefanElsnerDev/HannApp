@@ -103,14 +103,14 @@ class NutritionDataUpdateModelShould {
         fun emitStateWithCachedNutritionUiModel() = runTest {
             Assertions.assertEquals(
                 NutritionUiModel(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiState.value.cachedNutritionUiModel
             )
 
             nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
 
             Assertions.assertEquals(
                 nutritionUiModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiState.value.cachedNutritionUiModel
             )
         }
     }
@@ -176,7 +176,7 @@ class NutritionDataUpdateModelShould {
 
             Assertions.assertEquals(
                 nutritionUiModels.last(),
-                nutritionDataUpdateViewModel.uiState.value.nutritionUiModel
+                nutritionDataUpdateViewModel.uiState.value.cachedNutritionUiModel
             )
         }
 

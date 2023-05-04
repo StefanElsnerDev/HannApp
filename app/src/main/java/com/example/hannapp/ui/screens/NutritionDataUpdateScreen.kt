@@ -57,9 +57,9 @@ fun NutritionDataUpdateContent(
         ) {
             var expanded by remember { mutableStateOf(false) }
 
-            when (uiState.nutritionUiModel.isValid) {
+            when (uiState.cachedNutritionUiModel.isValid) {
                 true -> NutrimentCard(
-                    nutritionUiModel = uiState.nutritionUiModel,
+                    nutritionUiModel = uiState.cachedNutritionUiModel,
                     onClick = { expanded = true }
                 )
 
