@@ -21,7 +21,8 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun NutrimentHistoryContent(
     modifier: Modifier,
-    nutriments: List<NutrimentUiLogModel>
+    nutriments: List<NutrimentUiLogModel>,
+    onLongClick: (NutrimentUiLogModel) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -39,12 +40,13 @@ fun NutrimentHistoryContent(
             modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant),
             state = listState
         ) {
-            items(nutriments) {
+            items(nutriments) { nutrimentUiLogModel ->
                 NutrimentHistoryCard(
                     modifier = Modifier.padding(PADDING),
-                    nutrimentUiLogModel = it,
+                    nutrimentUiLogModel = nutrimentUiLogModel,
                     onClick = {},
-                    onLongClick = {})
+                    onLongClick = { onLongClick(it) }
+                )
             }
         }
     }

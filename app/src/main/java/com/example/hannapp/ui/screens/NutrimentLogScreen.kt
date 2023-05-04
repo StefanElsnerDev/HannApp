@@ -57,6 +57,7 @@ fun NutrimentLogContent(
     onClickBoxClick: () -> Unit,
     selectedNutriment: NutritionUiModel,
     onNutrimentSelected: (NutritionUiModel) -> Unit,
+    onLoggedNutrimentSelected: (NutrimentUiLogModel) -> Unit,
     clear: () -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
@@ -114,7 +115,10 @@ fun NutrimentLogContent(
 
                 NutrimentHistoryContent(
                     modifier = Modifier.fillMaxWidth(),
-                    nutriments = loggedNutriments
+                    nutriments = loggedNutriments,
+                    onLongClick = {
+                        onLoggedNutrimentSelected(it)
+                    }
                 )
             }
 
@@ -153,6 +157,7 @@ fun NutrimentLogScreen(
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.nutritionUiModel,
         onNutrimentSelected = { viewModel.select(it) },
+        onLoggedNutrimentSelected = { TODO()},
         clear = { viewModel.clearAll() }
     )
 }
@@ -197,6 +202,7 @@ fun NutrimentLogScreen_LightMode() {
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
+            onLoggedNutrimentSelected = {},
             clear = {})
     }
 }
