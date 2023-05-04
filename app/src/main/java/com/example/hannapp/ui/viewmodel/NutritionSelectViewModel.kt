@@ -151,6 +151,12 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     fun clearAll() {
+        clearHistory()
+        unselect()
+        validateSelection()
+    }
+
+    private fun clearHistory(){
         viewModelScope.launch(dispatcher) {
             try {
                 val isCleared = deleteNutrimentLogUseCase.clear()
@@ -161,8 +167,6 @@ class NutritionSelectViewModel @Inject constructor(
             }
         }
 
-        unselect()
-        validateSelection()
     }
 
     private fun unselect(){
