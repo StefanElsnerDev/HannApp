@@ -129,6 +129,7 @@ fun NutrimentLogContent(
                     onLongClick = {
                         isEditMode = true
                         onLoggedNutrimentSelected(it)
+                        quantity = it.quantity.toString()
                     }
                 )
             }
