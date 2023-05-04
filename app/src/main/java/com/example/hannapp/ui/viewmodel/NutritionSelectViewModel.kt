@@ -31,12 +31,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NutritionUiState(
-    val cachedNutritionUiModel: NutritionUiModel = NutritionUiModel(),
+    var cachedNutritionUiModel: NutritionUiModel = NutritionUiModel(),
+    var isSelectionValid: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
-){
-    val isSelectionValid = cachedNutritionUiModel.id != null
-}
+)
 
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
@@ -159,6 +158,14 @@ class NutritionSelectViewModel @Inject constructor(
             } catch (e: Exception) {
                 updateErrorState(e.message ?: "Unexpected error on deletion")
             }
+        }
+    }
+
+    private fun validateSelection(){
+        _uiState.update { state ->
+            state.copy(
+                isSelectionValid = state.cachedNutritionUiModel.id != null
+            )
         }
     }
 }
