@@ -390,5 +390,12 @@ class NutritionSelectViewModelShould {
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Unexpected error on deletion")
         }
+
+        @Test
+        fun emitStateWithEmptyModelState(){
+            nutritionViewModel.clearHistory()
+
+            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+        }
     }
 }

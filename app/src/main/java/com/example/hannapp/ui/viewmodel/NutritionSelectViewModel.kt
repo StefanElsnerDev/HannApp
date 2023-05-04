@@ -161,7 +161,12 @@ class NutritionSelectViewModel @Inject constructor(
             }
         }
 
+        unselect()
         validateSelection()
+    }
+
+    private fun unselect(){
+        _uiState.value.cachedNutritionUiModel = NutritionUiModel()
     }
 
     private fun validateSelection(){
