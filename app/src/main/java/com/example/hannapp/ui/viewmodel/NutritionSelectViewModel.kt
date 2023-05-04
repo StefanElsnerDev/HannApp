@@ -150,7 +150,7 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
-    fun clearHistory() {
+    fun clearAll() {
         viewModelScope.launch(dispatcher) {
             try {
                 val isCleared = deleteNutrimentLogUseCase.clear()

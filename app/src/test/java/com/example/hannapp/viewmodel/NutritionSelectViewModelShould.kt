@@ -354,11 +354,11 @@ class NutritionSelectViewModelShould {
     }
 
     @Nested
-    inner class ResetHistory {
+    inner class ClearAll {
 
         @Test
         fun invokeDeleteLogUseCase() = runTest {
-            nutritionViewModel.clearHistory()
+            nutritionViewModel.clearAll()
 
             verify(deleteNutrimentLogUseCase).clear()
         }
@@ -367,7 +367,7 @@ class NutritionSelectViewModelShould {
         fun emitErrorStateOnFailingDeletion() = runTest {
             whenever(deleteNutrimentLogUseCase.clear()).thenReturn(false)
 
-            nutritionViewModel.clearHistory()
+            nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Deletion failed")
         }
@@ -377,7 +377,7 @@ class NutritionSelectViewModelShould {
             val errorMessage = "Any strange error"
             whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException(errorMessage))
 
-            nutritionViewModel.clearHistory()
+            nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
         }
@@ -386,14 +386,14 @@ class NutritionSelectViewModelShould {
         fun emitErrorStateOnUnexpectedErrorDuringDeletion() = runTest {
             whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException())
 
-            nutritionViewModel.clearHistory()
+            nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Unexpected error on deletion")
         }
 
         @Test
         fun emitStateWithEmptyModelState(){
-            nutritionViewModel.clearHistory()
+            nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
         }

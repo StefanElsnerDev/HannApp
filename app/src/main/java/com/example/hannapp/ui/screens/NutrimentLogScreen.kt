@@ -153,7 +153,7 @@ fun NutrimentLogScreen(
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.cachedNutritionUiModel,
         onNutrimentSelected = { viewModel.select(it) },
-        clear = { viewModel.clearHistory() }
+        clear = { viewModel.clearAll() }
     )
 }
 
