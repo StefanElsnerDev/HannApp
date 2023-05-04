@@ -6,8 +6,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,10 +66,17 @@ fun NutrimentLogContent(
     val snackBarHost = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     var quantity by rememberSaveable { mutableStateOf("") }
+    var isEditMode by rememberSaveable { mutableStateOf(false) }
 
     AppScaffold(
         topBar = {
             AppTopBar {
+                if(isEditMode){
+                    Text(
+                        text = stringResource(id = R.string.edit_mode),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
                 IconButton(onClick = { clear() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.restore),
@@ -117,6 +127,7 @@ fun NutrimentLogContent(
                     modifier = Modifier.fillMaxWidth(),
                     nutriments = loggedNutriments,
                     onLongClick = {
+                        isEditMode = true
                         onLoggedNutrimentSelected(it)
                     }
                 )
