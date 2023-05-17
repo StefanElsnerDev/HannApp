@@ -3,13 +3,14 @@ package com.example.hannapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -72,17 +72,37 @@ fun NutrimentLogContent(
     AppScaffold(
         topBar = {
             AppTopBar {
-                if(isEditMode){
-                    Text(
-                        text = stringResource(id = R.string.edit_mode),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
-                IconButton(onClick = { clear() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.restore),
-                        contentDescription = null
-                    )
+                when (isEditMode) {
+                    true -> {
+                        IconButton(
+                            onClick = { TODO("abort change") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        IconButton(
+                            onClick = { TODO("save change") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Done,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+
+                    false -> {
+                        IconButton(onClick = { clear() }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.restore),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             }
         },
@@ -173,7 +193,7 @@ fun NutrimentLogScreen(
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.nutritionUiModel,
         onNutrimentSelected = { viewModel.select(it) },
-        onLoggedNutrimentSelected = { TODO()},
+        onLoggedNutrimentSelected = { viewModel.edit(it) },
         clear = { viewModel.clearAll() }
     )
 }
