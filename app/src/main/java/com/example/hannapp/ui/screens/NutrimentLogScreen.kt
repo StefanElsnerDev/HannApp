@@ -198,6 +198,33 @@ fun NutrimentLogScreen(
     )
 }
 
+private val dummyList = listOf(
+    NutrimentUiLogModel(
+        nutrition = NutritionUiModel(
+            name = "Peach"
+        ),
+        quantity = 123.4,
+        unit = "g",
+        timeStamp = 1681801313
+    ),
+    NutrimentUiLogModel(
+        nutrition = NutritionUiModel(
+            name = "Apple"
+        ),
+        quantity = 123.4,
+        unit = "g",
+        timeStamp = 1681801313
+    ),
+    NutrimentUiLogModel(
+        nutrition = NutritionUiModel(
+            name = "Chocolate"
+        ),
+        quantity = 123.4,
+        unit = "g",
+        timeStamp = 1681801313
+    )
+)
+
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape")
 @Composable
 fun NutrimentLogScreen_LightMode() {
@@ -206,33 +233,7 @@ fun NutrimentLogScreen_LightMode() {
             modifier = Modifier,
             uiState = NutritionUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
-            loggedNutriments =
-            listOf(
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Peach"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                ),
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Apple"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                ),
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Chocolate"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                )
-            ),
+            loggedNutriments = dummyList,
             isEditMode = false,
             onEditMode = {},
             onAdd = {},
@@ -253,33 +254,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             modifier = Modifier,
             uiState = NutritionUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
-            loggedNutriments =
-            listOf(
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Peach"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                ),
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Apple"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                ),
-                NutrimentUiLogModel(
-                    nutrition = NutritionUiModel(
-                        name = "Chocolate"
-                    ),
-                    quantity = 123.4,
-                    unit = "g",
-                    timeStamp = 1681801313
-                )
-            ),
+            loggedNutriments = dummyList,
             isEditMode = true,
             onEditMode = {},
             onAdd = {},
