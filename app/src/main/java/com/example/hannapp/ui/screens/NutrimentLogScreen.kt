@@ -55,6 +55,8 @@ fun NutrimentLogContent(
     uiState: NutritionUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
+    isEditMode: Boolean,
+    onEditMode: (Boolean) -> Unit,
     onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
@@ -66,7 +68,6 @@ fun NutrimentLogContent(
     val snackBarHost = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     var quantity by rememberSaveable { mutableStateOf("") }
-    var isEditMode by rememberSaveable { mutableStateOf(false) }
 
     AppScaffold(
         topBar = {
@@ -127,7 +128,7 @@ fun NutrimentLogContent(
                     modifier = Modifier.fillMaxWidth(),
                     nutriments = loggedNutriments,
                     onLongClick = {
-                        isEditMode = true
+                        onEditMode(true)
                         onLoggedNutrimentSelected(it)
                         quantity = it.quantity.toString()
                     }
@@ -152,12 +153,15 @@ fun NutrimentLogScreen(
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
     val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
+    val isEditMode by rememberSaveable { mutableStateOf(false) }
 
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
+        isEditMode = isEditMode,
+        onEditMode = {},
         onAdd = { toAdd ->
             if (uiState.isSelectionValid) {
                 viewModel.apply {
@@ -209,6 +213,55 @@ fun NutrimentLogScreen_LightMode() {
                     timeStamp = 1681801313
                 )
             ),
+            isEditMode = false,
+            onEditMode = {},
+            onAdd = {},
+            onClickBoxClick = {},
+            navController = rememberNavController(),
+            selectedNutriment = NutritionUiModel(),
+            onNutrimentSelected = {},
+            onLoggedNutrimentSelected = {},
+            clear = {})
+    }
+}
+
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape")
+@Composable
+fun NutrimentLogScreen_EditMode_LightMode() {
+    HannAppTheme {
+        NutrimentLogContent(
+            modifier = Modifier,
+            uiState = NutritionUiState(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
+            loggedNutriments =
+            listOf(
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Peach"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                ),
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Apple"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                ),
+                NutrimentUiLogModel(
+                    nutrition = NutritionUiModel(
+                        name = "Chocolate"
+                    ),
+                    quantity = 123.4,
+                    unit = "g",
+                    timeStamp = 1681801313
+                )
+            ),
+            isEditMode = true,
+            onEditMode = {},
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
