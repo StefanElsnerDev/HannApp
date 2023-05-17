@@ -193,7 +193,7 @@ fun NutrimentLogScreen(
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.nutritionUiModel,
         onNutrimentSelected = { viewModel.select(it) },
-        onLoggedNutrimentSelected = { viewModel.edit(it) },
+        onLoggedNutrimentSelected = { TODO("edit log item") },
         clear = { viewModel.clearAll() }
     )
 }
