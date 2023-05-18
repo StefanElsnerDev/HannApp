@@ -57,7 +57,7 @@ fun NutrimentLogContent(
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
     isEditMode: Boolean,
-    onEditMode: (Boolean) -> Unit,
+    onEditModeChange: (Boolean) -> Unit,
     onAdd: (String) -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
@@ -151,7 +151,7 @@ fun NutrimentLogContent(
                     modifier = Modifier.fillMaxWidth(),
                     nutriments = loggedNutriments,
                     onLongClick = {
-                        onEditMode(true)
+                        onEditModeChange(true)
                         onLoggedNutrimentSelected(it)
                         quantity = it.quantity.toString()
                     }
@@ -176,7 +176,7 @@ fun NutrimentLogScreen(
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
     val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
-    val isEditMode by rememberSaveable { mutableStateOf(false) }
+    var isEditMode by rememberSaveable { mutableStateOf(false) }
 
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
@@ -184,7 +184,7 @@ fun NutrimentLogScreen(
         pagingItems = nutriments,
         loggedNutriments = logged,
         isEditMode = isEditMode,
-        onEditMode = {},
+        onEditModeChange = { isEditMode = it },
         onAdd = { toAdd ->
             if (uiState.isSelectionValid) {
                 viewModel.apply {
@@ -238,7 +238,7 @@ fun NutrimentLogScreen_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             isEditMode = false,
-            onEditMode = {},
+            onEditModeChange = {},
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
@@ -259,7 +259,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             isEditMode = true,
-            onEditMode = {},
+            onEditModeChange = {},
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
