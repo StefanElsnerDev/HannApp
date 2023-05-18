@@ -203,6 +203,7 @@ fun NutrimentLogScreen(
 
 private val dummyList = listOf(
     NutrimentUiLogModel(
+        id = 1,
         nutrition = NutritionUiModel(
             name = "Peach"
         ),
@@ -211,6 +212,7 @@ private val dummyList = listOf(
         timeStamp = 1681801313
     ),
     NutrimentUiLogModel(
+        id = 2,
         nutrition = NutritionUiModel(
             name = "Apple"
         ),
@@ -219,6 +221,7 @@ private val dummyList = listOf(
         timeStamp = 1681801313
     ),
     NutrimentUiLogModel(
+        id = 3,
         nutrition = NutritionUiModel(
             name = "Chocolate"
         ),

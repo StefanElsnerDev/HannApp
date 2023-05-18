@@ -22,12 +22,14 @@ class GetNutrimentLogUseCaseShould {
     private val nutrimentLogRepository = mock(NutrimentLogRepository::class.java)
     private val nutrimentLogs = listOf(
         NutrimentLogModel(
+            id = 1,
             nutrition = Nutrition(name = "Apple"),
             quantity = 1.23,
             createdAt = 12345,
             modifiedAt = null
         ),
         NutrimentLogModel(
+            id = 2,
             nutrition = Nutrition(name = "Peach"),
             quantity = 9.87,
             createdAt = 987654321,

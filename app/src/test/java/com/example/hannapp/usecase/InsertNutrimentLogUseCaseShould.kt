@@ -20,6 +20,7 @@ class InsertNutrimentLogUseCaseShould {
     private lateinit var insertNutrimentLogUseCase: InsertNutrimentLogUseCase
     private val nutrimentLogRepository = mock(NutrimentLogRepository::class.java)
     private val nutrimentLogModel = NutrimentLogModel(
+        id = 1,
         nutrition = Nutrition(name = "Banana", protein = 1.23),
         quantity = 4.56,
         createdAt = 123456789,

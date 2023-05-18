@@ -60,6 +60,7 @@ fun NutrimentHistoryContent_LightMode() {
             modifier = Modifier,
             nutriments = listOf(
                 NutrimentUiLogModel(
+                    id = 1,
                     nutrition = NutritionUiModel(
                         name = "Peach"
                     ),
@@ -68,6 +69,7 @@ fun NutrimentHistoryContent_LightMode() {
                     timeStamp = 1681801313
                 ),
                 NutrimentUiLogModel(
+                    id = 2,
                     nutrition = NutritionUiModel(
                         name = "Apple"
                     ),
@@ -76,6 +78,7 @@ fun NutrimentHistoryContent_LightMode() {
                     timeStamp = 1681801313
                 ),
                 NutrimentUiLogModel(
+                    id = 2,
                     nutrition = NutritionUiModel(
                         name = "Chocolate"
                     ),

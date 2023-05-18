@@ -15,6 +15,7 @@ class NutrimentLogRepository @Inject constructor(
         nutrimentLogDao.getLogs().map { logList ->
             logList.map {
                 NutrimentLogModel(
+                    id = it.nutrimentLog.id,
                     nutrition = it.nutrition,
                     quantity = it.nutrimentLog.quantity,
                     createdAt = it.nutrimentLog.createdAt,

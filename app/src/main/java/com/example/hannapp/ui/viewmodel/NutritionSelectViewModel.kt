@@ -66,6 +66,7 @@ class NutritionSelectViewModel @Inject constructor(
         }.map { list ->
             list.map {
                 NutrimentUiLogModel(
+                    id = it.id,
                     nutrition = nutritionConverter.entity(it.nutrition).toUiModel(),
                     quantity = it.quantity,
                     unit = "",
@@ -112,6 +113,7 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 val isSuccess = insertNutrimentLogUseCase(
                     nutrimentLogModel = NutrimentLogModel(
+                        id = 0,
                         nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel).toEntity(),
                         quantity = quantity,
                         createdAt = System.currentTimeMillis(),

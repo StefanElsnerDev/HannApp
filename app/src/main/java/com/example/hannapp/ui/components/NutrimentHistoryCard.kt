@@ -130,6 +130,7 @@ fun NutrimentHistoryCard_LightMode() {
         NutrimentHistoryCard(
             modifier = Modifier,
             nutrimentUiLogModel = NutrimentUiLogModel(
+                id = 123,
                 nutrition = NutritionUiModel(
                     name = "Cola",
                     protein = "1.23",
