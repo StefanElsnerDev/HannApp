@@ -22,6 +22,9 @@ abstract class NutrimentLogDao {
     @Insert
     abstract suspend fun insert(nutrimentLog: NutrimentLog): Long
 
+    @Update
+    abstract suspend fun update(nutrimentLog: NutrimentLog)
+
     @Transaction
     @Query("SELECT * FROM NutrimentLog")
     abstract fun getLogs(): Flow<List<Log>>
