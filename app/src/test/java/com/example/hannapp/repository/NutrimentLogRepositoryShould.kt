@@ -1,6 +1,9 @@
 package com.example.hannapp.repository
 
 import com.example.hannapp.data.database.dao.NutrimentLogDao
+import com.example.hannapp.data.model.NutrimentUiLogModel
+import com.example.hannapp.data.model.NutritionUiModel
+import com.example.hannapp.data.model.entity.NutrimentLog
 import com.example.hannapp.data.repository.NutrimentLogRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -54,6 +57,40 @@ class NutrimentLogRepositoryShould {
             val result = nutrimentLogRepository.clearLog()
 
             assertThat(result).isFalse()
+        }
+    }
+
+    @Nested
+    inner class UpdateLoggedNutriment{
+
+        private val logId = 123L
+        private val quantity = 123.4
+        private val createdAt = 1684412066L
+        private val modifiedAt = 1774412066L
+
+        private val nutrimentUiLogModel = NutrimentUiLogModel(
+            id = logId,
+            nutrition = NutritionUiModel(
+                id = 123
+            ),
+            quantity = quantity,
+            unit = "ml",
+            timeStamp = createdAt
+        )
+
+        private val nutrimentLog = NutrimentLog(
+            id = logId,
+            nutrimentId = 123,
+            quantity = quantity,
+            createdAt = createdAt,
+            lastModifiedAt = modifiedAt
+        )
+
+        @Test
+        fun invokeDao() = runTest {
+            nutrimentLogRepository.update(nutrimentUiLogModel, modifiedAt)
+
+            verify(nutrimentLogDao).update(nutrimentLog = nutrimentLog)
         }
     }
 }
