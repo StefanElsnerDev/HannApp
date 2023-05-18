@@ -64,6 +64,7 @@ class NutrimentLogRepositoryShould {
     inner class UpdateLoggedNutriment{
 
         private val logId = 123L
+        private val nutrimentId = 987L
         private val quantity = 123.4
         private val createdAt = 1684412066L
         private val modifiedAt = 1774412066L
@@ -71,7 +72,7 @@ class NutrimentLogRepositoryShould {
         private val nutrimentUiLogModel = NutrimentUiLogModel(
             id = logId,
             nutrition = NutritionUiModel(
-                id = 123
+                id = nutrimentId
             ),
             quantity = quantity,
             unit = "ml",
@@ -80,7 +81,7 @@ class NutrimentLogRepositoryShould {
 
         private val nutrimentLog = NutrimentLog(
             id = logId,
-            nutrimentId = 123,
+            nutrimentId = nutrimentId,
             quantity = quantity,
             createdAt = createdAt,
             lastModifiedAt = modifiedAt
