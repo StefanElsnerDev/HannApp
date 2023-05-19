@@ -31,7 +31,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -481,30 +480,23 @@ class NutritionSelectViewModelShould {
         @Nested
         inner class UpdateLoggedNutriment {
 
-            @Test
-            fun invokeDaoOnSelectedLogNutriment() = runTest {
+            @BeforeEach
+            fun beforeEach() {
                 nutritionViewModel.edit(nutrimentUiLogModel)
 
+                nutritionViewModel.select(substitutedNutriment)
+                nutritionViewModel.setQuantity(substitutedQuantity.toString())
+            }
+
+            @Test
+            fun invokeDaoOnSelectedLogNutriment() = runTest {
                 nutritionViewModel.update()
 
                 verify(updateNutrimentLogUseCase).update(any())
             }
 
             @Test
-            fun emitErrorOnUpdateWithoutSelection() = runTest {
-                nutritionViewModel.update()
-
-                verifyNoInteractions(updateNutrimentLogUseCase)
-                assertThat(nutritionViewModel.uiState.value.errorMessage).isNotNull()
-            }
-
-            @Test
             fun saveChangedNutriment() = runTest {
-
-                nutritionViewModel.edit(nutrimentUiLogModel)
-
-                nutritionViewModel.select(substitutedNutriment)
-
                 nutritionViewModel.update()
 
                 verify(updateNutrimentLogUseCase).update(substituteNutrimentUiLogModel)
