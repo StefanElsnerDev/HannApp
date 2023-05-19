@@ -284,12 +284,12 @@ class NutritionSelectViewModelShould {
     inner class SetQuantity{
 
         private val quantity = "123.45"
-        private val castedQuantity = 123.45
+
         @Test
         fun emitStateWithQuantity(){
             nutritionViewModel.setQuantity(quantity = quantity)
 
-            assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(castedQuantity)
+            assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
         }
 
         @Test
@@ -345,6 +345,13 @@ class NutritionSelectViewModelShould {
             nutritionViewModel.add()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
+        }
+
+        @Test
+        fun clearsQuantityOnSuccesfulLog(){
+            nutritionViewModel.add()
+
+            assertThat(nutritionViewModel.uiState.value.quantity).isEmpty()
         }
     }
 
@@ -473,7 +480,7 @@ class NutritionSelectViewModelShould {
                 assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
                     nutritionUiModel
                 )
-                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
+                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity.toString())
             }
         }
 

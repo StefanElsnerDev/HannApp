@@ -138,6 +138,7 @@ class NutritionSelectViewModel @Inject constructor(
                 updateErrorState(e.message ?: "Addition of log entry failed")
             }
         }
+        _uiState.update { it.copy(quantity = "") }
     }
 
     fun edit(nutrimentUiLogModel: NutrimentUiLogModel) {

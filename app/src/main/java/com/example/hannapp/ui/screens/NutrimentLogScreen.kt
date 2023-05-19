@@ -116,7 +116,6 @@ fun NutrimentLogContent(
             if (uiState.isSelectionValid) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
                     onAdd()
-                    onQuantityChanged("")
                     focusManager.clearFocus()
                 }
             }
