@@ -10,6 +10,7 @@ import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
+import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.provider.NutritionUiModelAndValidationArgumentsProvider
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
@@ -30,6 +31,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,6 +40,7 @@ class NutritionSelectViewModelShould {
     private lateinit var nutritionViewModel: NutritionSelectViewModel
     private val getNutritionUseCase = mock(GetNutritionUseCase::class.java)
     private val insertNutrimentLogUseCase = mock(InsertNutrimentLogUseCase::class.java)
+    private val updateNutrimentLogUseCase = mock(UpdateNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
     private val nutritionConverter = mock(NutritionConverter::class.java)
@@ -126,6 +129,7 @@ class NutritionSelectViewModelShould {
             getNutritionUseCase = getNutritionUseCase,
             insertNutrimentLogUseCase = insertNutrimentLogUseCase,
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+            updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
             nutritionConverter = nutritionConverter,
             dispatcher = testDispatcher
@@ -150,6 +154,7 @@ class NutritionSelectViewModelShould {
             getNutritionUseCase = getNutritionUseCase,
             insertNutrimentLogUseCase = insertNutrimentLogUseCase,
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+            updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
             nutritionConverter = nutritionConverter,
             dispatcher = testDispatcher
@@ -205,6 +210,7 @@ class NutritionSelectViewModelShould {
                 getNutritionUseCase = getNutritionUseCase,
                 insertNutrimentLogUseCase = insertNutrimentLogUseCase,
                 deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+                updateNutrimentLogUseCase = updateNutrimentLogUseCase,
                 getNutrimentLogUseCase = getNutrimentLogUseCase,
                 nutritionConverter = nutritionConverter,
                 dispatcher = testDispatcher
@@ -420,6 +426,87 @@ class NutritionSelectViewModelShould {
             nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+        }
+    }
+
+    @Nested
+    inner class EditLoggedNutriment {
+
+        private val nutrimentId = 123L
+        private val logId = 987L
+        private val quantity = 123.45
+
+        private val nutritionUiModel = NutritionUiModel(
+            id = nutrimentId,
+            name = "Milk"
+        )
+
+        private val nutrimentUiLogModel = NutrimentUiLogModel(
+            id = logId,
+            nutrition = nutritionUiModel,
+            quantity = quantity,
+            unit = "ml",
+            timeStamp = 123456789
+        )
+
+        private val substitutedNutriment = NutritionUiModel(
+            id = 1234567,
+            name = "Pepsi Cola Sugar free"
+        )
+
+        private val substituteNutrimentUiLogModel = NutrimentUiLogModel(
+            id = logId,
+            nutrition = substitutedNutriment,
+            quantity = quantity,
+            unit = "ml",
+            timeStamp = 123456789
+        )
+
+        @Nested
+        inner class SelectLoggedNutriment {
+
+            @Test
+            fun emitLogNutrimentAndQuantity() {
+                nutritionViewModel.edit(nutrimentUiLogModel)
+
+                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
+                    nutritionUiModel
+                )
+                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
+            }
+        }
+
+        @Nested
+        inner class UpdateLoggedNutriment {
+
+            @Test
+            fun invokeDaoOnSelectedLogNutriment() = runTest {
+                nutritionViewModel.edit(nutrimentUiLogModel)
+
+                nutritionViewModel.update()
+
+                verify(updateNutrimentLogUseCase).update(any())
+            }
+
+            @Test
+            fun emitErrorOnUpdateWithoutSelection() = runTest {
+                nutritionViewModel.update()
+
+                verifyNoInteractions(updateNutrimentLogUseCase)
+                assertThat(nutritionViewModel.uiState.value.errorMessage).isNotNull()
+            }
+
+            @Test
+            fun saveChangedNutriment() = runTest {
+
+                nutritionViewModel.edit(nutrimentUiLogModel)
+
+                nutritionViewModel.select(substitutedNutriment)
+
+                nutritionViewModel.update()
+
+                verify(updateNutrimentLogUseCase).update(substituteNutrimentUiLogModel)
+            }
         }
     }
 }

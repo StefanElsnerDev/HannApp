@@ -15,6 +15,7 @@ import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
+import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,6 +33,7 @@ import javax.inject.Inject
 
 data class NutritionUiState(
     var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+    var nutrimentLogUiModel: NutrimentUiLogModel? = null, // TODO (simplify and separate)
     var quantity: Double? = null,
     var isSelectionValid: Boolean = false,
     val isLoading: Boolean = false,
@@ -43,6 +45,7 @@ class NutritionSelectViewModel @Inject constructor(
     private val getNutritionUseCase: GetNutritionUseCase,
     private val insertNutrimentLogUseCase: InsertNutrimentLogUseCase,
     private val deleteNutrimentLogUseCase: DeleteNutrimentLogUseCase,
+    private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     getNutrimentLogUseCase: GetNutrimentLogUseCase,
     private val nutritionConverter: NutritionConverter,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
@@ -138,6 +141,40 @@ class NutritionSelectViewModel @Inject constructor(
                 }
             } catch (e: Exception){
                 updateErrorState(e.message ?: "Addition of log entry failed")
+            }
+        }
+    }
+
+    fun edit(nutrimentUiLogModel: NutrimentUiLogModel) {
+        _uiState.update {
+            it.copy(
+                nutritionUiModel = nutrimentUiLogModel.nutrition,
+                nutrimentLogUiModel = nutrimentUiLogModel,
+                quantity = nutrimentUiLogModel.quantity,
+            )
+        }
+    }
+
+    fun update() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                val logModel = _uiState.value.nutrimentLogUiModel
+                require(logModel != null)
+
+                val quantity = _uiState.value.quantity
+                require(quantity != null)
+
+                updateNutrimentLogUseCase.update(
+                    NutrimentUiLogModel(
+                        id = logModel.id,
+                        nutrition = _uiState.value.nutritionUiModel,
+                        quantity = quantity,
+                        unit = "ml", // TODO(measure unit class)
+                        timeStamp = logModel.timeStamp // TODO(timestamp to created / modified)
+                    )
+                )
+            } catch (e: Exception){
+                updateErrorState("Editing failed")
             }
         }
     }
