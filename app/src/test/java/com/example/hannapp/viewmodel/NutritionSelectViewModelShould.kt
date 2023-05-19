@@ -66,12 +66,14 @@ class NutritionSelectViewModelShould {
 
     private val nutrimentLog = listOf(
         NutrimentLogModel(
+            id = 1,
             nutrition = nutritions.first(),
             quantity = 1.1,
             createdAt = 1681839531,
             modifiedAt = null
         ),
         NutrimentLogModel(
+            id = 2,
             nutrition = nutritions.last(),
             quantity = 2.2,
             createdAt = 1681234731,
@@ -81,12 +83,14 @@ class NutritionSelectViewModelShould {
 
     private val nutrimentUiLog = listOf(
         NutrimentUiLogModel(
+            id = 1,
             nutrition = nutritionUiModels.first(),
             quantity = 1.1,
             unit = "",
             timeStamp = 1681839531
         ),
         NutrimentUiLogModel(
+            id = 2,
             nutrition = nutritionUiModels.last(),
             quantity = 2.2,
             unit = "",
