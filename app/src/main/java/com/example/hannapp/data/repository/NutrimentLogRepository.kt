@@ -26,7 +26,7 @@ class NutrimentLogRepository @Inject constructor(
             }
         }
 
-    suspend fun update(nutrimentUiLogModel: NutrimentUiLogModel, timeStamp: Long){
+    suspend fun update(nutrimentUiLogModel: NutrimentUiLogModel, timeStamp: Long = System.currentTimeMillis()){
 
         require(nutrimentUiLogModel.nutrition.id != null)
 
