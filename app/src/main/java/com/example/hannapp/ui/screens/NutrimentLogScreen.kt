@@ -184,7 +184,7 @@ fun NutrimentLogScreen(
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
-        quantity = uiState.quantity.toString(),
+        quantity = uiState.quantity,
         onQuantityChanged = { viewModel.setQuantity(it) },
         isEditMode = isEditMode,
         onEditModeChange = { isEditMode = it },

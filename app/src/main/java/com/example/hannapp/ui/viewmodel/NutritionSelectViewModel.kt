@@ -34,7 +34,7 @@ import javax.inject.Inject
 data class NutritionUiState(
     var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     var nutrimentLogUiModel: NutrimentUiLogModel? = null, // TODO (simplify and separate)
-    var quantity: Double? = null,
+    var quantity: String = "",
     var isSelectionValid: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
@@ -112,31 +112,19 @@ class NutritionSelectViewModel @Inject constructor(
         validateSelection()
     }
 
-    fun setQuantity(quantity: String) {
-        try {
-            _uiState.update { state ->
-                state.copy(quantity = quantity.toDouble())
-            }
-        } catch (e: NumberFormatException) {
-            updateErrorState("Invalid Input")
-        } catch (e: Exception) {
-            updateErrorState("Error on setting quantity")
-        }
-    }
+    fun setQuantity(quantity: String) = _uiState.update { it.copy(quantity = quantity) }
 
     fun add() {
+        val quantity = _uiState.value.quantity
+
         viewModelScope.launch(dispatcher) {
             try {
-                val quantity = _uiState.value.quantity
-
-                require(quantity != null)
-
                 val isSuccess = insertNutrimentLogUseCase(
                     nutrimentLogModel = NutrimentLogModel(
                         id = 0,
                         nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel)
                             .toEntity(),
-                        quantity = quantity,
+                        quantity = quantity.toDouble(),
                         createdAt = System.currentTimeMillis(),
                         modifiedAt = null
                     )
@@ -144,8 +132,8 @@ class NutritionSelectViewModel @Inject constructor(
                 if (!isSuccess) {
                     updateErrorState("Nutriment could not be logged")
                 }
-            } catch (e: Exception) {
-                updateErrorState(e.message ?: "Missing quantity")
+            } catch (e: NumberFormatException) {
+                updateErrorState("Invalid Input")
             } catch (e: Exception) {
                 updateErrorState(e.message ?: "Addition of log entry failed")
             }
@@ -157,7 +145,7 @@ class NutritionSelectViewModel @Inject constructor(
             it.copy(
                 nutritionUiModel = nutrimentUiLogModel.nutrition,
                 nutrimentLogUiModel = nutrimentUiLogModel,
-                quantity = nutrimentUiLogModel.quantity,
+                quantity = nutrimentUiLogModel.quantity.toString(),
             )
         }
     }
@@ -168,19 +156,18 @@ class NutritionSelectViewModel @Inject constructor(
                 val logModel = _uiState.value.nutrimentLogUiModel
                 require(logModel != null)
 
-                val quantity = _uiState.value.quantity
-                require(quantity != null)
-
                 updateNutrimentLogUseCase.update(
                     NutrimentUiLogModel(
                         id = logModel.id,
                         nutrition = _uiState.value.nutritionUiModel,
-                        quantity = quantity,
+                        quantity = _uiState.value.quantity.toDouble(),
                         unit = "ml", // TODO(measure unit class)
                         timeStamp = logModel.timeStamp // TODO(timestamp to created / modified)
                     )
                 )
-            } catch (e: Exception){
+            } catch (e: NumberFormatException) {
+                updateErrorState(e.message ?: "Missing quantity")
+            } catch (e: Exception) {
                 updateErrorState("Editing failed")
             }
         }
