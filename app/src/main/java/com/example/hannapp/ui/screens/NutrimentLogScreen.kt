@@ -67,6 +67,7 @@ fun NutrimentLogContent(
     onNutrimentSelected: (NutritionUiModel) -> Unit,
     onLoggedNutrimentSelected: (NutrimentUiLogModel) -> Unit,
     onSaveEdit: () -> Unit = {},
+    onAbort: () -> Unit = {},
     clear: () -> Unit
 ) {
     val snackBarHost = remember { SnackbarHostState() }
@@ -80,7 +81,7 @@ fun NutrimentLogContent(
                 when (isEditMode) {
                     true -> {
                         IconButton(
-                            onClick = { TODO("abort change") }
+                            onClick = { onAbort() }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
@@ -195,6 +196,10 @@ fun NutrimentLogScreen(
         onNutrimentSelected = { viewModel.select(it) },
         onLoggedNutrimentSelected = { viewModel.edit(it) },
         onSaveEdit = { viewModel.update() },
+        onAbort = {
+            viewModel.abort()
+            isEditMode = false
+        },
         clear = { viewModel.clearAll() }
     )
 }

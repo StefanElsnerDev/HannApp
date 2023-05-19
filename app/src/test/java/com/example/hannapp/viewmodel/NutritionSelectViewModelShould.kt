@@ -510,5 +510,39 @@ class NutritionSelectViewModelShould {
                 verify(updateNutrimentLogUseCase).update(substituteNutrimentUiLogModel)
             }
         }
+
+        @Nested
+        inner class AbortUpdate{
+
+            @BeforeEach
+            fun beforeEach(){
+                nutritionViewModel.select(nutritionUiModel = nutritionUiModel)
+                nutritionViewModel.setQuantity(quantity.toString())
+
+                nutritionViewModel.edit(nutrimentUiLogModel)
+            }
+
+            @Test
+            fun restoreLogNutriment(){
+                nutritionViewModel.select(substitutedNutriment)
+
+                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(substitutedNutriment)
+
+                nutritionViewModel.abort()
+
+                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(nutritionUiModel)
+            }
+
+            @Test
+            fun restoreQuantity() {
+                nutritionViewModel.setQuantity(substitutedQuantity.toString())
+
+                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(substitutedQuantity.toString())
+
+                nutritionViewModel.abort()
+
+                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity.toString())
+            }
+        }
     }
 }

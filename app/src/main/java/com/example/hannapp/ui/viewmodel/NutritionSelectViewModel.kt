@@ -51,6 +51,8 @@ class NutritionSelectViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    private lateinit var memento: Memento
+
     private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
     val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
 
@@ -142,6 +144,8 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     fun edit(nutrimentUiLogModel: NutrimentUiLogModel) {
+        memento = Memento(_uiState.value.nutritionUiModel, _uiState.value.quantity)
+
         _uiState.update {
             it.copy(
                 nutritionUiModel = nutrimentUiLogModel.nutrition,
@@ -149,6 +153,7 @@ class NutritionSelectViewModel @Inject constructor(
                 quantity = nutrimentUiLogModel.quantity.toString(),
             )
         }
+        validateSelection()
     }
 
     fun update() {
@@ -172,6 +177,16 @@ class NutritionSelectViewModel @Inject constructor(
                 updateErrorState("Editing failed")
             }
         }
+    }
+
+    fun abort() {
+        _uiState.update { state ->
+            state.copy(
+                nutritionUiModel = memento.nutritionUiModel,
+                quantity = memento.quantity
+            )
+        }
+        validateSelection()
     }
 
     fun castAsDouble(value: String, function: (Double)->Unit) {
@@ -227,4 +242,9 @@ class NutritionSelectViewModel @Inject constructor(
             )
         }
     }
+
+    inner class Memento(
+        val nutritionUiModel: NutritionUiModel,
+        val quantity: String
+    )
 }
