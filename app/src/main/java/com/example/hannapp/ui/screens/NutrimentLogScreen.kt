@@ -60,7 +60,7 @@ fun NutrimentLogContent(
     onQuantityChanged: (String) -> Unit,
     isEditMode: Boolean,
     onEditModeChange: (Boolean) -> Unit,
-    onAdd: (String) -> Unit,
+    onAdd: () -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
     selectedNutriment: NutritionUiModel,
@@ -115,7 +115,7 @@ fun NutrimentLogContent(
         floatingActionButton = {
             if (uiState.isSelectionValid) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
-                    onAdd(quantity)
+                    onAdd()
                     onQuantityChanged("")
                     focusManager.clearFocus()
                 }
@@ -188,13 +188,7 @@ fun NutrimentLogScreen(
         onQuantityChanged = { viewModel.setQuantity(it) },
         isEditMode = isEditMode,
         onEditModeChange = { isEditMode = it },
-        onAdd = { toAdd ->
-            if (uiState.isSelectionValid) {
-                viewModel.apply {
-                    castAsDouble(toAdd) { add(it) }
-                }
-            }
-        },
+        onAdd = { viewModel.add() },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
         selectedNutriment = uiState.nutritionUiModel,

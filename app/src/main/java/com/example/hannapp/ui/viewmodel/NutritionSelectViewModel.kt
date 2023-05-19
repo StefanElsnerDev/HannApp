@@ -124,22 +124,29 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
-    fun add(quantity: Double) {
+    fun add() {
         viewModelScope.launch(dispatcher) {
             try {
+                val quantity = _uiState.value.quantity
+
+                require(quantity != null)
+
                 val isSuccess = insertNutrimentLogUseCase(
                     nutrimentLogModel = NutrimentLogModel(
                         id = 0,
-                        nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel).toEntity(),
+                        nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel)
+                            .toEntity(),
                         quantity = quantity,
                         createdAt = System.currentTimeMillis(),
                         modifiedAt = null
                     )
                 )
-                if (!isSuccess){
+                if (!isSuccess) {
                     updateErrorState("Nutriment could not be logged")
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
+                updateErrorState(e.message ?: "Missing quantity")
+            } catch (e: Exception) {
                 updateErrorState(e.message ?: "Addition of log entry failed")
             }
         }

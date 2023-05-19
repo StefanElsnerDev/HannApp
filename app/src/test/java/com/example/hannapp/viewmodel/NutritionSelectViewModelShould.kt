@@ -312,11 +312,12 @@ class NutritionSelectViewModelShould {
                     NutritionUiModel()
                 )
             )
+            nutritionViewModel.setQuantity(quantity = quantity.toString())
         }
 
         @Test
         fun callsUseCaseForAddingNutriment() = runTest {
-            nutritionViewModel.add(quantity)
+            nutritionViewModel.add()
 
             verify(insertNutrimentLogUseCase).invoke(any())
         }
@@ -327,7 +328,7 @@ class NutritionSelectViewModelShould {
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isNull()
 
-            nutritionViewModel.add(quantity)
+            nutritionViewModel.add()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isNotBlank()
         }
@@ -341,7 +342,7 @@ class NutritionSelectViewModelShould {
                 )
             )
 
-            nutritionViewModel.add(quantity)
+            nutritionViewModel.add()
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
         }
