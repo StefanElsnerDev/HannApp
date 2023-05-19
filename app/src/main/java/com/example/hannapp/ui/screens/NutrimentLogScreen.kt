@@ -115,7 +115,7 @@ fun NutrimentLogContent(
         bottomBar = { NavigationBar(navController) },
         snackBarHost = { SnackbarHost(hostState = snackBarHost) },
         floatingActionButton = {
-            if (uiState.isSelectionValid) {
+            if (uiState.isSelectionValid && !isEditMode) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
                     onAdd()
                     focusManager.clearFocus()
