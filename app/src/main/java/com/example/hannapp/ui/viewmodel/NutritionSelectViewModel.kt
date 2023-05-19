@@ -36,6 +36,7 @@ data class NutritionUiState(
     var nutrimentLogUiModel: NutrimentUiLogModel? = null, // TODO (simplify and separate)
     var quantity: String = "",
     var isSelectionValid: Boolean = false,
+    val isEditMode: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -151,6 +152,7 @@ class NutritionSelectViewModel @Inject constructor(
                 nutritionUiModel = nutrimentUiLogModel.nutrition,
                 nutrimentLogUiModel = nutrimentUiLogModel,
                 quantity = nutrimentUiLogModel.quantity.toString(),
+                isEditMode = true
             )
         }
         validateSelection()
@@ -171,6 +173,8 @@ class NutritionSelectViewModel @Inject constructor(
                         timeStamp = logModel.timeStamp // TODO(timestamp to created / modified)
                     )
                 )
+
+                _uiState.update { it.copy(isEditMode = false) }
             } catch (e: NumberFormatException) {
                 updateErrorState(e.message ?: "Missing quantity")
             } catch (e: Exception) {
@@ -183,7 +187,8 @@ class NutritionSelectViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 nutritionUiModel = memento.nutritionUiModel,
-                quantity = memento.quantity
+                quantity = memento.quantity,
+                isEditMode = false
             )
         }
         validateSelection()

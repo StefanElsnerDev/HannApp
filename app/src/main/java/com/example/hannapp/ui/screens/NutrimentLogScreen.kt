@@ -14,10 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -59,7 +56,6 @@ fun NutrimentLogContent(
     quantity: String,
     onQuantityChanged: (String) -> Unit,
     isEditMode: Boolean,
-    onEditModeChange: (Boolean) -> Unit,
     onAdd: () -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
@@ -153,7 +149,6 @@ fun NutrimentLogContent(
                     modifier = Modifier.fillMaxWidth(),
                     nutriments = loggedNutriments,
                     onLongClick = {
-                        onEditModeChange(true)
                         onLoggedNutrimentSelected(it)
                         onQuantityChanged(it.quantity.toString())
                     }
@@ -178,7 +173,6 @@ fun NutrimentLogScreen(
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
     val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
-    var isEditMode by rememberSaveable { mutableStateOf(false) }
 
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
@@ -187,8 +181,7 @@ fun NutrimentLogScreen(
         loggedNutriments = logged,
         quantity = uiState.quantity,
         onQuantityChanged = { viewModel.setQuantity(it) },
-        isEditMode = isEditMode,
-        onEditModeChange = { isEditMode = it },
+        isEditMode = uiState.isEditMode,
         onAdd = { viewModel.add() },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
@@ -196,10 +189,7 @@ fun NutrimentLogScreen(
         onNutrimentSelected = { viewModel.select(it) },
         onLoggedNutrimentSelected = { viewModel.edit(it) },
         onSaveEdit = { viewModel.update() },
-        onAbort = {
-            viewModel.abort()
-            isEditMode = false
-        },
+        onAbort = { viewModel.abort() },
         clear = { viewModel.clearAll() }
     )
 }
@@ -246,7 +236,6 @@ fun NutrimentLogScreen_LightMode() {
             quantity = "12.34",
             onQuantityChanged = {},
             isEditMode = false,
-            onEditModeChange = {},
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
@@ -269,7 +258,6 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             quantity = "12.34",
             onQuantityChanged = {},
             isEditMode = true,
-            onEditModeChange = {},
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
