@@ -77,7 +77,10 @@ fun NutrimentLogContent(
                 when (isEditMode) {
                     true -> {
                         IconButton(
-                            onClick = { onAbort() }
+                            onClick = {
+                                onAbort()
+                                focusManager.clearFocus()
+                            }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
@@ -87,7 +90,10 @@ fun NutrimentLogContent(
                         }
 
                         IconButton(
-                            onClick = { onSaveEdit() }
+                            onClick = {
+                                onSaveEdit()
+                                focusManager.clearFocus()
+                            }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Done,
