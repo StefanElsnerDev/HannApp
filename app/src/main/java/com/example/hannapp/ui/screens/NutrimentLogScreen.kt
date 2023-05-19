@@ -56,6 +56,8 @@ fun NutrimentLogContent(
     uiState: NutritionUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
+    quantity: String,
+    onQuantityChanged: (String) -> Unit,
     isEditMode: Boolean,
     onEditModeChange: (Boolean) -> Unit,
     onAdd: (String) -> Unit,
@@ -68,7 +70,6 @@ fun NutrimentLogContent(
 ) {
     val snackBarHost = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
-    var quantity by rememberSaveable { mutableStateOf("") }
 
     AppScaffold(
         topBar = {
@@ -115,7 +116,7 @@ fun NutrimentLogContent(
             if (uiState.isSelectionValid) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
                     onAdd(quantity)
-                    quantity = ""
+                    onQuantityChanged("")
                     focusManager.clearFocus()
                 }
             }
@@ -139,7 +140,7 @@ fun NutrimentLogContent(
                     snackBarHost = snackBarHost,
                     onClickBoxClick = onClickBoxClick,
                     quantity = quantity,
-                    onQuantityChanged = { quantity = it },
+                    onQuantityChanged = onQuantityChanged,
                     selectedNutriment = selectedNutriment,
                     onNutrimentChanged = { onNutrimentSelected(it) },
                     pagingItems = pagingItems,
@@ -153,7 +154,7 @@ fun NutrimentLogContent(
                     onLongClick = {
                         onEditModeChange(true)
                         onLoggedNutrimentSelected(it)
-                        quantity = it.quantity.toString()
+                        onQuantityChanged(it.quantity.toString())
                     }
                 )
             }
@@ -183,6 +184,8 @@ fun NutrimentLogScreen(
         uiState = uiState,
         pagingItems = nutriments,
         loggedNutriments = logged,
+        quantity = uiState.quantity.toString(),
+        onQuantityChanged = { viewModel.setQuantity(it) },
         isEditMode = isEditMode,
         onEditModeChange = { isEditMode = it },
         onAdd = { toAdd ->
@@ -240,6 +243,8 @@ fun NutrimentLogScreen_LightMode() {
             uiState = NutritionUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
+            quantity = "12.34",
+            onQuantityChanged = {},
             isEditMode = false,
             onEditModeChange = {},
             onAdd = {},
@@ -261,6 +266,8 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             uiState = NutritionUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
+            quantity = "12.34",
+            onQuantityChanged = {},
             isEditMode = true,
             onEditModeChange = {},
             onAdd = {},

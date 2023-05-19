@@ -32,6 +32,7 @@ import javax.inject.Inject
 
 data class NutritionUiState(
     var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+    var quantity: Double? = null,
     var isSelectionValid: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
@@ -106,6 +107,18 @@ class NutritionSelectViewModel @Inject constructor(
             }
         }
         validateSelection()
+    }
+
+    fun setQuantity(quantity: String) {
+        try {
+            _uiState.update { state ->
+                state.copy(quantity = quantity.toDouble())
+            }
+        } catch (e: NumberFormatException) {
+            updateErrorState("Invalid Input")
+        } catch (e: Exception) {
+            updateErrorState("Error on setting quantity")
+        }
     }
 
     fun add(quantity: Double) {

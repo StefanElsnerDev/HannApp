@@ -275,6 +275,26 @@ class NutritionSelectViewModelShould {
     }
 
     @Nested
+    inner class SetQuantity{
+
+        private val quantity = "123.45"
+        private val castedQuantity = 123.45
+        @Test
+        fun emitStateWithQuantity(){
+            nutritionViewModel.setQuantity(quantity = quantity)
+
+            assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(castedQuantity)
+        }
+
+        @Test
+        fun emitErrorOnCastException(){
+            nutritionViewModel.setQuantity(quantity = "N3um83r")
+
+            assertThat(nutritionViewModel.uiState.value.errorMessage).isNotNull
+        }
+    }
+
+    @Nested
     inner class AddToLog {
 
         private val quantity = 56.78
