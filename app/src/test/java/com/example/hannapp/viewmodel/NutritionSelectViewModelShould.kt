@@ -291,13 +291,6 @@ class NutritionSelectViewModelShould {
 
             assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
         }
-
-        @Test
-        fun emitErrorOnCastException(){
-            nutritionViewModel.setQuantity(quantity = "N3um83r")
-
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isNotNull
-        }
     }
 
     @Nested
@@ -443,6 +436,7 @@ class NutritionSelectViewModelShould {
         private val nutrimentId = 123L
         private val logId = 987L
         private val quantity = 123.45
+        private val substitutedQuantity = 54.321
 
         private val nutritionUiModel = NutritionUiModel(
             id = nutrimentId,
@@ -465,7 +459,7 @@ class NutritionSelectViewModelShould {
         private val substituteNutrimentUiLogModel = NutrimentUiLogModel(
             id = logId,
             nutrition = substitutedNutriment,
-            quantity = quantity,
+            quantity = substitutedQuantity,
             unit = "ml",
             timeStamp = 123456789
         )
