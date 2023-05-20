@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
 import com.example.hannapp.data.database.dao.NutritionDao
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import kotlinx.coroutines.flow.map
@@ -26,7 +27,9 @@ class NutritionRepository @Inject constructor(
 
     fun getFood() = nutritionDao.getFood()
 
-    suspend fun update(nutrition: Nutrition) = nutritionDao.update(nutrition) == 1
+    suspend fun update(nutritionUiModel: NutritionUiModel) = nutritionDao.update(
+            NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()
+        ) == 1
 
     suspend fun delete(nutrition: Nutrition) = nutritionDao.delete(nutrition)
 }
