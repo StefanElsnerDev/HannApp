@@ -13,7 +13,6 @@ import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
-import com.example.hannapp.ui.viewmodel.NutritionUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -158,7 +157,7 @@ class NutritionSelectViewModelShould {
         )
 
         Assertions.assertEquals(
-            NutritionUiState(
+            NutrimentSelectUiState.LogUiState(
                 isLoading = true,
                 errorMessage = null
             ),
@@ -178,7 +177,7 @@ class NutritionSelectViewModelShould {
         nutritionViewModel.getAll()
 
         Assertions.assertEquals(
-            NutritionUiState(
+            NutrimentSelectUiState.LogUiState(
                 isLoading = false,
                 errorMessage = errorMessage
             ),

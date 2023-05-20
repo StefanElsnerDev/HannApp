@@ -30,14 +30,14 @@ import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutritionUiState
+import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import kotlinx.coroutines.flow.flowOf
 
 
 @Composable
 fun SelectionContent(
     modifier: Modifier,
-    uiState: NutritionUiState,
+    uiState: NutrimentSelectUiState,
     snackBarHost: SnackbarHostState,
     onClickBoxClick: () -> Unit,
     quantity: String,
@@ -121,7 +121,7 @@ fun SelectionContent_LightMode() {
     HannAppTheme {
         SelectionContent(
             modifier = Modifier,
-            uiState = NutritionUiState(),
+            uiState = NutrimentSelectUiState.LogUiState(),
             snackBarHost = SnackbarHostState(),
             quantity = "",
             onQuantityChanged = {},

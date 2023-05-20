@@ -42,15 +42,15 @@ import com.example.hannapp.ui.selection.SelectionContent
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.Constraints.SPACE_VERTICAL
 import com.example.hannapp.ui.theme.HannAppTheme
+import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
-import com.example.hannapp.ui.viewmodel.NutritionUiState
 import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutrimentLogContent(
     modifier: Modifier,
-    uiState: NutritionUiState,
+    uiState: NutrimentSelectUiState,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
     quantity: String,
@@ -187,7 +187,7 @@ fun NutrimentLogScreen(
         loggedNutriments = logged,
         quantity = uiState.quantity,
         onQuantityChanged = { viewModel.setQuantity(it) },
-        isEditMode = uiState.isEditMode,
+        isEditMode = uiState is NutrimentSelectUiState.EditLogUiState,
         onAdd = { viewModel.add() },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
@@ -236,7 +236,7 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutritionUiState(),
+            uiState = NutrimentSelectUiState.LogUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -258,7 +258,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutritionUiState(),
+            uiState = NutrimentSelectUiState.LogUiState(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",

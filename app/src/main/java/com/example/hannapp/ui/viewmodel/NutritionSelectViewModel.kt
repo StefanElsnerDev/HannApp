@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -30,15 +29,57 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class NutritionUiState(
+sealed interface NutrimentSelectUiState {
+    val nutritionUiModel: NutritionUiModel
+    val quantity: String
+    val isLoading: Boolean
+    val errorMessage: String?
+
+    data class LogUiState(
+        override val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+        override val quantity: String = "",
+        override val isLoading: Boolean = false,
+        override val errorMessage: String? = null,
+    ) : NutrimentSelectUiState
+
+    data class EditLogUiState(
+        override val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+        override val quantity: String = "",
+        override val isLoading: Boolean = false,
+        override val errorMessage: String? = null,
+        val nutrimentLogId: Long? = null,
+    ) : NutrimentSelectUiState
+}
+
+data class NutrimentSelectViewModelUiState(
     var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val nutrimentLogId: Long? = null,
     var quantity: String = "",
-    var isSelectionValid: Boolean = false,
     val isEditMode: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
-)
+) {
+    fun toUiState() = when (isEditMode) {
+        true -> {
+            NutrimentSelectUiState.EditLogUiState(
+                nutritionUiModel = nutritionUiModel,
+                quantity = quantity,
+                isLoading = isLoading,
+                errorMessage = errorMessage,
+                nutrimentLogId = nutrimentLogId,
+            )
+        }
+
+        false -> {
+            NutrimentSelectUiState.LogUiState(
+                nutritionUiModel = nutritionUiModel,
+                quantity = quantity,
+                isLoading = isLoading,
+                errorMessage = errorMessage,
+            )
+        }
+    }
+}
 
 @HiltViewModel
 class NutritionSelectViewModel @Inject constructor(
@@ -53,48 +94,48 @@ class NutritionSelectViewModel @Inject constructor(
 
     private lateinit var memento: Memento
 
-    private val _uiState = MutableStateFlow(NutritionUiState(isLoading = true))
-    val uiState: StateFlow<NutritionUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(NutrimentSelectViewModelUiState(isLoading = true))
+    val uiState = _uiState.map(NutrimentSelectViewModelUiState::toUiState).stateIn(
+            viewModelScope, SharingStarted.Eagerly, _uiState.value.toUiState()
+        )
 
     private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
-    val nutriments = _nutriments
-        .map { nutriments -> nutriments.map { nutritionConverter.entity(it).toUiModel() } }
-        .cachedIn(viewModelScope)
+    val nutriments = _nutriments.map { nutriments ->
+            nutriments.map {
+                nutritionConverter.entity(it).toUiModel()
+            }
+        }.cachedIn(viewModelScope)
 
-    val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> = getNutrimentLogUseCase.observeNutrimentLog()
-        .catch {
-            _uiState.update { state ->
-                state.copy(
-                    isLoading = false,
-                    errorMessage = it.message
-                )
-            }
-        }.map { list ->
-            list.map {
-                NutrimentUiLogModel(
-                    id = it.id,
-                    nutrition = nutritionConverter.entity(it.nutrition).toUiModel(),
-                    quantity = it.quantity,
-                    unit = "",
-                    timeStamp = it.createdAt
-                )
-            }
-        }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            emptyList()
-        )
+    val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> =
+        getNutrimentLogUseCase.observeNutrimentLog().catch {
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false, errorMessage = it.message
+                    )
+                }
+            }.map { list ->
+                list.map {
+                    NutrimentUiLogModel(
+                        id = it.id,
+                        nutrition = nutritionConverter.entity(it.nutrition).toUiModel(),
+                        quantity = it.quantity,
+                        unit = "",
+                        timeStamp = it.createdAt
+                    )
+                }
+            }.stateIn(
+                viewModelScope, SharingStarted.Eagerly, emptyList()
+            )
 
     fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getNutritionUseCase.getAll()
-                .catch { throwable ->
-                    updateErrorState(throwable.message ?: "Loading of nutriments from database failed")
-                }
-                .collectLatest { nutriments ->
+            getNutritionUseCase.getAll().catch { throwable ->
+                    updateErrorState(
+                        throwable.message ?: "Loading of nutriments from database failed"
+                    )
+                }.collectLatest { nutriments ->
                     _nutriments.emit(nutriments)
                 }
         }
@@ -119,7 +160,7 @@ class NutritionSelectViewModel @Inject constructor(
         val quantity = _uiState.value.quantity
         val id = _uiState.value.nutritionUiModel.id
 
-        require(id != null) {"Invalid ID"}
+        require(id != null) { "Invalid ID" }
 
         viewModelScope.launch(dispatcher) {
             try {
@@ -157,10 +198,10 @@ class NutritionSelectViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val logId = _uiState.value.nutrimentLogId
-                require(logId != null) {"Invalid Log-ID"}
+                require(logId != null) { "Invalid Log-ID" }
 
                 val nutrimentId = _uiState.value.nutritionUiModel.id
-                require(nutrimentId != null) {"Invalid Nutriment-ID"}
+                require(nutrimentId != null) { "Invalid Nutriment-ID" }
 
                 updateNutrimentLogUseCase.update(
                     logId = logId,
@@ -190,8 +231,7 @@ class NutritionSelectViewModel @Inject constructor(
     private fun updateErrorState(message: String) {
         _uiState.update { state ->
             state.copy(
-                isLoading = false,
-                errorMessage = message
+                isLoading = false, errorMessage = message
             )
         }
     }
@@ -201,7 +241,7 @@ class NutritionSelectViewModel @Inject constructor(
         unselect()
     }
 
-    private fun clearHistory(){
+    private fun clearHistory() {
         viewModelScope.launch(dispatcher) {
             try {
                 val isCleared = deleteNutrimentLogUseCase.clear()
@@ -214,12 +254,11 @@ class NutritionSelectViewModel @Inject constructor(
 
     }
 
-    private fun unselect(){
+    private fun unselect() {
         _uiState.value.nutritionUiModel = NutritionUiModel()
     }
 
     inner class Memento(
-        val nutritionUiModel: NutritionUiModel,
-        val quantity: String
+        val nutritionUiModel: NutritionUiModel, val quantity: String
     )
 }
