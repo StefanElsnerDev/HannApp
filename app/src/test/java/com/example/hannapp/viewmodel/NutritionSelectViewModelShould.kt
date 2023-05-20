@@ -1,10 +1,8 @@
 package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
-import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -41,11 +39,6 @@ class NutritionSelectViewModelShould {
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
-    private val nutritions = listOf(
-        Nutrition(uid = 100, name = "Apple", kcal = 1.2),
-        Nutrition(uid = 200, name = "Banana", kcal = 3.4)
-    )
-
     private val nutritionUiModels = listOf(
         NutritionUiModel(
             id = 100,
@@ -59,25 +52,8 @@ class NutritionSelectViewModelShould {
         )
     )
 
-    private val pagingData = PagingData.from(nutritions)
-    private val nutrimentsFlow = flowOf(pagingData)
-
-    private val nutrimentLog = listOf(
-        NutrimentLogModel(
-            id = 1,
-            nutrition = nutritions.first(),
-            quantity = 1.1,
-            createdAt = 1681839531,
-            modifiedAt = null
-        ),
-        NutrimentLogModel(
-            id = 2,
-            nutrition = nutritions.last(),
-            quantity = 2.2,
-            createdAt = 1681234731,
-            modifiedAt = null
-        )
-    )
+    private val pagingData = PagingData.from(nutritionUiModels)
+    private val nutrimentsUiFlow = flowOf(pagingData)
 
     private val nutrimentUiLog = listOf(
         NutrimentUiLogModel(
@@ -101,11 +77,11 @@ class NutritionSelectViewModelShould {
         Dispatchers.setMain(testDispatcher)
 
         whenever(getNutritionUseCase.getAll()).thenReturn(
-            nutrimentsFlow
+            nutrimentsUiFlow
         )
 
         whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
-            flowOf(nutrimentLog)
+            flowOf(nutrimentUiLog)
         )
 
         nutritionViewModel = NutritionSelectViewModel(
