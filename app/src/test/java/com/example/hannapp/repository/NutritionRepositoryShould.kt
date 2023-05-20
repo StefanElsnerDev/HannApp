@@ -2,6 +2,7 @@ package com.example.hannapp.repository
 
 import com.example.hannapp.data.database.dao.NutritionDao
 import com.example.hannapp.data.model.Food
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.repository.NutritionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +23,7 @@ class NutritionRepositoryShould {
 
     lateinit var nutritionRepository: NutritionRepository
     private val nutritionDao: NutritionDao = mock()
-    private val nutrition = Nutrition()
+    private val nutritionUiModel = NutritionUiModel()
 
     @BeforeEach
     fun beforeEach() {
@@ -33,7 +34,7 @@ class NutritionRepositoryShould {
 
     @Test
     fun insertNutritionData() = runTest {
-        nutritionRepository.insert(nutrition)
+        nutritionRepository.insert(Nutrition())
 
         verify(nutritionDao).insert(any())
     }
@@ -72,7 +73,7 @@ class NutritionRepositoryShould {
 
         @Test
         fun invokeUpdate() = runTest {
-            nutritionRepository.update(nutrition)
+            nutritionRepository.update(nutritionUiModel)
 
             verify(nutritionDao).update(any())
         }
@@ -81,7 +82,7 @@ class NutritionRepositoryShould {
         fun returnSuccessfulUpdate() = runTest {
             whenever(nutritionDao.update(any())).thenReturn(1)
 
-            val result = nutritionRepository.update(nutrition)
+            val result = nutritionRepository.update(nutritionUiModel)
 
             Assertions.assertEquals(true, result)
         }
@@ -90,7 +91,7 @@ class NutritionRepositoryShould {
         fun returnFailingUpdate() = runTest {
             whenever(nutritionDao.update(any())).thenReturn(-1)
 
-            val result = nutritionRepository.update(nutrition)
+            val result = nutritionRepository.update(nutritionUiModel)
 
             Assertions.assertEquals(false, result)
         }
@@ -99,7 +100,7 @@ class NutritionRepositoryShould {
 
     @Test
     fun deleteNutrition() = runTest {
-        nutritionRepository.delete(nutrition)
+        nutritionRepository.delete(Nutrition())
 
         verify(nutritionDao).delete(any())
     }

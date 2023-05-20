@@ -3,7 +3,6 @@ package com.example.hannapp.viewmodel
 import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.UpdateNutritionUseCase
@@ -27,10 +26,6 @@ class NutritionDataUpdateModelShould {
     private val deleteNutritionUseCase = mock(DeleteNutritionUseCase::class.java)
     private val testDispatcher = UnconfinedTestDispatcher()
 
-    private val nutritions = listOf(
-        Nutrition(uid = 100, name = "Apple", kcal = 1.2),
-        Nutrition(uid = 200, name = "Banana", kcal = 3.4)
-    )
     private val nutritionUiModels = listOf(
         NutritionUiModel(id = 100, name = "Apple", kcal = "12"),
         NutritionUiModel(id = 200, name = "Banana", kcal = "3.4")
@@ -164,7 +159,7 @@ class NutritionDataUpdateModelShould {
                 nutritionUiModels.last(),
                 nutritionDataUpdateViewModel.uiComponentState.value.nutritionUiModel
             )
-            verify(updateNutritionUseCase).invoke(nutritions.last())
+            verify(updateNutritionUseCase).invoke(nutritionUiModels.last())
         }
 
         @Test

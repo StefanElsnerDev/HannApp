@@ -1,6 +1,6 @@
 package com.example.hannapp.usecase
 
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.repository.NutritionRepository
 import com.example.hannapp.domain.UpdateNutritionUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,7 +29,7 @@ class UpdateNutritionUseCaseShould {
 
     @Test
     fun invokeInsertOfRepository() = runTest {
-        updateNutritionUseCase.invoke(Nutrition())
+        updateNutritionUseCase.invoke(NutritionUiModel())
 
         verify(nutritionRepository).update(any())
     }
@@ -38,7 +38,7 @@ class UpdateNutritionUseCaseShould {
     fun returnSuccessfulUpdate() = runTest {
         whenever(nutritionRepository.update(any())).thenReturn(true)
 
-        val result = updateNutritionUseCase.invoke(Nutrition())
+        val result = updateNutritionUseCase.invoke(NutritionUiModel())
 
         Assertions.assertEquals(true, result)
     }
@@ -47,7 +47,7 @@ class UpdateNutritionUseCaseShould {
     fun returnFailingUpdate() = runTest {
         whenever(nutritionRepository.update(any())).thenReturn(false)
 
-        val result = updateNutritionUseCase.invoke(Nutrition())
+        val result = updateNutritionUseCase.invoke(NutritionUiModel())
 
         Assertions.assertEquals(false, result)
     }
