@@ -61,14 +61,16 @@ class NutritionSelectViewModelShould {
             nutrition = nutritionUiModels.first(),
             quantity = 1.1,
             unit = "",
-            createdAt = 1681839531
+            createdAt = 1681839531,
+            modifiedAt = null,
         ),
         NutrimentUiLogModel(
             id = 2,
             nutrition = nutritionUiModels.last(),
             quantity = 2.2,
             unit = "",
-            createdAt = 1681234731
+            createdAt = 1681234731,
+            modifiedAt = null,
         )
     )
 
