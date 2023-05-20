@@ -108,7 +108,7 @@ fun NutrimentHistoryCard(
                 value = SimpleDateFormat(
                     "k:m",
                     Locale.getDefault()
-                ).format(nutrimentUiLogModel.timeStamp),
+                ).format(nutrimentUiLogModel.createdAt),
                 onValueChange = { _ -> },
                 label = {
                     Text(text = stringResource(id = R.string.time))
@@ -139,7 +139,7 @@ fun NutrimentHistoryCard_LightMode() {
                 ),
                 quantity = 12.345,
                 unit = "g",
-                timeStamp = 1681801313
+                createdAt = 1681801313
             ),
             onClick = {},
             onLongClick = {}

@@ -29,7 +29,7 @@ class NutrimentLogRepository @Inject constructor(
                     nutrition = NutritionConverter.entity(it.nutrition).toUiModel(),
                     quantity = it.nutrimentLog.quantity,
                     unit = "g / ml",
-                    timeStamp = it.nutrimentLog.createdAt,
+                    createdAt = it.nutrimentLog.createdAt,
                 )
             }
         }

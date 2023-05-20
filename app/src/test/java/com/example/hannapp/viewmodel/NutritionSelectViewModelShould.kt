@@ -61,14 +61,14 @@ class NutritionSelectViewModelShould {
             nutrition = nutritionUiModels.first(),
             quantity = 1.1,
             unit = "",
-            timeStamp = 1681839531
+            createdAt = 1681839531
         ),
         NutrimentUiLogModel(
             id = 2,
             nutrition = nutritionUiModels.last(),
             quantity = 2.2,
             unit = "",
-            timeStamp = 1681234731
+            createdAt = 1681234731
         )
     )
 
@@ -346,7 +346,7 @@ class NutritionSelectViewModelShould {
             nutrition = nutritionUiModel,
             quantity = quantity,
             unit = "ml",
-            timeStamp = 123456789
+            createdAt = 123456789
         )
 
         private val substitutedNutriment = NutritionUiModel(

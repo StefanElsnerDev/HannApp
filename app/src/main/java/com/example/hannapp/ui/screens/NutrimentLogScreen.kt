@@ -208,7 +208,7 @@ private val dummyList = listOf(
         ),
         quantity = 123.4,
         unit = "g",
-        timeStamp = 1681801313
+        createdAt = 1681801313
     ),
     NutrimentUiLogModel(
         id = 2,
@@ -217,7 +217,7 @@ private val dummyList = listOf(
         ),
         quantity = 123.4,
         unit = "g",
-        timeStamp = 1681801313
+        createdAt = 1681801313
     ),
     NutrimentUiLogModel(
         id = 3,
@@ -226,7 +226,7 @@ private val dummyList = listOf(
         ),
         quantity = 123.4,
         unit = "g",
-        timeStamp = 1681801313
+        createdAt = 1681801313
     )
 )
 

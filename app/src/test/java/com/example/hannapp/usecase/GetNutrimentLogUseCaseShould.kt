@@ -26,14 +26,14 @@ class GetNutrimentLogUseCaseShould {
             nutrition = NutritionUiModel(name = "Apple"),
             quantity = 1.23,
             unit = "g / ml",
-            timeStamp = 12345,
+            createdAt = 12345,
         ),
         NutrimentUiLogModel(
             id = 2,
             nutrition = NutritionUiModel(name = "Peach"),
             quantity = 9.87,
             unit = "g / ml",
-            timeStamp = 987654321,
+            createdAt = 987654321,
         )
     )
     private val logFlow = flowOf(nutrimentLogs)
