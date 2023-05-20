@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
@@ -33,7 +32,7 @@ import javax.inject.Inject
 
 data class NutritionUiState(
     var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
-    var nutrimentLogUiModel: NutrimentUiLogModel? = null, // TODO (simplify and separate)
+    val nutrimentLogId: Long? = null,
     var quantity: String = "",
     var isSelectionValid: Boolean = false,
     val isEditMode: Boolean = false,
@@ -150,7 +149,7 @@ class NutritionSelectViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 nutritionUiModel = nutrimentUiLogModel.nutrition,
-                nutrimentLogUiModel = nutrimentUiLogModel,
+                nutrimentLogId = nutrimentUiLogModel.id,
                 quantity = nutrimentUiLogModel.quantity.toString(),
                 isEditMode = true
             )
