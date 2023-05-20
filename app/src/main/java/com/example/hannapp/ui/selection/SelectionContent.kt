@@ -60,7 +60,7 @@ fun SelectionContent(
             var expanded by remember { mutableStateOf(false) }
 
             uiState.errorMessage?.let {
-                val errorMessageText: String = it
+                val errorMessageText: String = if (it.messageRes!=null) stringResource(id = it.messageRes) else it.message ?: ""
                 val retryMessageText = stringResource(id = R.string.okay)
 
                 LaunchedEffect(errorMessageText, retryMessageText, snackBarHost) {
