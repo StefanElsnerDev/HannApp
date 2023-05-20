@@ -41,7 +41,7 @@ class NutritionInsertViewModel @Inject constructor(
     fun insert() {
         viewModelScope.launch(dispatcher) {
             // TODO error handling on failing insertion
-            insertNutritionUseCase( NutritionConverter().uiModel(_uiComponentState.value.nutritionUiModel).toEntity())
+            insertNutritionUseCase( NutritionConverter.uiModel(_uiComponentState.value.nutritionUiModel).toEntity())
             clearState()
         }
     }

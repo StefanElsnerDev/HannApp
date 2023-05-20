@@ -29,9 +29,6 @@ class NutritionUpdateViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : NutritionComponentViewModel() {
 
-    @Inject
-    lateinit var nutritionConverter: NutritionConverter
-
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
 
@@ -46,7 +43,7 @@ class NutritionUpdateViewModel @Inject constructor(
                 )
             }
         }
-        .map { nutriments -> nutriments.map { nutritionConverter.entity(it).toUiModel() } }
+        .map { nutriments -> nutriments.map { NutritionConverter.entity(it).toUiModel() } }
         .cachedIn(viewModelScope)
 
     fun selectItem(nutritionUiModel: NutritionUiModel) {
@@ -66,7 +63,7 @@ class NutritionUpdateViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val isSuccess =
-                    NutritionConverter().uiModel(_uiComponentState.value.nutritionUiModel)
+                    NutritionConverter.uiModel(_uiComponentState.value.nutritionUiModel)
                         .toEntity()
                         .let { updateNutritionUseCase(it) }
 
@@ -88,7 +85,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     fun delete(nutritionUiModel: NutritionUiModel) {
         viewModelScope.launch(dispatcher) {
-            deleteNutritionUseCase(nutritionConverter.uiModel(nutritionUiModel).toEntity())
+            deleteNutritionUseCase(NutritionConverter.uiModel(nutritionUiModel).toEntity())
         }
     }
 }

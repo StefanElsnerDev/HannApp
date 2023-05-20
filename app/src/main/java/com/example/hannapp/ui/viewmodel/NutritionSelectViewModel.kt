@@ -88,7 +88,6 @@ class NutritionSelectViewModel @Inject constructor(
     private val deleteNutrimentLogUseCase: DeleteNutrimentLogUseCase,
     private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     getNutrimentLogUseCase: GetNutrimentLogUseCase,
-    private val nutritionConverter: NutritionConverter,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
