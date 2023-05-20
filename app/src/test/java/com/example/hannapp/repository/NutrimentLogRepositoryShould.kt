@@ -1,8 +1,6 @@
 package com.example.hannapp.repository
 
 import com.example.hannapp.data.database.dao.NutrimentLogDao
-import com.example.hannapp.data.model.NutrimentUiLogModel
-import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.NutrimentLog
 import com.example.hannapp.data.repository.NutrimentLogRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,6 +11,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -61,23 +60,13 @@ class NutrimentLogRepositoryShould {
     }
 
     @Nested
-    inner class UpdateLoggedNutriment{
+    inner class UpdateLoggedNutriment {
 
         private val logId = 123L
         private val nutrimentId = 987L
         private val quantity = 123.4
         private val createdAt = 1684412066L
         private val modifiedAt = 1774412066L
-
-        private val nutrimentUiLogModel = NutrimentUiLogModel(
-            id = logId,
-            nutrition = NutritionUiModel(
-                id = nutrimentId
-            ),
-            quantity = quantity,
-            unit = "ml",
-            timeStamp = createdAt
-        )
 
         private val nutrimentLog = NutrimentLog(
             id = logId,
@@ -89,9 +78,17 @@ class NutrimentLogRepositoryShould {
 
         @Test
         fun invokeDao() = runTest {
-            nutrimentLogRepository.update(nutrimentUiLogModel, modifiedAt)
+            whenever(nutrimentLogDao.update(any())).thenReturn(Unit)
+            whenever(nutrimentLogDao.get(any())).thenReturn(nutrimentLog)
 
-            verify(nutrimentLogDao).update(nutrimentLog = nutrimentLog)
+            nutrimentLogRepository.update(
+                logId = logId,
+                nutrimentId = nutrimentId,
+                quantity = quantity,
+            )
+
+            verify(nutrimentLogDao).get(logId = any())
+            verify(nutrimentLogDao).update(nutrimentLog = any())
         }
     }
 }
