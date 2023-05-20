@@ -2,6 +2,8 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.example.hannapp.R
+import com.example.hannapp.data.Message
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutritionUseCase
@@ -20,7 +22,7 @@ import javax.inject.Inject
 data class NutritionUpdateUiState(
     val cachedNutritionUiModel: NutritionUiModel = NutritionUiModel(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: Message? = null
 )
 
 @HiltViewModel
@@ -39,7 +41,10 @@ class NutritionUpdateViewModel @Inject constructor(
             _uiState.update { state ->
                 state.copy(
                     isLoading = false,
-                    errorMessage = throwable.message ?: "Something went wrong"
+                    errorMessage = Message(
+                        messageRes = null,
+                        message = throwable.message,
+                    )
                 )
             }
         }.cachedIn(viewModelScope)
@@ -65,7 +70,14 @@ class NutritionUpdateViewModel @Inject constructor(
 
                 updateNutritionUiState(isSuccess)
             } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = e.message) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false, errorMessage = Message(
+                            messageRes = null,
+                            message = e.message,
+                        )
+                    )
+                }
             }
         }
     }
@@ -73,8 +85,20 @@ class NutritionUpdateViewModel @Inject constructor(
     private fun updateNutritionUiState(isSuccess: Boolean) {
         _uiState.apply {
             when (isSuccess) {
-                true -> update { state -> state.copy(cachedNutritionUiModel = _uiComponentState.value.nutritionUiModel) }
-                false -> update { state -> state.copy(errorMessage = "Update failed") }
+                true -> update { state ->
+                    state.copy(
+                        cachedNutritionUiModel = _uiComponentState.value.nutritionUiModel,
+                    )
+                }
+
+                false -> update { state ->
+                    state.copy(
+                        isLoading = false, errorMessage = Message(
+                            messageRes = R.string.nutriment_update_failed,
+                            message = null,
+                        )
+                    )
+                }
             }
         }
     }

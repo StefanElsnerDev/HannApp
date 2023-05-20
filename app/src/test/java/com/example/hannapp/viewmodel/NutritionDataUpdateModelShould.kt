@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
@@ -180,10 +181,8 @@ class NutritionDataUpdateModelShould {
 
             nutritionDataUpdateViewModel.update()
 
-            Assertions.assertEquals(
-                "Update failed",
-                nutritionDataUpdateViewModel.uiState.value.errorMessage
-            )
+            assertThat(nutritionDataUpdateViewModel.uiState.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionDataUpdateViewModel.uiState.value.errorMessage?.message).isNull()
         }
 
         @Test
@@ -193,10 +192,8 @@ class NutritionDataUpdateModelShould {
 
             nutritionDataUpdateViewModel.update()
 
-            Assertions.assertEquals(
-                errorMessage,
-                nutritionDataUpdateViewModel.uiState.value.errorMessage
-            )
+            assertThat(nutritionDataUpdateViewModel.uiState.value.errorMessage?.messageRes).isNull()
+            assertThat(nutritionDataUpdateViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
         }
     }
 
