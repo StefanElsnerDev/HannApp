@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
@@ -97,12 +95,8 @@ class NutritionSelectViewModel @Inject constructor(
             viewModelScope, SharingStarted.Eagerly, _uiState.value.toUiState()
         )
 
-    private var _nutriments = MutableSharedFlow<PagingData<Nutrition>>()
-    val nutriments = _nutriments.map { nutriments ->
-            nutriments.map {
-                nutritionConverter.entity(it).toUiModel()
-            }
-        }.cachedIn(viewModelScope)
+    private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
+    val nutriments = _nutriments.cachedIn(viewModelScope)
 
     val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> =
         getNutrimentLogUseCase.observeNutrimentLog().catch {

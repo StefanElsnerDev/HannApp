@@ -2,8 +2,11 @@ package com.example.hannapp.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.map
 import com.example.hannapp.data.database.dao.NutritionDao
+import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NutritionRepository @Inject constructor(
@@ -17,7 +20,9 @@ class NutritionRepository @Inject constructor(
         PagingConfig(pageSize = 24)
     ) {
         nutritionDao.getAll()
-    }.flow
+    }.flow.map { nutritionPagingData ->
+        nutritionPagingData.map { NutritionConverter.entity(it).toUiModel() }
+    }
 
     fun getFood() = nutritionDao.getFood()
 
