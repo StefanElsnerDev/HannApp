@@ -1,6 +1,6 @@
 package com.example.hannapp.usecase
 
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.repository.NutritionRepository
 import com.example.hannapp.domain.InsertNutritionUseCase
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +39,7 @@ class InsertNutritionUseCaseShould {
 
     @Test
     fun invokeInsertOfRepository() = runTest{
-        insertNutritionUseCase.invoke(Nutrition())
+        insertNutritionUseCase.invoke(NutritionUiModel())
 
         verify(nutritionRepository).insert(any())
     }

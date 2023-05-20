@@ -5,7 +5,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Product
-import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.GetProductSearchResultsUseCase
 import com.example.hannapp.domain.InsertNutritionUseCase
@@ -25,10 +24,9 @@ class NutritionInsertViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : NutritionComponentViewModel() {
 
-
     private var _products = MutableSharedFlow<PagingData<Product>>()
     val products: Flow<PagingData<Product>> =
-        _products.cachedIn(viewModelScope)//.search("", 24).cachedIn(viewModelScope)
+        _products.cachedIn(viewModelScope)
 
     fun search(searchString: String) {
         viewModelScope.launch(dispatcher) {
@@ -40,8 +38,11 @@ class NutritionInsertViewModel @Inject constructor(
 
     fun insert() {
         viewModelScope.launch(dispatcher) {
-            // TODO error handling on failing insertion
-            insertNutritionUseCase( NutritionConverter.uiModel(_uiComponentState.value.nutritionUiModel).toEntity())
+            try {
+                insertNutritionUseCase(_uiComponentState.value.nutritionUiModel)
+            } catch (e: Exception) {
+                TODO("catch error and emit state")
+            }
             clearState()
         }
     }
