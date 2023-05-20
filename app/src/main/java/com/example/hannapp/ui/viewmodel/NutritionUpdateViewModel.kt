@@ -34,8 +34,8 @@ class NutritionUpdateViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NutritionUpdateUiState(isLoading = true))
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
 
-
-    val nutriments = getNutritionUseCase.getAll().catch { throwable ->
+    val nutriments = getNutritionUseCase.getAll()
+        .catch { throwable ->
             _uiState.update { state ->
                 state.copy(
                     isLoading = false, errorMessage = throwable.message ?: "Something went wrong"

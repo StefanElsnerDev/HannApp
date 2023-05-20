@@ -91,9 +91,11 @@ class NutritionSelectViewModel @Inject constructor(
     private lateinit var memento: Memento
 
     private val _uiState = MutableStateFlow(NutrimentSelectViewModelUiState(isLoading = true))
-    val uiState = _uiState.map(NutrimentSelectViewModelUiState::toUiState).stateIn(
-            viewModelScope, SharingStarted.Eagerly, _uiState.value.toUiState()
-        )
+    val uiState = _uiState
+        .map(NutrimentSelectViewModelUiState::toUiState)
+        .stateIn(
+        viewModelScope, SharingStarted.Eagerly, _uiState.value.toUiState()
+    )
 
     private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
     val nutriments = _nutriments.cachedIn(viewModelScope)
@@ -113,7 +115,8 @@ class NutritionSelectViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch(dispatcher) {
-            getNutritionUseCase.getAll().catch { throwable ->
+            getNutritionUseCase.getAll()
+                .catch { throwable ->
                     updateErrorState(
                         throwable.message ?: "Loading of nutriments from database failed"
                     )
