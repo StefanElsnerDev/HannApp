@@ -61,9 +61,7 @@ class NutritionUpdateViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val isSuccess =
-                    NutritionConverter.uiModel(_uiComponentState.value.nutritionUiModel)
-                        .toEntity()
-                        .let { updateNutritionUseCase(it) }
+                    _uiComponentState.value.nutritionUiModel.let { updateNutritionUseCase(it) }
 
                 updateNutritionUiState(isSuccess)
             } catch (e: Exception) {
