@@ -343,42 +343,6 @@ class NutritionSelectViewModelShould {
     }
 
     @Nested
-    inner class CastInputString {
-
-        private var result = -1.0
-
-        @Test
-        fun executeOnSuccessfulCast() {
-            val input = "123.456"
-            val expected = 123.456
-
-            nutritionViewModel.castAsDouble(input) {
-                result = it
-            }
-
-            assertThat(result).isEqualTo(expected)
-        }
-
-        @Test
-        fun emitErrorStateOnEmptyInput() {
-            nutritionViewModel.castAsDouble("") {
-                result = it
-            }
-
-            assertThat(nutritionViewModel.uiState.value.errorMessage).containsAnyOf("Invalid Input")
-        }
-
-        @Test
-        fun emitErrorStateOnNANInput() {
-            nutritionViewModel.castAsDouble("4ny Num83r") {
-                result = it
-            }
-
-            assertThat(nutritionViewModel.uiState.value.errorMessage).containsAnyOf("Invalid Input")
-        }
-    }
-
-    @Nested
     inner class ClearAll {
 
         @Test

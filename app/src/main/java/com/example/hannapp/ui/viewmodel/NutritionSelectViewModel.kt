@@ -190,20 +190,6 @@ class NutritionSelectViewModel @Inject constructor(
         validateSelection()
     }
 
-    fun castAsDouble(value: String, function: (Double)->Unit) {
-        val nullableValue = value.toDoubleOrNull()
-        if(nullableValue != null){
-            nullableValue.apply(function)
-        } else {
-            _uiState.update { state ->
-                state.copy(
-                    isLoading = false,
-                    errorMessage = "Invalid Input"
-                )
-            }
-        }
-    }
-
     private fun updateErrorState(message: String) {
         _uiState.update { state ->
             state.copy(
