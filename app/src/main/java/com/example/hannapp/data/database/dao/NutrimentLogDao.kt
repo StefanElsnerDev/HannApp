@@ -6,21 +6,21 @@ import com.example.hannapp.data.model.entity.relation.Log
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class NutrimentLogDao {
+interface NutrimentLogDao {
 
     @Query("SELECT * FROM NutrimentLog WHERE id LIKE :logId")
-    abstract fun get(logId: Long): NutrimentLog
+    fun get(logId: Long): NutrimentLog
 
     @Insert
-    abstract suspend fun insert(nutrimentLog: NutrimentLog): Long
+    suspend fun insert(nutrimentLog: NutrimentLog): Long
 
     @Update
-    abstract suspend fun update(nutrimentLog: NutrimentLog)
+    suspend fun update(nutrimentLog: NutrimentLog)
 
     @Transaction
     @Query("SELECT * FROM NutrimentLog")
-    abstract fun getLogs(): Flow<List<Log>>
+    fun getLogs(): Flow<List<Log>>
 
     @Query("DELETE FROM NutrimentLog")
-    abstract suspend fun deleteAll(): Int
+    suspend fun deleteAll(): Int
 }
