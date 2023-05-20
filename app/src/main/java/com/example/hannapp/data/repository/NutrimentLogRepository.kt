@@ -30,6 +30,7 @@ class NutrimentLogRepository @Inject constructor(
                     quantity = it.nutrimentLog.quantity,
                     unit = "g / ml",
                     createdAt = it.nutrimentLog.createdAt,
+                    modifiedAt = it.nutrimentLog.lastModifiedAt
                 )
             }
         }

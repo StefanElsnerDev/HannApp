@@ -66,7 +66,8 @@ fun NutrimentHistoryContent_LightMode() {
                     ),
                     quantity = 123.4,
                     unit = "g",
-                    createdAt = 1681801313
+                    createdAt = 1681801313,
+                    modifiedAt = 1999801313
                 ),
                 NutrimentUiLogModel(
                     id = 2,
@@ -75,7 +76,8 @@ fun NutrimentHistoryContent_LightMode() {
                     ),
                     quantity = 123.4,
                     unit = "g",
-                    createdAt = 1681801313
+                    createdAt = 1681801313,
+                    modifiedAt = null
                 ),
                 NutrimentUiLogModel(
                     id = 2,
@@ -84,7 +86,8 @@ fun NutrimentHistoryContent_LightMode() {
                     ),
                     quantity = 123.4,
                     unit = "g",
-                    createdAt = 1681801313
+                    createdAt = 1681801313,
+                    modifiedAt = 1999801313
                 )
             )
         )

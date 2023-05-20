@@ -139,7 +139,8 @@ fun NutrimentHistoryCard_LightMode() {
                 ),
                 quantity = 12.345,
                 unit = "g",
-                createdAt = 1681801313
+                createdAt = 1681801313,
+                modifiedAt = 1775801313
             ),
             onClick = {},
             onLongClick = {}
