@@ -1,9 +1,12 @@
 package com.example.hannapp.ui.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.hannapp.R
+import com.example.hannapp.data.Message
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.modul.IoDispatcher
@@ -30,20 +33,20 @@ sealed interface NutrimentSelectUiState {
     val nutritionUiModel: NutritionUiModel
     val quantity: String
     val isLoading: Boolean
-    val errorMessage: String?
+    val errorMessage: Message?
 
     data class LogUiState(
         override val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
         override val quantity: String = "",
         override val isLoading: Boolean = false,
-        override val errorMessage: String? = null,
+        override val errorMessage: Message? = null,
     ) : NutrimentSelectUiState
 
     data class EditLogUiState(
         override val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
         override val quantity: String = "",
         override val isLoading: Boolean = false,
-        override val errorMessage: String? = null,
+        override val errorMessage: Message? = null,
         val nutrimentLogId: Long? = null,
     ) : NutrimentSelectUiState
 }
@@ -54,7 +57,7 @@ data class NutrimentSelectViewModelUiState(
     var quantity: String = "",
     val isEditMode: Boolean = false,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: Message? = null
 ) {
     fun toUiState() = when (isEditMode) {
         true -> {
@@ -104,7 +107,11 @@ class NutritionSelectViewModel @Inject constructor(
         getNutrimentLogUseCase.observeNutrimentLog().catch {
             _uiState.update { state ->
                 state.copy(
-                    isLoading = false, errorMessage = it.message
+                    isLoading = false,
+                    errorMessage = Message(
+                        messageRes = null,
+                        message = it.message,
+                    )
                 )
             }
         }.stateIn(
@@ -118,7 +125,8 @@ class NutritionSelectViewModel @Inject constructor(
             getNutritionUseCase.getAll()
                 .catch { throwable ->
                     updateErrorState(
-                        throwable.message ?: "Loading of nutriments from database failed"
+                        stringRes = R.string.loading_nutriments_failed,
+                        string = throwable.message,
                     )
                 }.collectLatest { nutriments ->
                     _nutriments.emit(nutriments)
@@ -129,7 +137,13 @@ class NutritionSelectViewModel @Inject constructor(
     fun select(nutritionUiModel: NutritionUiModel) {
         nutritionUiModel.apply {
             when (id) {
-                null -> updateErrorState("Invalid selection")
+                null -> {
+                    updateErrorState(
+                        stringRes = R.string.invalid_selection,
+                        string = null,
+                    )
+                }
+
                 else -> _uiState.update { state ->
                     state.copy(
                         nutritionUiModel = this
@@ -145,22 +159,31 @@ class NutritionSelectViewModel @Inject constructor(
         val quantity = _uiState.value.quantity
         val id = _uiState.value.nutritionUiModel.id
 
-        require(id != null) { "Invalid ID" }
-
         viewModelScope.launch(dispatcher) {
             try {
+                require(id != null) { R.string.invalid_nutriment_id }
+
                 val isInserted = insertNutrimentLogUseCase(
                     nutrimentId = id,
                     quantity = quantity.toDouble(),
                 )
 
-                require(isInserted) { "Insertion of log entry failed" }
+                require(isInserted) { R.string.insertion_failed }
             } catch (e: IllegalArgumentException) {
-                updateErrorState(e.message ?: "Illegal Argument")
+                updateErrorState(
+                    stringRes = e.message?.toInt(),
+                    string = e.message,
+                )
             } catch (e: NumberFormatException) {
-                updateErrorState("Invalid Input")
+                updateErrorState(
+                    stringRes = R.string.invalid_input,
+                    string = e.message,
+                )
             } catch (e: Exception) {
-                updateErrorState(e.message ?: "Addition of log entry failed")
+                updateErrorState(
+                    stringRes = R.string.log_failed,
+                    string = e.message,
+                )
             }
         }
         _uiState.update { it.copy(quantity = "") }
@@ -183,10 +206,10 @@ class NutritionSelectViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val logId = _uiState.value.nutrimentLogId
-                require(logId != null) { "Invalid Log-ID" }
+                require(logId != null) { R.string.invalid_log_id }
 
                 val nutrimentId = _uiState.value.nutritionUiModel.id
-                require(nutrimentId != null) { "Invalid Nutriment-ID" }
+                require(nutrimentId != null) { R.string.invalid_nutriment_id }
 
                 updateNutrimentLogUseCase.update(
                     logId = logId,
@@ -195,10 +218,21 @@ class NutritionSelectViewModel @Inject constructor(
                 )
 
                 _uiState.update { it.copy(isEditMode = false) }
+            } catch (e: IllegalArgumentException) {
+                updateErrorState(
+                    stringRes = e.message?.toInt(),
+                    string = e.message,
+                )
             } catch (e: NumberFormatException) {
-                updateErrorState(e.message ?: "Missing quantity")
+                updateErrorState(
+                    stringRes = R.string.missing_quantity,
+                    string = e.message,
+                )
             } catch (e: Exception) {
-                updateErrorState("Editing failed")
+                updateErrorState(
+                    stringRes = R.string.editing_failed,
+                    string = e.message,
+                )
             }
         }
     }
@@ -213,10 +247,14 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
-    private fun updateErrorState(message: String) {
+    private fun updateErrorState(@StringRes stringRes: Int?, string: String? = null) {
         _uiState.update { state ->
             state.copy(
-                isLoading = false, errorMessage = message
+                isLoading = false,
+                errorMessage = Message(
+                    messageRes = stringRes,
+                    message = string
+                )
             )
         }
     }
@@ -231,12 +269,18 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 val isCleared = deleteNutrimentLogUseCase.clear()
 
-                if (!isCleared) updateErrorState("Deletion failed")
+                if (!isCleared){
+                    updateErrorState(
+                        stringRes = R.string.deletion_failed,
+                    )
+                }
             } catch (e: Exception) {
-                updateErrorState(e.message ?: "Unexpected error on deletion")
+                updateErrorState(
+                    stringRes = R.string.unexpected_error_on_deletion,
+                    string = e.message,
+                )
             }
         }
-
     }
 
     private fun unselect() {

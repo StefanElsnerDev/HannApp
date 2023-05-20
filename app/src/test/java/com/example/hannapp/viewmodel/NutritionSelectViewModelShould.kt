@@ -139,13 +139,8 @@ class NutritionSelectViewModelShould {
 
         nutritionViewModel.getAll()
 
-        Assertions.assertEquals(
-            NutrimentSelectUiState.LogUiState(
-                isLoading = false,
-                errorMessage = errorMessage
-            ),
-            nutritionViewModel.uiState.first()
-        )
+        assertThat(nutritionViewModel.uiState.first().errorMessage?.messageRes).isNotNull
+        assertThat(nutritionViewModel.uiState.first().errorMessage?.message).isEqualTo(errorMessage)
     }
 
     @Nested
@@ -174,7 +169,8 @@ class NutritionSelectViewModelShould {
                 dispatcher = testDispatcher
             )
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).contains(errorMessage)
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNull()
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
         }
     }
 
@@ -213,7 +209,8 @@ class NutritionSelectViewModelShould {
         fun emitErrorStateOnInvalidSelection() {
             nutritionViewModel.select(NutritionUiModel(id = null))
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Invalid selection")
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
         }
     }
 
@@ -257,7 +254,7 @@ class NutritionSelectViewModelShould {
 
             nutritionViewModel.add()
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isNotBlank()
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNotBlank()
         }
 
         @Test
@@ -271,7 +268,7 @@ class NutritionSelectViewModelShould {
 
             nutritionViewModel.add()
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
         }
 
         @Test
@@ -298,7 +295,8 @@ class NutritionSelectViewModelShould {
 
             nutritionViewModel.clearAll()
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Deletion failed")
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
         }
 
         @Test
@@ -308,7 +306,8 @@ class NutritionSelectViewModelShould {
 
             nutritionViewModel.clearAll()
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo(errorMessage)
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
         }
 
         @Test
@@ -317,7 +316,8 @@ class NutritionSelectViewModelShould {
 
             nutritionViewModel.clearAll()
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Unexpected error on deletion")
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
         }
 
         @Test
@@ -348,7 +348,8 @@ class NutritionSelectViewModelShould {
             nutrition = nutritionUiModel,
             quantity = quantity,
             unit = "ml",
-            createdAt = 123456789
+            createdAt = 123456789,
+            modifiedAt = null,
         )
 
         private val substitutedNutriment = NutritionUiModel(

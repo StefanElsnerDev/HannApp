@@ -22,4 +22,15 @@
     <string name="edit_mode">Edit Mode</string>
     <string name="createdAt">created at</string>
     <string name="modifiedAt">modified at</string>
+    <string name="missing_quantity">Missing quantity</string>
+    <string name="editing_failed">Editing failed</string>
+    <string name="deletion_failed">Deletion failed</string>
+    <string name="unexpected_error_on_deletion">Unexpected error on deletion</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="log_failed">Addition of log entry failed</string>
+    <string name="invalid_selection">Invalid selection</string>
+    <string name="loading_nutriments_failed">Loading of nutriments from database failed</string>
+    <string name="invalid_nutriment_id">Invalid nutriment ID</string>
+    <string name="insertion_failed">Insertion of log entry failed</string>
+    <string name="invalid_log_id">Invalid log ID</string>
 </resources>
