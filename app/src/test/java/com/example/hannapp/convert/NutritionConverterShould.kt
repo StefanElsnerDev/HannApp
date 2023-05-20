@@ -5,12 +5,11 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class NutritionConverterShould {
 
-    private lateinit var nutritionConverter: NutritionConverter
+    private val nutritionConverter = NutritionConverter
 
     private val id: Long = 123
     private val name = "Apple"
@@ -20,11 +19,6 @@ class NutritionConverterShould {
     private val nutritionModel = NutritionModel(id = id, name = name, kcal = kcal, protein = protein)
     private val nutritionEntity = Nutrition(uid = id, name = name, kcal = kcal, protein = protein)
     private val nutritionUiModel = NutritionUiModel(id = id, name = name, kcal = kcal.toString(), protein = protein.toString())
-
-    @BeforeEach
-    fun beforeEach() {
-        nutritionConverter = NutritionConverter()
-    }
 
     @Test
     fun convertNutritionModelToEntity(){
