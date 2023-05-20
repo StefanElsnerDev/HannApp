@@ -3,9 +3,8 @@ package com.example.hannapp.data.model.convert
 import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.entity.Nutrition
-import javax.inject.Inject
 
-class NutritionConverter @Inject constructor() {
+object NutritionConverter {
 
     fun model(nutritionModel: NutritionModel) = InnerNutritionModel(nutritionModel)
 

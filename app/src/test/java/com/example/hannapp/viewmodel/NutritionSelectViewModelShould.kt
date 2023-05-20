@@ -39,7 +39,8 @@ class NutritionSelectViewModelShould {
     private val updateNutrimentLogUseCase = mock(UpdateNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
-    private val nutritionConverter = mock(NutritionConverter::class.java)
+
+    private val nutritionConverter = NutritionConverter
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
@@ -127,7 +128,6 @@ class NutritionSelectViewModelShould {
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
-            nutritionConverter = nutritionConverter,
             dispatcher = testDispatcher
         )
     }
@@ -152,7 +152,6 @@ class NutritionSelectViewModelShould {
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
-            nutritionConverter = nutritionConverter,
             dispatcher = testDispatcher
         )
 
@@ -208,7 +207,6 @@ class NutritionSelectViewModelShould {
                 deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
                 updateNutrimentLogUseCase = updateNutrimentLogUseCase,
                 getNutrimentLogUseCase = getNutrimentLogUseCase,
-                nutritionConverter = nutritionConverter,
                 dispatcher = testDispatcher
             )
 
