@@ -7,7 +7,6 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
@@ -107,24 +106,14 @@ class NutritionSelectViewModel @Inject constructor(
 
     val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> =
         getNutrimentLogUseCase.observeNutrimentLog().catch {
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false, errorMessage = it.message
-                    )
-                }
-            }.map { list ->
-                list.map {
-                    NutrimentUiLogModel(
-                        id = it.id,
-                        nutrition = nutritionConverter.entity(it.nutrition).toUiModel(),
-                        quantity = it.quantity,
-                        unit = "",
-                        timeStamp = it.createdAt
-                    )
-                }
-            }.stateIn(
-                viewModelScope, SharingStarted.Eagerly, emptyList()
-            )
+            _uiState.update { state ->
+                state.copy(
+                    isLoading = false, errorMessage = it.message
+                )
+            }
+        }.stateIn(
+            viewModelScope, SharingStarted.Eagerly, emptyList()
+        )
 
     fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
