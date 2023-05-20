@@ -9,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -26,7 +27,9 @@ class NutritionRepositoryShould {
     private val nutritionUiModel = NutritionUiModel()
 
     @BeforeEach
-    fun beforeEach() {
+    fun beforeEach() = runTest {
+        whenever(nutritionDao.insert(any())).thenReturn(123L)
+
         nutritionRepository = NutritionRepository(
             nutritionDao
         )
@@ -34,9 +37,16 @@ class NutritionRepositoryShould {
 
     @Test
     fun insertNutritionData() = runTest {
-        nutritionRepository.insert(Nutrition())
+        nutritionRepository.insert(nutritionUiModel)
 
         verify(nutritionDao).insert(any())
+    }
+
+    @Test
+    fun returnSuccessOnInsertionOfNutritionData() = runTest {
+        val result = nutritionRepository.insert(nutritionUiModel)
+
+        assertThat(result).isTrue()
     }
 
     @Test
