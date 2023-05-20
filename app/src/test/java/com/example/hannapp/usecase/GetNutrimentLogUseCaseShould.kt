@@ -1,7 +1,7 @@
 package com.example.hannapp.usecase
 
-import com.example.hannapp.data.model.NutrimentLogModel
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutrimentUiLogModel
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.repository.NutrimentLogRepository
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,19 +21,19 @@ class GetNutrimentLogUseCaseShould {
     lateinit var getNutrimentLogUseCase: GetNutrimentLogUseCase
     private val nutrimentLogRepository = mock(NutrimentLogRepository::class.java)
     private val nutrimentLogs = listOf(
-        NutrimentLogModel(
+        NutrimentUiLogModel(
             id = 1,
-            nutrition = Nutrition(name = "Apple"),
+            nutrition = NutritionUiModel(name = "Apple"),
             quantity = 1.23,
-            createdAt = 12345,
-            modifiedAt = null
+            unit = "g / ml",
+            timeStamp = 12345,
         ),
-        NutrimentLogModel(
+        NutrimentUiLogModel(
             id = 2,
-            nutrition = Nutrition(name = "Peach"),
+            nutrition = NutritionUiModel(name = "Peach"),
             quantity = 9.87,
-            createdAt = 987654321,
-            modifiedAt = null
+            unit = "g / ml",
+            timeStamp = 987654321,
         )
     )
     private val logFlow = flowOf(nutrimentLogs)
