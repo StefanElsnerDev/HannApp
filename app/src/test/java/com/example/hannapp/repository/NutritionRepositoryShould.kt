@@ -100,7 +100,7 @@ class NutritionRepositoryShould {
 
     @Test
     fun deleteNutrition() = runTest {
-        nutritionRepository.delete(Nutrition())
+        nutritionRepository.delete(nutritionUiModel)
 
         verify(nutritionDao).delete(any())
     }

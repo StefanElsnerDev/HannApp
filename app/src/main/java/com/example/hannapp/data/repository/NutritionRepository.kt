@@ -31,5 +31,7 @@ class NutritionRepository @Inject constructor(
             NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()
         ) == 1
 
-    suspend fun delete(nutrition: Nutrition) = nutritionDao.delete(nutrition)
+    suspend fun delete(nutritionUiModel: NutritionUiModel) = nutritionDao.delete(
+        NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()
+    )
 }
