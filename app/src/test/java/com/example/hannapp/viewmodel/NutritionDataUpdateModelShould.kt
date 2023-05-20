@@ -3,7 +3,6 @@ package com.example.hannapp.viewmodel
 import androidx.paging.PagingData
 import com.example.hannapp.data.distinct.*
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -37,7 +36,7 @@ class NutritionDataUpdateModelShould {
         NutritionUiModel(id = 200, name = "Banana", kcal = "3.4")
     )
 
-    private val pagingData = PagingData.from(nutritions)
+    private val pagingData = PagingData.from(nutritionUiModels)
     private val nutrimentsFlow = flowOf(pagingData)
 
     @BeforeEach
@@ -217,8 +216,6 @@ class NutritionDataUpdateModelShould {
                 deleteNutritionUseCase = deleteNutritionUseCase,
                 testDispatcher
             )
-
-            nutritionDataUpdateViewModel.nutritionConverter = NutritionConverter()
         }
 
         @Test

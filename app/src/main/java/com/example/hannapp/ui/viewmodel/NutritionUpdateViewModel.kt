@@ -2,7 +2,6 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
@@ -11,7 +10,11 @@ import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.UpdateNutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,18 +36,13 @@ class NutritionUpdateViewModel @Inject constructor(
     val uiState: StateFlow<NutritionUpdateUiState> = _uiState.asStateFlow()
 
 
-    val nutriments = getNutritionUseCase
-        .getAll()
-        .catch { throwable ->
+    val nutriments = getNutritionUseCase.getAll().catch { throwable ->
             _uiState.update { state ->
                 state.copy(
-                    isLoading = false,
-                    errorMessage = throwable.message ?: "Something went wrong"
+                    isLoading = false, errorMessage = throwable.message ?: "Something went wrong"
                 )
             }
-        }
-        .map { nutriments -> nutriments.map { NutritionConverter.entity(it).toUiModel() } }
-        .cachedIn(viewModelScope)
+        }.cachedIn(viewModelScope)
 
     fun selectItem(nutritionUiModel: NutritionUiModel) {
         // TODO: Error Handling
