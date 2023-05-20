@@ -3,7 +3,6 @@ package com.example.hannapp.ui.viewmodel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -81,7 +80,7 @@ class NutritionUpdateViewModel @Inject constructor(
 
     fun delete(nutritionUiModel: NutritionUiModel) {
         viewModelScope.launch(dispatcher) {
-            deleteNutritionUseCase(NutritionConverter.uiModel(nutritionUiModel).toEntity())
+            deleteNutritionUseCase(nutritionUiModel = nutritionUiModel)
         }
     }
 }
