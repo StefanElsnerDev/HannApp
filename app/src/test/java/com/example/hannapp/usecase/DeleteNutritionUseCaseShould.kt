@@ -1,6 +1,6 @@
 package com.example.hannapp.usecase
 
-import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.repository.NutritionRepository
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +28,7 @@ class DeleteNutritionUseCaseShould {
 
     @Test
     fun invokeDeleteOfRepository() = runTest {
-        deleteNutritionUseCase.invoke(Nutrition())
+        deleteNutritionUseCase.invoke(NutritionUiModel())
 
         verify(nutritionRepository).delete(any())
     }
