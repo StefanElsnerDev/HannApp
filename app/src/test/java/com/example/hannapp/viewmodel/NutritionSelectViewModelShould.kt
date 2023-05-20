@@ -222,14 +222,6 @@ class NutritionSelectViewModelShould {
     @Nested
     inner class Select {
 
-        private val nutritionUiModel = NutritionUiModel(
-            id = 123,
-            name = "Cola",
-            kcal = "123",
-            protein = "0.1",
-            fat = "0.0"
-        )
-
         @Test
         fun emitUiStateWithEmptyNutrimentUiModel() {
             assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
@@ -244,16 +236,16 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitUiStateWithSelectedNutrimentUiModel() {
-            nutritionViewModel.select(nutritionUiModel)
+            nutritionViewModel.select(nutritionUiModels.first())
 
             assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
-                nutritionUiModel
+                nutritionUiModels.first()
             )
         }
 
         @Test
         fun emitUiStateWithValidationBasedOnModelId() {
-            nutritionViewModel.select(nutritionUiModel)
+            nutritionViewModel.select(nutritionUiModels.first())
 
             assertThat(nutritionViewModel.uiState.value.isSelectionValid).isTrue
         }
@@ -304,6 +296,9 @@ class NutritionSelectViewModelShould {
                     NutritionUiModel()
                 )
             )
+
+            nutritionViewModel.select(nutritionUiModels.first())
+
             nutritionViewModel.setQuantity(quantity = quantity.toString())
         }
 
@@ -311,12 +306,12 @@ class NutritionSelectViewModelShould {
         fun callsUseCaseForAddingNutriment() = runTest {
             nutritionViewModel.add()
 
-            verify(insertNutrimentLogUseCase).invoke(any())
+            verify(insertNutrimentLogUseCase).invoke(any(), any())
         }
 
         @Test
         fun emitsErrorStateOnFailingInsertion() = runTest {
-            whenever(insertNutrimentLogUseCase.invoke(any())).thenReturn(false)
+            whenever(insertNutrimentLogUseCase.invoke(any(), any())).thenReturn(false)
 
             assertThat(nutritionViewModel.uiState.value.errorMessage).isNull()
 
@@ -328,7 +323,7 @@ class NutritionSelectViewModelShould {
         @Test
         fun emitsErrorStateOnThrowingInsertion() = runTest {
             val errorMessage = "Logging failed!"
-            whenever(insertNutrimentLogUseCase.invoke(any())).thenThrow(
+            whenever(insertNutrimentLogUseCase.invoke(any(), any())).thenThrow(
                 RuntimeException(
                     errorMessage
                 )
@@ -435,6 +430,8 @@ class NutritionSelectViewModelShould {
         private val nutrimentId = 123L
         private val logId = 987L
         private val quantity = 123.45
+
+        private val substitutedNutrimentId = 1234567L
         private val substitutedQuantity = 54.321
 
         private val nutritionUiModel = NutritionUiModel(
@@ -451,16 +448,8 @@ class NutritionSelectViewModelShould {
         )
 
         private val substitutedNutriment = NutritionUiModel(
-            id = 1234567,
+            id = substitutedNutrimentId,
             name = "Pepsi Cola Sugar free"
-        )
-
-        private val substituteNutrimentUiLogModel = NutrimentUiLogModel(
-            id = logId,
-            nutrition = substitutedNutriment,
-            quantity = substitutedQuantity,
-            unit = "ml",
-            timeStamp = 123456789
         )
 
         @Nested
@@ -492,14 +481,18 @@ class NutritionSelectViewModelShould {
             fun invokeDaoOnSelectedLogNutriment() = runTest {
                 nutritionViewModel.update()
 
-                verify(updateNutrimentLogUseCase).update(any())
+                verify(updateNutrimentLogUseCase).update(any(), any(), any())
             }
 
             @Test
-            fun saveChangedNutriment() = runTest {
+            fun saveChangedNutrimentAndModifiedQuantity() = runTest {
                 nutritionViewModel.update()
 
-                verify(updateNutrimentLogUseCase).update(substituteNutrimentUiLogModel)
+                verify(updateNutrimentLogUseCase).update(
+                    logId = logId,
+                    nutrimentId = substitutedNutrimentId,
+                    quantity = substitutedQuantity,
+                )
             }
         }
 

@@ -118,22 +118,20 @@ class NutritionSelectViewModel @Inject constructor(
 
     fun add() {
         val quantity = _uiState.value.quantity
+        val id = _uiState.value.nutritionUiModel.id
+
+        require(id != null) {"Invalid ID"}
 
         viewModelScope.launch(dispatcher) {
             try {
-                val isSuccess = insertNutrimentLogUseCase(
-                    nutrimentLogModel = NutrimentLogModel(
-                        id = 0,
-                        nutrition = nutritionConverter.uiModel(_uiState.value.nutritionUiModel)
-                            .toEntity(),
-                        quantity = quantity.toDouble(),
-                        createdAt = System.currentTimeMillis(),
-                        modifiedAt = null
-                    )
+                val isInserted = insertNutrimentLogUseCase(
+                    nutrimentId = id,
+                    quantity = quantity.toDouble(),
                 )
-                if (!isSuccess) {
-                    updateErrorState("Nutriment could not be logged")
-                }
+
+                require(isInserted) { "Insertion of log entry failed" }
+            } catch (e: IllegalArgumentException) {
+                updateErrorState(e.message ?: "Illegal Argument")
             } catch (e: NumberFormatException) {
                 updateErrorState("Invalid Input")
             } catch (e: Exception) {
@@ -160,17 +158,16 @@ class NutritionSelectViewModel @Inject constructor(
     fun update() {
         viewModelScope.launch(dispatcher) {
             try {
-                val logModel = _uiState.value.nutrimentLogUiModel
-                require(logModel != null)
+                val logId = _uiState.value.nutrimentLogId
+                require(logId != null) {"Invalid Log-ID"}
+
+                val nutrimentId = _uiState.value.nutritionUiModel.id
+                require(nutrimentId != null) {"Invalid Nutriment-ID"}
 
                 updateNutrimentLogUseCase.update(
-                    NutrimentUiLogModel(
-                        id = logModel.id,
-                        nutrition = _uiState.value.nutritionUiModel,
-                        quantity = _uiState.value.quantity.toDouble(),
-                        unit = "ml", // TODO(measure unit class)
-                        timeStamp = logModel.timeStamp // TODO(timestamp to created / modified)
-                    )
+                    logId = logId,
+                    nutrimentId = nutrimentId,
+                    quantity = _uiState.value.quantity.toDouble(),
                 )
 
                 _uiState.update { it.copy(isEditMode = false) }
