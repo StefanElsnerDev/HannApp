@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutrimentUiLogModel
 import com.example.hannapp.data.model.NutritionUiModel
-import com.example.hannapp.data.model.convert.NutritionConverter
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
@@ -40,7 +39,6 @@ class NutritionSelectViewModelShould {
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
 
-    private val nutritionConverter = NutritionConverter
     private val testDispatcher = UnconfinedTestDispatcher()
 
     private val nutritions = listOf(
@@ -108,18 +106,6 @@ class NutritionSelectViewModelShould {
 
         whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
             flowOf(nutrimentLog)
-        )
-
-        whenever(nutritionConverter.entity(nutritions.first())).thenReturn(
-            NutritionConverter.InnerNutrition(
-                nutritions.first()
-            )
-        )
-
-        whenever(nutritionConverter.entity(nutritions.last())).thenReturn(
-            NutritionConverter.InnerNutrition(
-                nutritions.last()
-            )
         )
 
         nutritionViewModel = NutritionSelectViewModel(
@@ -273,12 +259,6 @@ class NutritionSelectViewModelShould {
 
         @BeforeEach
         fun beforeEach() = runTest {
-            whenever(nutritionConverter.uiModel(any())).thenReturn(
-                NutritionConverter.InnerNutritionUiModel(
-                    NutritionUiModel()
-                )
-            )
-
             nutritionViewModel.select(nutritionUiModels.first())
 
             nutritionViewModel.setQuantity(quantity = quantity.toString())
