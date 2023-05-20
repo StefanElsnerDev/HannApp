@@ -38,7 +38,8 @@ class NutritionUpdateViewModel @Inject constructor(
         .catch { throwable ->
             _uiState.update { state ->
                 state.copy(
-                    isLoading = false, errorMessage = throwable.message ?: "Something went wrong"
+                    isLoading = false,
+                    errorMessage = throwable.message ?: "Something went wrong"
                 )
             }
         }.cachedIn(viewModelScope)
