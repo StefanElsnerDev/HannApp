@@ -20,4 +20,6 @@
     <string name="nothing_selected">nothing selected</string>
     <string name="selection">Selection</string>
     <string name="edit_mode">Edit Mode</string>
+    <string name="createdAt">created at</string>
+    <string name="modifiedAt">modified at</string>
 </resources>

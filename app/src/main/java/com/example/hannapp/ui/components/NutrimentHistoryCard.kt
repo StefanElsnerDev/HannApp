@@ -111,11 +111,30 @@ fun NutrimentHistoryCard(
                 ).format(nutrimentUiLogModel.createdAt),
                 onValueChange = { _ -> },
                 label = {
-                    Text(text = stringResource(id = R.string.time))
+                    Text(text = stringResource(id = R.string.createdAt))
                 },
                 textStyle = MaterialTheme.typography.labelMedium,
                 enabled = false
             )
+
+            if (nutrimentUiLogModel.modifiedAt != null) {
+                TextField(
+                    modifier = Modifier.weight(1f),
+                    value = SimpleDateFormat(
+                        "k:m",
+                        Locale.getDefault()
+                    ).format(nutrimentUiLogModel.modifiedAt),
+                    onValueChange = { _ -> },
+                    label = {
+                        Text(
+                            text = stringResource(id = R.string.modifiedAt),
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    },
+                    textStyle = MaterialTheme.typography.labelMedium,
+                    enabled = false
+                )
+            }
         }
     }
 }
@@ -125,7 +144,35 @@ fun NutrimentHistoryCard(
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun NutrimentHistoryCard_LightMode() {
+fun NutrimentHistoryCard_WithOutModified_LightMode() {
+    HannAppTheme {
+        NutrimentHistoryCard(
+            modifier = Modifier,
+            nutrimentUiLogModel = NutrimentUiLogModel(
+                id = 123,
+                nutrition = NutritionUiModel(
+                    name = "Cola",
+                    protein = "1.23",
+                    fat = "5.6",
+                    kcal = "8.9"
+                ),
+                quantity = 12.345,
+                unit = "g",
+                createdAt = 1681801313,
+                modifiedAt = null
+            ),
+            onClick = {},
+            onLongClick = {}
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
+@Composable
+fun NutrimentHistoryCard_WithModified_LightMode() {
     HannAppTheme {
         NutrimentHistoryCard(
             modifier = Modifier,
