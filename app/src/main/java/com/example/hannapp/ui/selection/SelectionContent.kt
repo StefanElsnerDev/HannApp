@@ -71,7 +71,7 @@ fun SelectionContent(
                 }
             }
 
-            when (uiState.isSelectionValid) {
+            when (uiState.nutritionUiModel.id != null) {
                 false -> EmptySelectionDropDownMenu(
                     modifier = Modifier.fillMaxWidth()
                 ) {

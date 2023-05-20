@@ -111,7 +111,6 @@ class NutritionSelectViewModel @Inject constructor(
                 }
             }
         }
-        validateSelection()
     }
 
     fun setQuantity(quantity: String) = _uiState.update { it.copy(quantity = quantity) }
@@ -152,7 +151,6 @@ class NutritionSelectViewModel @Inject constructor(
                 isEditMode = true
             )
         }
-        validateSelection()
     }
 
     fun update() {
@@ -187,7 +185,6 @@ class NutritionSelectViewModel @Inject constructor(
                 isEditMode = false
             )
         }
-        validateSelection()
     }
 
     private fun updateErrorState(message: String) {
@@ -202,7 +199,6 @@ class NutritionSelectViewModel @Inject constructor(
     fun clearAll() {
         clearHistory()
         unselect()
-        validateSelection()
     }
 
     private fun clearHistory(){
@@ -220,14 +216,6 @@ class NutritionSelectViewModel @Inject constructor(
 
     private fun unselect(){
         _uiState.value.nutritionUiModel = NutritionUiModel()
-    }
-
-    private fun validateSelection(){
-        _uiState.update { state ->
-            state.copy(
-                isSelectionValid = state.nutritionUiModel.id != null
-            )
-        }
     }
 
     inner class Memento(

@@ -11,7 +11,7 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
-import com.example.hannapp.provider.NutritionUiModelAndValidationArgumentsProvider
+import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUiState
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +26,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
@@ -231,7 +229,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitUiStateWithErrorStateByDefault() {
-            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNull()
         }
 
         @Test
@@ -247,27 +245,14 @@ class NutritionSelectViewModelShould {
         fun emitUiStateWithValidationBasedOnModelId() {
             nutritionViewModel.select(nutritionUiModels.first())
 
-            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isTrue
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNotNull()
         }
 
         @Test
         fun emitErrorStateOnInvalidSelection() {
             nutritionViewModel.select(NutritionUiModel(id = null))
 
-            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
             assertThat(nutritionViewModel.uiState.value.errorMessage).isEqualTo("Invalid selection")
-        }
-    }
-
-    @Nested
-    inner class ValidateSelection{
-
-        @ParameterizedTest
-        @ArgumentsSource(NutritionUiModelAndValidationArgumentsProvider::class)
-        fun emitValidationStateOnSelection(selectedModel: NutritionUiModel, expectedValidation: Boolean){
-            nutritionViewModel.select(nutritionUiModel = selectedModel)
-
-            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isEqualTo(expectedValidation)
         }
     }
 
@@ -384,7 +369,7 @@ class NutritionSelectViewModelShould {
         fun emitStateWithEmptyModelState(){
             nutritionViewModel.clearAll()
 
-            assertThat(nutritionViewModel.uiState.value.isSelectionValid).isFalse
+            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNull()
         }
     }
 
