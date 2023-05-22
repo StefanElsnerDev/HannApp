@@ -171,7 +171,7 @@ class NutritionSelectViewModel @Inject constructor(
                 require(isInserted) { R.string.insertion_failed }
             } catch (e: IllegalArgumentException) {
                 updateErrorState(
-                    stringRes = e.message?.toInt(),
+                    stringRes = e.message?.toIntOrNull(),
                     string = e.message,
                 )
             } catch (e: NumberFormatException) {
@@ -220,7 +220,7 @@ class NutritionSelectViewModel @Inject constructor(
                 _uiState.update { it.copy(isEditMode = false) }
             } catch (e: IllegalArgumentException) {
                 updateErrorState(
-                    stringRes = e.message?.toInt(),
+                    stringRes = e.message?.toIntOrNull(),
                     string = e.message,
                 )
             } catch (e: NumberFormatException) {
