@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +37,6 @@ import kotlinx.coroutines.flow.flowOf
 fun SelectionContent(
     modifier: Modifier,
     uiState: NutrimentSelectUiState,
-    snackBarHost: SnackbarHostState,
     onClickBoxClick: () -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
@@ -60,18 +57,6 @@ fun SelectionContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var expanded by remember { mutableStateOf(false) }
-
-            uiState.errorMessage?.let {
-                val errorMessageText: String = if (it.messageRes!=null) stringResource(id = it.messageRes) else it.message ?: ""
-                val retryMessageText = stringResource(id = R.string.okay)
-
-                LaunchedEffect(errorMessageText, retryMessageText, snackBarHost) {
-                    snackBarHost.showSnackbar(
-                        message = errorMessageText,
-                        actionLabel = retryMessageText
-                    )
-                }
-            }
 
             when (uiState.nutritionUiModel.id != null) {
                 false -> EmptySelectionDropDownMenu(
@@ -127,7 +112,6 @@ fun SelectionContent_LightMode() {
         SelectionContent(
             modifier = Modifier,
             uiState = NutrimentSelectUiState.LogUiState(),
-            snackBarHost = SnackbarHostState(),
             quantity = "",
             onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
