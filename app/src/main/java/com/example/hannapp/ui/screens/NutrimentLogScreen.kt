@@ -172,17 +172,17 @@ fun NutrimentLogContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(480.dp),
-                        uiState,
-                        onClickBoxClick,
-                        quantity,
-                        onQuantityChanged,
-                        focusManager,
-                        onAdd,
-                        selectedNutriment,
-                        onNutrimentSelected,
-                        pagingItems,
-                        loggedNutriments,
-                        onLoggedNutrimentSelected
+                        uiState = uiState,
+                        onClickBoxClick = onClickBoxClick,
+                        quantity = quantity,
+                        onQuantityChanged = onQuantityChanged,
+                        focusManager = focusManager,
+                        onAdd = onAdd,
+                        selectedNutriment = selectedNutriment,
+                        onNutrimentSelected = onNutrimentSelected,
+                        pagingItems = pagingItems,
+                        loggedNutriments = loggedNutriments,
+                        onLoggedNutrimentSelected = onLoggedNutrimentSelected,
                     )
 
                     CalculationContent(
@@ -204,17 +204,17 @@ fun NutrimentLogContent(
                 ) {
                     LogGroup(
                         modifier = Modifier.fillMaxWidth(0.5f),
-                        uiState,
-                        onClickBoxClick,
-                        quantity,
-                        onQuantityChanged,
-                        focusManager,
-                        onAdd,
-                        selectedNutriment,
-                        onNutrimentSelected,
-                        pagingItems,
-                        loggedNutriments,
-                        onLoggedNutrimentSelected
+                        uiState = uiState,
+                        onClickBoxClick = onClickBoxClick,
+                        quantity = quantity,
+                        onQuantityChanged = onQuantityChanged,
+                        focusManager = focusManager,
+                        onAdd = onAdd,
+                        selectedNutriment = selectedNutriment,
+                        onNutrimentSelected = onNutrimentSelected,
+                        pagingItems = pagingItems,
+                        loggedNutriments = loggedNutriments,
+                        onLoggedNutrimentSelected = onLoggedNutrimentSelected,
                     )
 
                     Spacer(modifier = Modifier.height(SPACE_VERTICAL))
