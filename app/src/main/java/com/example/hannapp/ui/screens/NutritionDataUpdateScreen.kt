@@ -89,6 +89,7 @@ fun NutritionDataUpdateContent(
                 nutritionUiModel = componentUiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
+                onLastItem = onUpdate,
                 uiComponents = uiComponents,
                 errors = componentUiState.errors,
                 showErrors = componentUiState.showErrors
