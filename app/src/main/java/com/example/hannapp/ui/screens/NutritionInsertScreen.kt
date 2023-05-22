@@ -116,7 +116,8 @@ fun NutritionInsertContent(
                     uiComponents = uiComponents,
                     nutritionUiModel = nutritionUiModel,
                     errors = errors,
-                    showErrors = showErrors
+                    showErrors = showErrors,
+                    onLastItem = onAdd,
                 )
 
                 if (expanded) {
