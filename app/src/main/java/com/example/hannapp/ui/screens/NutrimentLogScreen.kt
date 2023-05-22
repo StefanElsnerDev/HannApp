@@ -3,11 +3,13 @@ package com.example.hannapp.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -55,6 +57,7 @@ import com.example.hannapp.ui.theme.Constraints.SPACE_VERTICAL
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
+import com.example.hannapp.utils.WindowSize
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -171,7 +174,9 @@ fun NutrimentLogContent(
                     LogGroup(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(480.dp),
+                            .heightIn(
+                                min = 0.dp,
+                                max = WindowSize.COMPACT.size),
                         uiState = uiState,
                         onClickBoxClick = onClickBoxClick,
                         quantity = quantity,
