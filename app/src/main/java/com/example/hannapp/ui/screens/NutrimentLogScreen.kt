@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -35,6 +36,7 @@ import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.AppTopBar
 import com.example.hannapp.ui.components.NavigationBar
+import com.example.hannapp.ui.components.SnackBar
 import com.example.hannapp.ui.history.NutrimentHistoryContent
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationContent
@@ -66,8 +68,9 @@ fun NutrimentLogContent(
     onAbort: () -> Unit = {},
     clear: () -> Unit
 ) {
-    val snackBarHost = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
+    val error = uiState.errorMessage
 
     AppScaffold(
         topBar = {
@@ -115,7 +118,27 @@ fun NutrimentLogContent(
             }
         },
         bottomBar = { NavigationBar(navController) },
-        snackBarHost = { SnackbarHost(hostState = snackBarHost) },
+        snackBarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    data.visuals.actionLabel?.let {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = PADDING),
+                            contentAlignment = Alignment.BottomCenter,
+                        ) {
+                            SnackBar(
+                                message = data.visuals.message,
+                                actionLabel = it,
+                                onAction = { data.dismiss() },
+                            )
+                        }
+                    }
+                },
+            )
+        },
         floatingActionButton = {
             if (!isEditMode) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
@@ -140,7 +163,7 @@ fun NutrimentLogContent(
                 SelectionContent(
                     modifier = Modifier.fillMaxWidth(),
                     uiState = uiState,
-                    snackBarHost = snackBarHost,
+                    snackBarHost = snackbarHostState,
                     onClickBoxClick = onClickBoxClick,
                     quantity = quantity,
                     onQuantityChanged = onQuantityChanged,
@@ -171,6 +194,19 @@ fun NutrimentLogContent(
                     .padding(horizontal = PADDING),
                 mood = Mood.GREEN
             )
+
+            if (error != null) {
+                val label = stringResource(id = R.string.okay)
+                val errorMessage =
+                    error.messageRes?.let { stringResource(id = it) } ?: error.message ?: ""
+
+                LaunchedEffect(error) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        actionLabel = label,
+                    )
+                }
+            }
         }
     }
 }
