@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,9 +21,11 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.NutrimentCard
+import com.example.hannapp.ui.components.SnackBar
 import com.example.hannapp.ui.dropdown.DropDownDialog
 import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.NutritionDataGroup
+import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.ComponentUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
@@ -42,10 +45,34 @@ fun NutritionDataUpdateContent(
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
 ) {
+    val error = uiState.errorMessage
+    val snackbarHostState = remember { SnackbarHostState() }
+
     AppScaffold(
         floatingActionButton = {
             FAB({ Icon(painterResource(id = R.drawable.change), "") }) { onUpdate() }
-        }
+        },
+        snackBarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    data.visuals.actionLabel?.let {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = PADDING),
+                            contentAlignment = Alignment.BottomCenter,
+                        ) {
+                            SnackBar(
+                                message = data.visuals.message,
+                                actionLabel = it,
+                                onAction = { data.dismiss() },
+                            )
+                        }
+                    }
+                },
+            )
+        },
     ) {
         Column(
             modifier = Modifier
@@ -95,6 +122,19 @@ fun NutritionDataUpdateContent(
                 errors = componentUiState.errors,
                 showErrors = componentUiState.showErrors
             )
+
+            if (error != null) {
+                val label = stringResource(id = R.string.okay)
+                val errorMessage =
+                    error.messageRes?.let { stringResource(id = it) } ?: error.message ?: ""
+
+                LaunchedEffect(error) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        actionLabel = label,
+                    )
+                }
+            }
         }
     }
 }
