@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -44,6 +45,7 @@ fun SelectionContent(
     onQuantityChanged: (String) -> Unit,
     selectedNutriment: NutritionUiModel,
     onNutrimentChanged: (NutritionUiModel) -> Unit,
+    onQuantityEntered: () -> Unit = {},
     pagingItems: LazyPagingItems<NutritionUiModel>,
 ) {
     Surface(
@@ -93,7 +95,10 @@ fun SelectionContent(
                 onValueChange = { onQuantityChanged(it) },
                 modifier = Modifier,
                 label = stringResource(id = R.string.quantity),
-                isError = false
+                isError = false,
+                keyboardActions = KeyboardActions(
+                    onDone = { onQuantityEntered() }
+                ),
             )
 
             if (expanded) {
