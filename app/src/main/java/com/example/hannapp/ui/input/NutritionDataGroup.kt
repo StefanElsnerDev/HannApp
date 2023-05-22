@@ -35,6 +35,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
 fun NutritionDataGroup(
+    modifier: Modifier = Modifier,
     nutritionUiModel: NutritionUiModel,
     errors: Set<NutritionDataComponent>,
     uiComponents: List<NutritionComponent>,
@@ -44,7 +45,7 @@ fun NutritionDataGroup(
     onComponentValueChange: (NutritionComponent, String) -> Unit = {_, _ ->},
 ) {
     Surface(
-        modifier = Modifier.padding(PADDING),
+        modifier = modifier.padding(PADDING),
         shape = MaterialTheme.shapes.medium
     ) {
         val localFocusManager = LocalFocusManager.current
