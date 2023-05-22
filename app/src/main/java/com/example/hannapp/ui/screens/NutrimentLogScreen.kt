@@ -1,11 +1,20 @@
 package com.example.hannapp.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +31,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -37,10 +47,9 @@ import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.AppTopBar
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.components.SnackBar
-import com.example.hannapp.ui.history.NutrimentHistoryContent
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.output.CalculationContent
-import com.example.hannapp.ui.selection.SelectionContent
+import com.example.hannapp.ui.output.LogGroup
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.Constraints.SPACE_VERTICAL
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -48,7 +57,6 @@ import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutrimentLogContent(
     modifier: Modifier,
@@ -58,6 +66,7 @@ fun NutrimentLogContent(
     quantity: String,
     onQuantityChanged: (String) -> Unit,
     isEditMode: Boolean,
+    isCompactScreen: Boolean,
     onAdd: () -> Unit,
     navController: NavHostController,
     onClickBoxClick: () -> Unit,
@@ -148,65 +157,89 @@ fun NutrimentLogContent(
             }
         }
     ) { paddingValues ->
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(horizontal = PADDING)
-            ) {
-                SelectionContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    uiState = uiState,
-                    snackBarHost = snackbarHostState,
-                    onClickBoxClick = onClickBoxClick,
-                    quantity = quantity,
-                    onQuantityChanged = onQuantityChanged,
-                    onQuantityEntered = {
-                        focusManager.clearFocus()
-                        onAdd()
-                    },
-                    selectedNutriment = selectedNutriment,
-                    onNutrimentChanged = { onNutrimentSelected(it) },
-                    pagingItems = pagingItems,
-                )
 
-                Spacer(modifier = Modifier.height(SPACE_VERTICAL))
+        when (isCompactScreen) {
+            true -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    LogGroup(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(480.dp),
+                        uiState,
+                        onClickBoxClick,
+                        quantity,
+                        onQuantityChanged,
+                        focusManager,
+                        onAdd,
+                        selectedNutriment,
+                        onNutrimentSelected,
+                        pagingItems,
+                        loggedNutriments,
+                        onLoggedNutrimentSelected
+                    )
 
-                NutrimentHistoryContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    nutriments = loggedNutriments,
-                    onLongClick = {
-                        onLoggedNutrimentSelected(it)
-                        onQuantityChanged(it.quantity.toString())
-                    }
-                )
-            }
-
-            CalculationContent(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(horizontal = PADDING),
-                mood = Mood.GREEN
-            )
-
-            if (error != null) {
-                val label = stringResource(id = R.string.okay)
-                val errorMessage =
-                    error.messageRes?.let { stringResource(id = it) } ?: error.message ?: ""
-
-                LaunchedEffect(error) {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = label,
+                    CalculationContent(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(horizontal = PADDING),
+                        mood = Mood.GREEN
                     )
                 }
             }
+
+            false -> {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    LogGroup(
+                        modifier = Modifier.fillMaxWidth(0.5f),
+                        uiState,
+                        onClickBoxClick,
+                        quantity,
+                        onQuantityChanged,
+                        focusManager,
+                        onAdd,
+                        selectedNutriment,
+                        onNutrimentSelected,
+                        pagingItems,
+                        loggedNutriments,
+                        onLoggedNutrimentSelected
+                    )
+
+                    Spacer(modifier = Modifier.height(SPACE_VERTICAL))
+
+                    CalculationContent(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(horizontal = PADDING),
+                        mood = Mood.GREEN
+                    )
+                }
+            }
+        }
+
+    }
+    if (error != null) {
+        val label = stringResource(id = R.string.okay)
+        val errorMessage =
+            error.messageRes?.let { stringResource(id = it) } ?: error.message ?: ""
+
+        LaunchedEffect(error) {
+            snackbarHostState.showSnackbar(
+                message = errorMessage,
+                actionLabel = label,
+            )
         }
     }
 }
@@ -229,6 +262,7 @@ fun NutrimentLogScreen(
         quantity = uiState.quantity,
         onQuantityChanged = { viewModel.setQuantity(it) },
         isEditMode = uiState is NutrimentSelectUiState.EditLogUiState,
+        isCompactScreen = isCompactScreen,
         onAdd = { viewModel.add() },
         navController = navController,
         onClickBoxClick = { viewModel.getAll() },
@@ -286,6 +320,30 @@ fun NutrimentLogScreen_LightMode() {
             quantity = "12.34",
             onQuantityChanged = {},
             isEditMode = false,
+            isCompactScreen = false,
+            onAdd = {},
+            onClickBoxClick = {},
+            navController = rememberNavController(),
+            selectedNutriment = NutritionUiModel(),
+            onNutrimentSelected = {},
+            onLoggedNutrimentSelected = {},
+            clear = {})
+    }
+}
+
+@Preview(device = "spec:width=411dp,height=891dp")
+@Composable
+fun NutrimentLogScreen_Compact_LightMode() {
+    HannAppTheme {
+        NutrimentLogContent(
+            modifier = Modifier,
+            uiState = NutrimentSelectUiState.LogUiState(),
+            pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
+            loggedNutriments = dummyList,
+            quantity = "12.34",
+            onQuantityChanged = {},
+            isEditMode = false,
+            isCompactScreen = true,
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
@@ -308,6 +366,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             quantity = "12.34",
             onQuantityChanged = {},
             isEditMode = true,
+            isCompactScreen = false,
             onAdd = {},
             onClickBoxClick = {},
             navController = rememberNavController(),
