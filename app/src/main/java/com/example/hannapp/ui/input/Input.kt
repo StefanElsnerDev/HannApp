@@ -1,10 +1,12 @@
 package com.example.hannapp.ui.input
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -17,7 +19,10 @@ fun InputField(
     modifier: Modifier,
     label: String,
     isError: Boolean = false,
-    supportingText: String = ""
+    supportingText: String = "",
+    keyboardType: KeyboardType = KeyboardType.Number,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    imeAction: ImeAction = ImeAction.Default,
     ) {
     OutlinedTextField(
         modifier = modifier,
@@ -29,7 +34,12 @@ fun InputField(
         supportingText = { Text(text = supportingText)},
         isError = isError,
         textStyle = MaterialTheme.typography.labelMedium,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction,
+        ),
+        keyboardActions = keyboardActions
     )
 }
 
