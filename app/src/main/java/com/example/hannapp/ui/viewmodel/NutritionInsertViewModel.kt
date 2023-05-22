@@ -41,7 +41,7 @@ class NutritionInsertViewModel @Inject constructor(
             try {
                 insertNutritionUseCase(_uiComponentState.value.nutritionUiModel)
             } catch (e: Exception) {
-                TODO("catch error and emit state")
+                // TODO("catch error and emit state")
             }
             clearState()
         }
