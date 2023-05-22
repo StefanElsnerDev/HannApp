@@ -34,6 +34,7 @@ fun SearchBar(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         keyboardOptions = KeyboardOptions(
+            autoCorrect = true,
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Search
         ),
