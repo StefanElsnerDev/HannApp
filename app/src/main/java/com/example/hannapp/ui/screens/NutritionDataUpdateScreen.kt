@@ -86,6 +86,7 @@ fun NutritionDataUpdateContent(
             }
 
             NutritionDataGroup(
+                modifier = Modifier.wrapContentSize(),
                 nutritionUiModel = componentUiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,

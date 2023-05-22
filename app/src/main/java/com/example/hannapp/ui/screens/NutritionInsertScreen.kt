@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -124,6 +125,7 @@ fun NutritionInsertContent(
                 )
 
                 NutritionDataGroup(
+                    modifier = Modifier.wrapContentSize(),
                     onComponentValueChange = onComponentValueChange,
                     onReset = onReset,
                     uiComponents = uiComponents,
