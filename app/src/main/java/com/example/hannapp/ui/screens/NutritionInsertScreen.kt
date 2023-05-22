@@ -1,6 +1,5 @@
 package com.example.hannapp.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +10,13 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +25,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Alcohol
+import com.example.hannapp.data.distinct.Carbohydrates
+import com.example.hannapp.data.distinct.Fat
+import com.example.hannapp.data.distinct.Fiber
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
+import com.example.hannapp.data.distinct.NutritionComponent
+import com.example.hannapp.data.distinct.NutritionDataComponent
+import com.example.hannapp.data.distinct.Protein
+import com.example.hannapp.data.distinct.Sugar
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
@@ -42,9 +53,10 @@ import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.flow.flowOf
 
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutritionInsertContent(
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     nutritionUiModel: NutritionUiModel = NutritionUiModel(),
     uiComponents: List<NutritionComponent> = listOf(
@@ -96,9 +108,10 @@ fun NutritionInsertContent(
             floatingActionButton = {
                 FAB({ Icon(Icons.Filled.Add, null) }) { onAdd() }
             }
-        ) {
+        ) { paddingValues ->
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier
+                    .padding(paddingValues),
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -149,38 +162,31 @@ fun NutritionInsertScreen(
     val uiComponents by viewModel.uiComponents.collectAsState()
     val pagingItems = viewModel.products.collectAsLazyPagingItems()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround,
-    ) {
-        NutritionInsertContent(
-            navController = navController,
-            nutritionUiModel = componentUiState.nutritionUiModel,
-            uiComponents = uiComponents,
-            pagingItems = pagingItems,
-            errors = componentUiState.errors,
-            showErrors = componentUiState.showErrors,
-            onComponentValueChange = { component, value ->
-                viewModel.onNutritionChange(
-                    component,
-                    value
-                )
+    NutritionInsertContent(
+        modifier = Modifier.fillMaxSize(),
+        navController = navController,
+        nutritionUiModel = componentUiState.nutritionUiModel,
+        uiComponents = uiComponents,
+        pagingItems = pagingItems,
+        errors = componentUiState.errors,
+        showErrors = componentUiState.showErrors,
+        onComponentValueChange = { component, value ->
+            viewModel.onNutritionChange(
+                component,
+                value
+            )
+            viewModel.validate()
+        },
+        onReset = { viewModel.resetError(it) },
+        onAdd = {
+            if (componentUiState.isValid) {
+                viewModel.insert()
+            } else {
                 viewModel.validate()
-            },
-            onReset = { viewModel.resetError(it) },
-            onAdd = {
-                if (componentUiState.isValid) {
-                    viewModel.insert()
-                } else {
-                    viewModel.validate()
-                    viewModel.showErrors()
-                }
-            },
-            onSearch = { viewModel.search(it) },
-            onItemSelect = { viewModel.select(it) }
-        )
-    }
+                viewModel.showErrors()
+            }
+        },
+        onSearch = { viewModel.search(it) },
+        onItemSelect = { viewModel.select(it) }
+    )
 }
