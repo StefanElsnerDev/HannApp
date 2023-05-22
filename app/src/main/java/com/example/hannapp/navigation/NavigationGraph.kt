@@ -30,7 +30,8 @@ fun NavigationGraph (
 
             NutrimentLogScreen(
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                isCompactScreen = isCompactScreen,
             )
         }
         composable(Destination.DATA.value) {

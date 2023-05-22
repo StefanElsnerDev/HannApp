@@ -214,7 +214,8 @@ fun NutrimentLogContent(
 @Composable
 fun NutrimentLogScreen(
     viewModel: NutritionSelectViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    isCompactScreen: Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
