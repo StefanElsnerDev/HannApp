@@ -144,6 +144,10 @@ fun NutrimentLogContent(
                     onClickBoxClick = onClickBoxClick,
                     quantity = quantity,
                     onQuantityChanged = onQuantityChanged,
+                    onQuantityEntered = {
+                        focusManager.clearFocus()
+                        onAdd()
+                    },
                     selectedNutriment = selectedNutriment,
                     onNutrimentChanged = { onNutrimentSelected(it) },
                     pagingItems = pagingItems,
