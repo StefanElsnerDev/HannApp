@@ -39,8 +39,9 @@ fun NutritionDataGroup(
     errors: Set<NutritionDataComponent>,
     uiComponents: List<NutritionComponent>,
     showErrors: Boolean,
-    onReset: (NutritionDataComponent) -> Unit,
-    onComponentValueChange: (NutritionComponent, String) -> Unit,
+    onLastItem: ()->Unit = {},
+    onReset: (NutritionDataComponent) -> Unit = {},
+    onComponentValueChange: (NutritionComponent, String) -> Unit = {_, _ ->},
 ) {
     Surface(
         modifier = Modifier.padding(PADDING),
@@ -59,7 +60,9 @@ fun NutritionDataGroup(
                     onNext = {
                         localFocusManager.moveFocus(FocusDirection.Next)
                     },
-                    onDone = { TODO("action on last item") },
+                    onDone = {
+                        localFocusManager.clearFocus()
+                        onLastItem() },
                 )
                 val isError = errors.contains(component.type) && showErrors
 
