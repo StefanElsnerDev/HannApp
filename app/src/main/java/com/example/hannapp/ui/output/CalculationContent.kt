@@ -24,7 +24,7 @@ fun CalculationContent(
     mood: Mood
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
         shape = MaterialTheme.shapes.medium,
