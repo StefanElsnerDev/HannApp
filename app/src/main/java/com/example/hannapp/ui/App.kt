@@ -3,6 +3,7 @@ package com.example.hannapp.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
@@ -11,7 +12,9 @@ import com.example.hannapp.navigation.NavigationGraph
 import com.example.hannapp.ui.theme.HannAppTheme
 
 @Composable
-fun App() {
+fun App(
+    widthSizeClass: WindowWidthSizeClass
+) {
     HannAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -21,7 +24,8 @@ fun App() {
 
             NavigationGraph(
                 navController = navController,
-                startDestination = Destination.SELECTION.value
+                startDestination = Destination.SELECTION.value,
+                isCompactScreen = widthSizeClass == WindowWidthSizeClass.Compact
             )
         }
     }

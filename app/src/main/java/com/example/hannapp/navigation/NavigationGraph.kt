@@ -21,7 +21,8 @@ enum class Destination(val value: String) {
 @Composable
 fun NavigationGraph (
     navController: NavHostController,
-    startDestination: String
+    startDestination: String,
+    isCompactScreen: Boolean,
 ){
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Destination.SELECTION.value) {
