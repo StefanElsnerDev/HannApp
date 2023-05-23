@@ -62,7 +62,7 @@ class NutritionInsertViewModel @Inject constructor(
                     carbohydrates = product.nutriments.carbohydrates.toString(),
                     sugar = product.nutriments.sugar.toString(),
                     fiber = product.nutriments.fiber.toString(),
-                    alcohol = product.nutriments.alcohol.toString(),
+                    alcohol = product.nutriments.alcohol.toString()
                 )
             )
         }

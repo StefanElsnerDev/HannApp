@@ -32,7 +32,6 @@ import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
 import kotlinx.coroutines.flow.flowOf
 
-
 @Composable
 fun SelectionContent(
     modifier: Modifier,
@@ -43,7 +42,7 @@ fun SelectionContent(
     selectedNutriment: NutritionUiModel,
     onNutrimentChanged: (NutritionUiModel) -> Unit,
     onQuantityEntered: () -> Unit = {},
-    pagingItems: LazyPagingItems<NutritionUiModel>,
+    pagingItems: LazyPagingItems<NutritionUiModel>
 ) {
     Surface(
         modifier = modifier.wrapContentHeight(),
@@ -83,7 +82,7 @@ fun SelectionContent(
                 isError = false,
                 keyboardActions = KeyboardActions(
                     onDone = { onQuantityEntered() }
-                ),
+                )
             )
 
             if (expanded) {

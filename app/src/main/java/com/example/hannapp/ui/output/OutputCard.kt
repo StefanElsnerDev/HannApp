@@ -41,16 +41,18 @@ fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, te
                 .clip(RoundedCornerShape(12.dp))
         )
         OutlinedTextField(
-            value = text, onValueChange = {},
+            value = text,
+            onValueChange = {},
             readOnly = true,
             textStyle = MaterialTheme.typography.titleMedium,
-            label = { Text(text = label) })
+            label = { Text(text = label) }
+        )
     }
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_NO)
 @Composable
-fun OutputCardPreview_LightMode(){
+fun OutputCardPreview_LightMode() {
     HannAppTheme {
         OutputCard(
             modifier = Modifier,
@@ -63,7 +65,7 @@ fun OutputCardPreview_LightMode(){
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun OutputCardPreview_DarkMode(){
+fun OutputCardPreview_DarkMode() {
     HannAppTheme {
         OutputCard(
             modifier = Modifier,

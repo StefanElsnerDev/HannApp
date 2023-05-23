@@ -7,7 +7,7 @@ import com.example.hannapp.data.source.ProductSearchPagingSource
 import javax.inject.Inject
 
 class ProductSearchRepository @Inject constructor(
-    private val productSearchApi: ProductSearchApi,
+    private val productSearchApi: ProductSearchApi
 ) {
 
     fun search(searchString: String, pageSize: Int) = Pager(

@@ -25,7 +25,6 @@ import com.example.hannapp.ui.theme.HannAppTheme
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 fun NutrimentHistoryCard(
@@ -38,7 +37,8 @@ fun NutrimentHistoryCard(
         modifier = modifier
             .combinedClickable(
                 onClick = { onClick(nutrimentUiLogModel) },
-                onLongClick = { onLongClick(nutrimentUiLogModel) })
+                onLongClick = { onLongClick(nutrimentUiLogModel) }
+            )
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
     ) {
@@ -47,7 +47,7 @@ fun NutrimentHistoryCard(
             text = nutrimentUiLogModel.nutrition.name,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -128,7 +128,7 @@ fun NutrimentHistoryCard(
                     label = {
                         Text(
                             text = stringResource(id = R.string.modifiedAt),
-                            color = MaterialTheme.colorScheme.error,
+                            color = MaterialTheme.colorScheme.error
                         )
                     },
                     textStyle = MaterialTheme.typography.labelMedium,

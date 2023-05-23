@@ -3,7 +3,13 @@ package com.example.hannapp.ui.output
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -27,7 +33,7 @@ fun CalculationContent(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.medium
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -56,7 +62,8 @@ fun CalculationContent(
                 modifier = Modifier.size(128.dp)
                     .padding(PADDING),
 
-                mood = mood)
+                mood = mood
+            )
         }
     }
 }

@@ -28,14 +28,26 @@ class GetProductSearchResultsCaseShould {
             code = "12345",
             productName = "Apple",
             nutriments = Nutriments(
-                1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                1.1,
+                2.2,
+                3.3,
+                3.3,
+                4.4,
+                5.5,
+                6.6
             )
         ),
         Product(
             code = "6789",
             productName = "Apple Green",
             nutriments = Nutriments(
-                1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                1.1,
+                2.2,
+                3.3,
+                3.3,
+                4.4,
+                5.5,
+                6.6
             )
         )
     )
@@ -44,7 +56,6 @@ class GetProductSearchResultsCaseShould {
 
     @BeforeEach
     fun beforeEach() {
-
         whenever(productSearchRepository.search(any(), any())).thenReturn(
             flowOf(pagingData)
         )
@@ -63,7 +74,6 @@ class GetProductSearchResultsCaseShould {
 
     @Test
     fun emitSearchResults() = runTest {
-
         val result = getProductSearchResultsUseCase.search("apple juice", 24)
 
         Assertions.assertEquals(

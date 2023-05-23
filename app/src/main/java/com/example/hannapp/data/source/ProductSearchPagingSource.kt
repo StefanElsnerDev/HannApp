@@ -31,7 +31,7 @@ class ProductSearchPagingSource(
             if (response.isSuccessful) {
                 val resultBody = response.body()
 
-                require(resultBody!= null)
+                require(resultBody != null)
 
                 LoadResult.Page(
                     data = resultBody.products,
@@ -43,7 +43,6 @@ class ProductSearchPagingSource(
                     HttpException(response)
                 )
             }
-
         } catch (exception: HttpException) {
             return LoadResult.Error(exception)
         } catch (exception: Exception) {

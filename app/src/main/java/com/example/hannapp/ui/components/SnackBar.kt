@@ -26,7 +26,7 @@ fun SnackBar(
     modifier: Modifier = Modifier,
     message: String,
     actionLabel: String,
-    onAction: () -> Unit = {},
+    onAction: () -> Unit = {}
 ) {
     Card(
         modifier = modifier.wrapContentSize(),
@@ -37,16 +37,16 @@ fun SnackBar(
         Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 modifier = Modifier.padding(10.dp),
                 imageVector = Icons.Default.Notifications,
-                contentDescription = null,
+                contentDescription = null
             )
             Text(
                 text = message,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium
             )
             TextButton(onClick = { onAction() }) {
                 Text(text = actionLabel)
@@ -62,9 +62,9 @@ fun SnackBar_LightMode_Preview() {
         SnackBar(
             modifier = Modifier.fillMaxWidth(),
             message = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr," +
-                    " sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat," +
-                    " sed diam voluptua.",
-            actionLabel = "okay",
+                " sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat," +
+                " sed diam voluptua.",
+            actionLabel = "okay"
         )
     }
 }

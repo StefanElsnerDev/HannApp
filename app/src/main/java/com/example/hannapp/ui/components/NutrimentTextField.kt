@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 fun NutrimentTextField(
     modifier: Modifier,
     text: String,
-    label: @Composable() (() -> Unit),
+    label:
+        @Composable()
+        (() -> Unit)
 ) {
     TextField(
         modifier = modifier,
@@ -37,6 +39,6 @@ fun NutrimentTextField_LightMode() {
             .width(200.dp)
             .height(50.dp),
         text = "Important Text",
-        label = { Text(text = "Label") },
+        label = { Text(text = "Label") }
     )
 }

@@ -9,6 +9,6 @@ class InsertNutrimentLogUseCase @Inject constructor(
     suspend operator fun invoke(nutrimentId: Long, quantity: Double): Boolean =
         nutrimentLogRepository.log(
             nutrimentId = nutrimentId,
-            quantity = quantity,
+            quantity = quantity
         ) != -1L
 }

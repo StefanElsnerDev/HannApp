@@ -38,7 +38,7 @@ class InsertNutritionUseCaseShould {
     }
 
     @Test
-    fun invokeInsertOfRepository() = runTest{
+    fun invokeInsertOfRepository() = runTest {
         insertNutritionUseCase.invoke(NutritionUiModel())
 
         verify(nutritionRepository).insert(any())

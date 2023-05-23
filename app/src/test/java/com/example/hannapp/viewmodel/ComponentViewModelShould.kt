@@ -1,18 +1,28 @@
 package com.example.hannapp.viewmodel
 
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Alcohol
+import com.example.hannapp.data.distinct.Carbohydrates
+import com.example.hannapp.data.distinct.Fat
+import com.example.hannapp.data.distinct.Fiber
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
+import com.example.hannapp.data.distinct.NutritionDataComponent
+import com.example.hannapp.data.distinct.Protein
+import com.example.hannapp.data.distinct.Sugar
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.viewmodel.ComponentUiState
 import com.example.hannapp.ui.viewmodel.NutritionComponentViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.test.*
-import org.junit.jupiter.api.*
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ComponentViewModelShould {
 
-    class MockedComponentViewModel: NutritionComponentViewModel()
+    class MockedComponentViewModel : NutritionComponentViewModel()
 
     lateinit var mockedComponentViewModel: MockedComponentViewModel
 
@@ -43,7 +53,8 @@ class ComponentViewModelShould {
             val expectedComponentUiState = NutritionUiModel(fat = "987.6")
 
             mockedComponentViewModel.onNutritionChange(
-                Fat(), "987.6"
+                Fat(),
+                "987.6"
             )
 
             Assertions.assertEquals(expectedComponentUiState, mockedComponentViewModel.uiComponentState.value.nutritionUiModel)
@@ -56,15 +67,16 @@ class ComponentViewModelShould {
             )
 
             mockedComponentViewModel.onNutritionChange(
-                Fat(), "123.4"
+                Fat(),
+                "123.4"
             )
 
             Assertions.assertEquals(expectedComponentUiState, mockedComponentViewModel.uiComponentState.value.nutritionUiModel)
         }
     }
-    
+
     @Nested
-    inner class Validate{
+    inner class Validate {
 
         @Test
         fun emitInvalidDataState() {
@@ -73,17 +85,17 @@ class ComponentViewModelShould {
         }
 
         @Test
-        fun emitErrorUiState(){
+        fun emitErrorUiState() {
             val expectedErrors = setOf(
-                    NutritionDataComponent.NAME,
-                    NutritionDataComponent.KCAL,
-                    NutritionDataComponent.PROTEIN,
-                    NutritionDataComponent.FAT,
-                    NutritionDataComponent.CARBOHYDRATES,
-                    NutritionDataComponent.SUGAR,
-                    NutritionDataComponent.FIBER,
-                    NutritionDataComponent.ALCOHOL
-                )
+                NutritionDataComponent.NAME,
+                NutritionDataComponent.KCAL,
+                NutritionDataComponent.PROTEIN,
+                NutritionDataComponent.FAT,
+                NutritionDataComponent.CARBOHYDRATES,
+                NutritionDataComponent.SUGAR,
+                NutritionDataComponent.FIBER,
+                NutritionDataComponent.ALCOHOL
+            )
 
             mockedComponentViewModel.validate()
 
@@ -99,7 +111,7 @@ class ComponentViewModelShould {
             Assertions.assertEquals(true, mockedComponentViewModel.uiComponentState.value.isValid)
         }
 
-        private fun MockedComponentViewModel.fakeCompletion(){
+        private fun MockedComponentViewModel.fakeCompletion() {
             listOf(
                 Name(),
                 Kcal(),
@@ -109,16 +121,17 @@ class ComponentViewModelShould {
                 Sugar(),
                 Fiber(),
                 Alcohol()
-            ).forEach{
+            ).forEach {
                 this.onNutritionChange(
-                    it, "123.4"
+                    it,
+                    "123.4"
                 )
             }
         }
     }
 
     @Nested
-    inner class ResetErrors{
+    inner class ResetErrors {
         @Test
         fun resetErrorOfComponent() {
             val expectedComponentUiState = ComponentUiState(

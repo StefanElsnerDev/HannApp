@@ -32,8 +32,9 @@ fun NutrimentHistoryContent(
         shape = MaterialTheme.shapes.medium
     ) {
         LaunchedEffect(nutriments) {
-            if (listState.layoutInfo.totalItemsCount - 1 < nutriments.size)
+            if (listState.layoutInfo.totalItemsCount - 1 < nutriments.size) {
                 listState.animateScrollToItem(nutriments.size)
+            }
         }
 
         LazyColumn(

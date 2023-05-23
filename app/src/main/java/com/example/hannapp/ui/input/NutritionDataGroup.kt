@@ -40,9 +40,9 @@ fun NutritionDataGroup(
     errors: Set<NutritionDataComponent>,
     uiComponents: List<NutritionComponent>,
     showErrors: Boolean,
-    onLastItem: ()->Unit = {},
+    onLastItem: () -> Unit = {},
     onReset: (NutritionDataComponent) -> Unit = {},
-    onComponentValueChange: (NutritionComponent, String) -> Unit = {_, _ ->},
+    onComponentValueChange: (NutritionComponent, String) -> Unit = { _, _ -> }
 ) {
     Surface(
         modifier = modifier.padding(PADDING),
@@ -52,7 +52,7 @@ fun NutritionDataGroup(
 
         LazyVerticalGrid(
             modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant).padding(PADDING),
-            columns = GridCells.Adaptive(300.dp),
+            columns = GridCells.Adaptive(300.dp)
         ) {
             itemsIndexed(uiComponents) { index, component ->
                 val imeAction =
@@ -63,7 +63,8 @@ fun NutritionDataGroup(
                     },
                     onDone = {
                         localFocusManager.clearFocus()
-                        onLastItem() },
+                        onLastItem()
+                    }
                 )
                 val isError = errors.contains(component.type) && showErrors
 
@@ -83,7 +84,7 @@ fun NutritionDataGroup(
                     },
                     keyboardType = KeyboardType.Number,
                     keyboardActions = keyboardActions,
-                    imeAction = imeAction,
+                    imeAction = imeAction
                 )
             }
         }

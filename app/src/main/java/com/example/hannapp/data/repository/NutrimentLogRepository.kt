@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NutrimentLogRepository @Inject constructor(
-    private val nutrimentLogDao: NutrimentLogDao,
+    private val nutrimentLogDao: NutrimentLogDao
 ) {
     suspend fun log(nutrimentId: Long, quantity: Double) = nutrimentLogDao.insert(
         NutrimentLog(
@@ -17,7 +17,7 @@ class NutrimentLogRepository @Inject constructor(
             nutrimentId = nutrimentId,
             quantity = quantity,
             createdAt = System.currentTimeMillis(),
-            lastModifiedAt = null,
+            lastModifiedAt = null
         )
     )
 
@@ -36,7 +36,6 @@ class NutrimentLogRepository @Inject constructor(
         }
 
     suspend fun update(logId: Long, nutrimentId: Long, quantity: Double) {
-
         val createdAt = nutrimentLogDao.get(logId).createdAt
 
         nutrimentLogDao.update(

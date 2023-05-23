@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NutritionRepository @Inject constructor(
-    private val nutritionDao: NutritionDao,
+    private val nutritionDao: NutritionDao
 ) {
     suspend fun insert(nutritionUiModel: NutritionUiModel) =
         nutritionDao.insert(NutritionConverter.uiModel(nutritionUiModel).toEntity()) >= 0
@@ -28,8 +28,8 @@ class NutritionRepository @Inject constructor(
     fun getFood() = nutritionDao.getFood()
 
     suspend fun update(nutritionUiModel: NutritionUiModel) = nutritionDao.update(
-            NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()
-        ) == 1
+        NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()
+    ) == 1
 
     suspend fun delete(nutritionUiModel: NutritionUiModel) = nutritionDao.delete(
         NutritionConverter.uiModel(nutritionUiModel = nutritionUiModel).toEntity()

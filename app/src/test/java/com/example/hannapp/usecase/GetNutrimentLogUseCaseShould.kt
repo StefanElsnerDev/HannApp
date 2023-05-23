@@ -27,7 +27,7 @@ class GetNutrimentLogUseCaseShould {
             quantity = 1.23,
             unit = "g / ml",
             createdAt = 12345,
-            modifiedAt = 7878473,
+            modifiedAt = 7878473
         ),
         NutrimentUiLogModel(
             id = 2,
@@ -35,11 +35,10 @@ class GetNutrimentLogUseCaseShould {
             quantity = 9.87,
             unit = "g / ml",
             createdAt = 987654321,
-            modifiedAt = null,
+            modifiedAt = null
         )
     )
     private val logFlow = flowOf(nutrimentLogs)
-
 
     @BeforeEach
     fun beforeEach() = runTest {

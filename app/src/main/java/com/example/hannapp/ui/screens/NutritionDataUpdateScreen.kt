@@ -2,9 +2,24 @@ package com.example.hannapp.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,7 +31,16 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.hannapp.R
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Alcohol
+import com.example.hannapp.data.distinct.Carbohydrates
+import com.example.hannapp.data.distinct.Fat
+import com.example.hannapp.data.distinct.Fiber
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
+import com.example.hannapp.data.distinct.NutritionComponent
+import com.example.hannapp.data.distinct.NutritionDataComponent
+import com.example.hannapp.data.distinct.Protein
+import com.example.hannapp.data.distinct.Sugar
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
@@ -32,7 +56,6 @@ import com.example.hannapp.ui.viewmodel.NutritionUpdateUiState
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutritionDataUpdateContent(
     pagingItems: LazyPagingItems<NutritionUiModel>,
@@ -61,18 +84,18 @@ fun NutritionDataUpdateContent(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(bottom = PADDING),
-                            contentAlignment = Alignment.BottomCenter,
+                            contentAlignment = Alignment.BottomCenter
                         ) {
                             SnackBar(
                                 message = data.visuals.message,
                                 actionLabel = it,
-                                onAction = { data.dismiss() },
+                                onAction = { data.dismiss() }
                             )
                         }
                     }
-                },
+                }
             )
-        },
+        }
     ) {
         Column(
             modifier = Modifier
@@ -131,7 +154,7 @@ fun NutritionDataUpdateContent(
                 LaunchedEffect(error) {
                     snackbarHostState.showSnackbar(
                         message = errorMessage,
-                        actionLabel = label,
+                        actionLabel = label
                     )
                 }
             }
@@ -202,7 +225,7 @@ fun NutritionDataUpdate_LightMode() {
             onDeleteSelected = {},
             onComponentValueChange = { _, _ -> },
             onReset = {},
-            onUpdate = {},
+            onUpdate = {}
         )
     }
 }

@@ -31,13 +31,13 @@ class UpdateNutrimentLogUseCaseShould {
         updateNutrimentLogUseCase.update(
             logId = logId,
             nutrimentId = nutrimentId,
-            quantity = quantity,
+            quantity = quantity
         )
 
         verify(nutrimentLogRepository).update(
             logId = logId,
             nutrimentId = nutrimentId,
-            quantity = quantity,
+            quantity = quantity
         )
     }
 }

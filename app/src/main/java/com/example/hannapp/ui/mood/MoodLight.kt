@@ -19,7 +19,8 @@ enum class Mood(val value: String, @DrawableRes val drawable: Int) {
 @Composable
 fun MoodLight(
     modifier: Modifier = Modifier,
-    mood: Mood) {
+    mood: Mood
+) {
     Icon(
         modifier = modifier,
         painter = painterResource(id = mood.drawable),

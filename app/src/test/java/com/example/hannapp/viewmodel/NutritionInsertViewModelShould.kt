@@ -1,7 +1,9 @@
 package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Fat
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
@@ -12,9 +14,16 @@ import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Ignore
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
@@ -65,14 +74,15 @@ class NutritionInsertViewModelShould {
     }
 
     @Nested
-    inner class ClearErrorState{
+    inner class ClearErrorState {
 
         @Test
         fun clearUiStateOnInsert() {
             val expectedUiState = ComponentUiState()
 
             nutritionInsertViewModel.onNutritionChange(
-                Fat(), "123.4"
+                Fat(),
+                "123.4"
             )
 
             nutritionInsertViewModel.clearState()
@@ -82,21 +92,33 @@ class NutritionInsertViewModelShould {
     }
 
     @Nested
-    inner class SearchResults{
+    inner class SearchResults {
 
         private val products = listOf(
             Product(
                 code = "12345",
                 productName = "Apple",
                 nutriments = Nutriments(
-                    1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                    1.1,
+                    2.2,
+                    3.3,
+                    3.3,
+                    4.4,
+                    5.5,
+                    6.6
                 )
             ),
             Product(
                 code = "6789",
                 productName = "Apple Green",
                 nutriments = Nutriments(
-                    1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                    1.1,
+                    2.2,
+                    3.3,
+                    3.3,
+                    4.4,
+                    5.5,
+                    6.6
                 )
             )
         )
@@ -105,7 +127,7 @@ class NutritionInsertViewModelShould {
         private val flow = flowOf(pagingData)
 
         @BeforeEach
-        fun beforeEach() = runTest{
+        fun beforeEach() = runTest {
             whenever(getProductSearchResultsUseCase.search(any(), any())).thenReturn(
                 flow
             )
@@ -122,11 +144,10 @@ class NutritionInsertViewModelShould {
         @Test
         fun fetchProductFlow() = runTest {
             nutritionInsertViewModel.search("apple juice")
-
         }
 
         @Test
-        fun selectProduct(){
+        fun selectProduct() {
             val expectedNutritionUiModel = NutritionUiModel(
                 id = null,
                 name = "Delicious green Apple",
@@ -159,7 +180,7 @@ class NutritionInsertViewModelShould {
         }
 
         @Test
-        fun validateOnProductSelection(){
+        fun validateOnProductSelection() {
             val selectedProduct = Product(
                 code = "123",
                 productName = "Delicious green Apple",

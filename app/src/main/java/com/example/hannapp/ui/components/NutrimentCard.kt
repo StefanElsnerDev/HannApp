@@ -26,7 +26,6 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NutrimentCard(
@@ -38,7 +37,8 @@ fun NutrimentCard(
         modifier = Modifier
             .combinedClickable(
                 onClick = { onClick(nutritionUiModel) },
-                onLongClick = { onLongClick(nutritionUiModel) })
+                onLongClick = { onLongClick(nutritionUiModel) }
+            )
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .height(IntrinsicSize.Min)
             .padding(PADDING),

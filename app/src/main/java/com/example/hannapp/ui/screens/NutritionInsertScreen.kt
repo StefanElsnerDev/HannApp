@@ -74,7 +74,8 @@ fun NutritionInsertContent(
         PagingData.from(
             listOf(
                 Product(
-                    "123", "name",
+                    "123",
+                    "name",
                     Nutriments(1.2, 3.4, 5.5, 6.6, 7.7, 8.8, 0.0)
                 )
             )
@@ -132,7 +133,7 @@ fun NutritionInsertContent(
                     nutritionUiModel = nutritionUiModel,
                     errors = errors,
                     showErrors = showErrors,
-                    onLastItem = onAdd,
+                    onLastItem = onAdd
                 )
 
                 if (expanded) {

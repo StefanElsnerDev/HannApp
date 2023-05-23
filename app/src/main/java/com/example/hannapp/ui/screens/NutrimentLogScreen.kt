@@ -86,7 +86,7 @@ fun NutrimentLogContent(
     AppScaffold(
         topBar = {
             AppTopBar(
-                title = if(isEditMode) stringResource(id = R.string.edit_mode) else ""
+                title = if (isEditMode) stringResource(id = R.string.edit_mode) else ""
             ) {
                 when (isEditMode) {
                     true -> {
@@ -138,16 +138,16 @@ fun NutrimentLogContent(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(bottom = PADDING),
-                            contentAlignment = Alignment.BottomCenter,
+                            contentAlignment = Alignment.BottomCenter
                         ) {
                             SnackBar(
                                 message = data.visuals.message,
                                 actionLabel = it,
-                                onAction = { data.dismiss() },
+                                onAction = { data.dismiss() }
                             )
                         }
                     }
-                },
+                }
             )
         },
         floatingActionButton = {
@@ -175,7 +175,8 @@ fun NutrimentLogContent(
                             .fillMaxWidth()
                             .heightIn(
                                 min = 0.dp,
-                                max = WindowSize.COMPACT.size),
+                                max = WindowSize.COMPACT.size
+                            ),
                         uiState = uiState,
                         onClickBoxClick = onClickBoxClick,
                         quantity = quantity,
@@ -186,7 +187,7 @@ fun NutrimentLogContent(
                         onNutrimentSelected = onNutrimentSelected,
                         pagingItems = pagingItems,
                         loggedNutriments = loggedNutriments,
-                        onLoggedNutrimentSelected = onLoggedNutrimentSelected,
+                        onLoggedNutrimentSelected = onLoggedNutrimentSelected
                     )
 
                     Spacer(modifier = Modifier.height(SPACE_VERTICAL))
@@ -220,7 +221,7 @@ fun NutrimentLogContent(
                         onNutrimentSelected = onNutrimentSelected,
                         pagingItems = pagingItems,
                         loggedNutriments = loggedNutriments,
-                        onLoggedNutrimentSelected = onLoggedNutrimentSelected,
+                        onLoggedNutrimentSelected = onLoggedNutrimentSelected
                     )
 
                     Spacer(modifier = Modifier.height(SPACE_VERTICAL))
@@ -234,7 +235,6 @@ fun NutrimentLogContent(
                 }
             }
         }
-
     }
     if (error != null) {
         val label = stringResource(id = R.string.okay)
@@ -244,7 +244,7 @@ fun NutrimentLogContent(
         LaunchedEffect(error) {
             snackbarHostState.showSnackbar(
                 message = errorMessage,
-                actionLabel = label,
+                actionLabel = label
             )
         }
     }
@@ -254,7 +254,7 @@ fun NutrimentLogContent(
 fun NutrimentLogScreen(
     viewModel: NutritionSelectViewModel = hiltViewModel(),
     navController: NavHostController,
-    isCompactScreen: Boolean,
+    isCompactScreen: Boolean
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
@@ -290,7 +290,7 @@ private val dummyList = listOf(
         quantity = 123.4,
         unit = "g",
         createdAt = 1681801313,
-        modifiedAt = 1999801313,
+        modifiedAt = 1999801313
     ),
     NutrimentUiLogModel(
         id = 2,
@@ -333,7 +333,8 @@ fun NutrimentLogScreen_LightMode() {
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
             onLoggedNutrimentSelected = {},
-            clear = {})
+            clear = {}
+        )
     }
 }
 
@@ -356,7 +357,8 @@ fun NutrimentLogScreen_Compact_LightMode() {
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
             onLoggedNutrimentSelected = {},
-            clear = {})
+            clear = {}
+        )
     }
 }
 
@@ -379,6 +381,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
             onLoggedNutrimentSelected = {},
-            clear = {})
+            clear = {}
+        )
     }
 }

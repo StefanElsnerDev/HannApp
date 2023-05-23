@@ -1,7 +1,8 @@
 package com.example.hannapp.ui.dropdown
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -22,7 +23,9 @@ import kotlinx.coroutines.flow.flowOf
 fun <T : Any> DropDownDialog(
     pagingItems: LazyPagingItems<T>,
     onDismiss: () -> Unit,
-    itemContent: @Composable() ((T) -> Unit)
+    itemContent:
+        @Composable()
+        ((T) -> Unit)
 ) {
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -44,7 +47,8 @@ fun <T : Any> DropDownDialog(
     }
 }
 
-@Preview(showBackground = true,
+@Preview(
+    showBackground = true,
     device = "spec:width=800dp,height=1280dp,dpi=240,orientation=portrait",
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
@@ -53,7 +57,8 @@ fun DropDownList_LightMode() {
     HannAppTheme() {
         DropDownDialog(
             pagingItems = flowOf(PagingData.from(List(25) { it.toString() })).collectAsLazyPagingItems(),
-            onDismiss = {}) {
+            onDismiss = {}
+        ) {
             SimpleDropDownItem(
                 modifier = Modifier.fillMaxSize(),
                 item = it

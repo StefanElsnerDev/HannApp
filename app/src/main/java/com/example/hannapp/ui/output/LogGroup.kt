@@ -53,7 +53,7 @@ fun LogGroup(
             },
             selectedNutriment = selectedNutriment,
             onNutrimentChanged = { onNutrimentSelected(it) },
-            pagingItems = pagingItems,
+            pagingItems = pagingItems
         )
 
         Spacer(modifier = Modifier.height(Constraints.SPACE_VERTICAL))
@@ -78,7 +78,7 @@ private val dummyList = listOf(
         quantity = 123.4,
         unit = "g",
         createdAt = 1681801313,
-        modifiedAt = 1999801313,
+        modifiedAt = 1999801313
     ),
     NutrimentUiLogModel(
         id = 2,
@@ -118,7 +118,7 @@ fun NutrimentLogScreen_LightMode() {
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
             onLoggedNutrimentSelected = {},
-            focusManager = LocalFocusManager.current,
+            focusManager = LocalFocusManager.current
         )
     }
 }
@@ -139,7 +139,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
             onLoggedNutrimentSelected = {},
-            focusManager = LocalFocusManager.current,
+            focusManager = LocalFocusManager.current
         )
     }
 }

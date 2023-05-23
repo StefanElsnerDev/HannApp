@@ -15,7 +15,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -62,7 +65,7 @@ class NutritionSelectViewModelShould {
             quantity = 1.1,
             unit = "",
             createdAt = 1681839531,
-            modifiedAt = null,
+            modifiedAt = null
         ),
         NutrimentUiLogModel(
             id = 2,
@@ -70,7 +73,7 @@ class NutritionSelectViewModelShould {
             quantity = 2.2,
             unit = "",
             createdAt = 1681234731,
-            modifiedAt = null,
+            modifiedAt = null
         )
     )
 
@@ -215,12 +218,12 @@ class NutritionSelectViewModelShould {
     }
 
     @Nested
-    inner class SetQuantity{
+    inner class SetQuantity {
 
         private val quantity = "123.45"
 
         @Test
-        fun emitStateWithQuantity(){
+        fun emitStateWithQuantity() {
             nutritionViewModel.setQuantity(quantity = quantity)
 
             assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
@@ -272,7 +275,7 @@ class NutritionSelectViewModelShould {
         }
 
         @Test
-        fun clearsQuantityOnSuccesfulLog(){
+        fun clearsQuantityOnSuccesfulLog() {
             nutritionViewModel.add()
 
             assertThat(nutritionViewModel.uiState.value.quantity).isEmpty()
@@ -321,7 +324,7 @@ class NutritionSelectViewModelShould {
         }
 
         @Test
-        fun emitStateWithEmptyModelState(){
+        fun emitStateWithEmptyModelState() {
             nutritionViewModel.clearAll()
 
             assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNull()
@@ -349,7 +352,7 @@ class NutritionSelectViewModelShould {
             quantity = quantity,
             unit = "ml",
             createdAt = 123456789,
-            modifiedAt = null,
+            modifiedAt = null
         )
 
         private val substitutedNutriment = NutritionUiModel(
@@ -396,16 +399,16 @@ class NutritionSelectViewModelShould {
                 verify(updateNutrimentLogUseCase).update(
                     logId = logId,
                     nutrimentId = substitutedNutrimentId,
-                    quantity = substitutedQuantity,
+                    quantity = substitutedQuantity
                 )
             }
         }
 
         @Nested
-        inner class AbortUpdate{
+        inner class AbortUpdate {
 
             @BeforeEach
-            fun beforeEach(){
+            fun beforeEach() {
                 nutritionViewModel.select(nutritionUiModel = nutritionUiModel)
                 nutritionViewModel.setQuantity(quantity.toString())
 
@@ -413,7 +416,7 @@ class NutritionSelectViewModelShould {
             }
 
             @Test
-            fun restoreLogNutriment(){
+            fun restoreLogNutriment() {
                 nutritionViewModel.select(substitutedNutriment)
 
                 assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(substitutedNutriment)

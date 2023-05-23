@@ -21,28 +21,28 @@ class NutritionConverterShould {
     private val nutritionUiModel = NutritionUiModel(id = id, name = name, kcal = kcal.toString(), protein = protein.toString())
 
     @Test
-    fun convertNutritionModelToEntity(){
+    fun convertNutritionModelToEntity() {
         val result = nutritionConverter.model(nutritionModel).toEntity()
 
         Assertions.assertEquals(nutritionEntity, result)
     }
 
     @Test
-    fun convertNutritionEntityToModel(){
+    fun convertNutritionEntityToModel() {
         val result = nutritionConverter.entity(nutritionEntity).toModel()
 
         Assertions.assertEquals(nutritionModel, result)
     }
 
     @Test
-    fun convertUiNutritionModelToEntity(){
+    fun convertUiNutritionModelToEntity() {
         val result = nutritionConverter.uiModel(nutritionUiModel).toEntity()
 
         Assertions.assertEquals(nutritionEntity, result)
     }
 
     @Test
-    fun convertEntityToUiNutritionModel(){
+    fun convertEntityToUiNutritionModel() {
         val result = nutritionConverter.entity(nutritionEntity).toUiModel()
 
         Assertions.assertEquals(nutritionUiModel, result)

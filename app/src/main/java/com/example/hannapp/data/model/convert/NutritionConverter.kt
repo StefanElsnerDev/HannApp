@@ -45,9 +45,9 @@ object NutritionConverter {
             )
         }
     }
-    
-    class InnerNutrition(private val nutrition: Nutrition){
-        
+
+    class InnerNutrition(private val nutrition: Nutrition) {
+
         fun toModel() = nutrition.let {
             NutritionModel(
                 id = it.uid,
@@ -72,7 +72,7 @@ object NutritionConverter {
                 carbohydrates = it.carbohydrates?.toString() ?: "",
                 sugar = it.sugar?.toString() ?: "",
                 fiber = it.fiber?.toString() ?: "",
-                alcohol = it.alcohol?.toString() ?: "",
+                alcohol = it.alcohol?.toString() ?: ""
             )
         }
     }

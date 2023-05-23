@@ -39,7 +39,7 @@ sealed interface NutrimentSelectUiState {
         override val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
         override val quantity: String = "",
         override val isLoading: Boolean = false,
-        override val errorMessage: Message? = null,
+        override val errorMessage: Message? = null
     ) : NutrimentSelectUiState
 
     data class EditLogUiState(
@@ -47,7 +47,7 @@ sealed interface NutrimentSelectUiState {
         override val quantity: String = "",
         override val isLoading: Boolean = false,
         override val errorMessage: Message? = null,
-        val nutrimentLogId: Long? = null,
+        val nutrimentLogId: Long? = null
     ) : NutrimentSelectUiState
 }
 
@@ -66,7 +66,7 @@ data class NutrimentSelectViewModelUiState(
                 quantity = quantity,
                 isLoading = isLoading,
                 errorMessage = errorMessage,
-                nutrimentLogId = nutrimentLogId,
+                nutrimentLogId = nutrimentLogId
             )
         }
 
@@ -75,7 +75,7 @@ data class NutrimentSelectViewModelUiState(
                 nutritionUiModel = nutritionUiModel,
                 quantity = quantity,
                 isLoading = isLoading,
-                errorMessage = errorMessage,
+                errorMessage = errorMessage
             )
         }
     }
@@ -97,8 +97,10 @@ class NutritionSelectViewModel @Inject constructor(
     val uiState = _uiState
         .map(NutrimentSelectViewModelUiState::toUiState)
         .stateIn(
-        viewModelScope, SharingStarted.Eagerly, _uiState.value.toUiState()
-    )
+            viewModelScope,
+            SharingStarted.Eagerly,
+            _uiState.value.toUiState()
+        )
 
     private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
     val nutriments = _nutriments.cachedIn(viewModelScope)
@@ -110,12 +112,14 @@ class NutritionSelectViewModel @Inject constructor(
                     isLoading = false,
                     errorMessage = Message(
                         messageRes = null,
-                        message = it.message,
+                        message = it.message
                     )
                 )
             }
         }.stateIn(
-            viewModelScope, SharingStarted.Eagerly, emptyList()
+            viewModelScope,
+            SharingStarted.Eagerly,
+            emptyList()
         )
 
     fun getAll() {
@@ -126,7 +130,7 @@ class NutritionSelectViewModel @Inject constructor(
                 .catch { throwable ->
                     updateErrorState(
                         stringRes = R.string.loading_nutriments_failed,
-                        string = throwable.message,
+                        string = throwable.message
                     )
                 }.collectLatest { nutriments ->
                     _nutriments.emit(nutriments)
@@ -140,7 +144,7 @@ class NutritionSelectViewModel @Inject constructor(
                 null -> {
                     updateErrorState(
                         stringRes = R.string.invalid_selection,
-                        string = null,
+                        string = null
                     )
                 }
 
@@ -165,24 +169,24 @@ class NutritionSelectViewModel @Inject constructor(
 
                 val isInserted = insertNutrimentLogUseCase(
                     nutrimentId = id,
-                    quantity = quantity.toDouble(),
+                    quantity = quantity.toDouble()
                 )
 
                 require(isInserted) { R.string.insertion_failed }
             } catch (e: IllegalArgumentException) {
                 updateErrorState(
                     stringRes = e.message?.toIntOrNull(),
-                    string = e.message,
+                    string = e.message
                 )
             } catch (e: NumberFormatException) {
                 updateErrorState(
                     stringRes = R.string.invalid_input,
-                    string = e.message,
+                    string = e.message
                 )
             } catch (e: Exception) {
                 updateErrorState(
                     stringRes = R.string.log_failed,
-                    string = e.message,
+                    string = e.message
                 )
             }
         }
@@ -214,24 +218,24 @@ class NutritionSelectViewModel @Inject constructor(
                 updateNutrimentLogUseCase.update(
                     logId = logId,
                     nutrimentId = nutrimentId,
-                    quantity = _uiState.value.quantity.toDouble(),
+                    quantity = _uiState.value.quantity.toDouble()
                 )
 
                 _uiState.update { it.copy(isEditMode = false) }
             } catch (e: IllegalArgumentException) {
                 updateErrorState(
                     stringRes = e.message?.toIntOrNull(),
-                    string = e.message,
+                    string = e.message
                 )
             } catch (e: NumberFormatException) {
                 updateErrorState(
                     stringRes = R.string.missing_quantity,
-                    string = e.message,
+                    string = e.message
                 )
             } catch (e: Exception) {
                 updateErrorState(
                     stringRes = R.string.editing_failed,
-                    string = e.message,
+                    string = e.message
                 )
             }
         }
@@ -269,15 +273,15 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 val isCleared = deleteNutrimentLogUseCase.clear()
 
-                if (!isCleared){
+                if (!isCleared) {
                     updateErrorState(
-                        stringRes = R.string.deletion_failed,
+                        stringRes = R.string.deletion_failed
                     )
                 }
             } catch (e: Exception) {
                 updateErrorState(
                     stringRes = R.string.unexpected_error_on_deletion,
-                    string = e.message,
+                    string = e.message
                 )
             }
         }
@@ -288,6 +292,7 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     inner class Memento(
-        val nutritionUiModel: NutritionUiModel, val quantity: String
+        val nutritionUiModel: NutritionUiModel,
+        val quantity: String
     )
 }

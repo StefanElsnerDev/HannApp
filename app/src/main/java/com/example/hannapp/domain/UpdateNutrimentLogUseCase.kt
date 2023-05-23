@@ -10,6 +10,6 @@ class UpdateNutrimentLogUseCase @Inject constructor(
         nutrimentLogRepository.update(
             logId = logId,
             nutrimentId = nutrimentId,
-            quantity = quantity,
+            quantity = quantity
         )
 }

@@ -43,7 +43,7 @@ class NutritionUpdateViewModel @Inject constructor(
                     isLoading = false,
                     errorMessage = Message(
                         messageRes = null,
-                        message = throwable.message,
+                        message = throwable.message
                     )
                 )
             }
@@ -72,9 +72,10 @@ class NutritionUpdateViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        isLoading = false, errorMessage = Message(
+                        isLoading = false,
+                        errorMessage = Message(
                             messageRes = null,
-                            message = e.message,
+                            message = e.message
                         )
                     )
                 }
@@ -87,15 +88,16 @@ class NutritionUpdateViewModel @Inject constructor(
             when (isSuccess) {
                 true -> update { state ->
                     state.copy(
-                        cachedNutritionUiModel = _uiComponentState.value.nutritionUiModel,
+                        cachedNutritionUiModel = _uiComponentState.value.nutritionUiModel
                     )
                 }
 
                 false -> update { state ->
                     state.copy(
-                        isLoading = false, errorMessage = Message(
+                        isLoading = false,
+                        errorMessage = Message(
                             messageRes = R.string.nutriment_update_failed,
-                            message = null,
+                            message = null
                         )
                     )
                 }

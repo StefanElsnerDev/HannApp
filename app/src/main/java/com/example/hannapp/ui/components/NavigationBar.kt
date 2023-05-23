@@ -1,10 +1,17 @@
 package com.example.hannapp.ui.components
 
-
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,7 +44,6 @@ fun NavigationBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-
             val currentRoute = currentRoute(navController = navController)
 
             navigationItems(navController).forEach { item ->
@@ -106,7 +112,7 @@ private fun currentRoute(navController: NavHostController): String? {
 @Composable
 fun HannappBottomBar_LightMode() {
     HannAppTheme {
-        NavigationBar( rememberNavController() )
+        NavigationBar(rememberNavController())
     }
 }
 
@@ -114,6 +120,6 @@ fun HannappBottomBar_LightMode() {
 @Composable
 fun HannappBottomBar_DarkMode() {
     HannAppTheme {
-        NavigationBar( rememberNavController() )
+        NavigationBar(rememberNavController())
     }
 }

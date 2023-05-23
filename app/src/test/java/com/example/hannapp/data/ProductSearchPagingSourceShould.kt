@@ -33,20 +33,33 @@ class ProductSearchPagingSourceShould {
             code = "12345",
             productName = "Apple",
             nutriments = Nutriments(
-                1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                1.1,
+                2.2,
+                3.3,
+                3.3,
+                4.4,
+                5.5,
+                6.6
             )
         ),
         Product(
             code = "6789",
             productName = "Apple Green",
             nutriments = Nutriments(
-                1.1, 2.2, 3.3, 3.3, 4.4, 5.5, 6.6
+                1.1,
+                2.2,
+                3.3,
+                3.3,
+                4.4,
+                5.5,
+                6.6
             )
         )
     )
 
     private val response: Response<ProductSearchResult> = Response.success(
-        200, ProductSearchResult(
+        200,
+        ProductSearchResult(
             count = 2,
             page = 0,
             pageCount = 2,
@@ -76,7 +89,6 @@ class ProductSearchPagingSourceShould {
 
     @Test
     fun loadProductsWithFirstPageSuccessfully() = runTest {
-
         val result = productSearchPagingSource.load(loadParams)
 
         Assertions.assertEquals(

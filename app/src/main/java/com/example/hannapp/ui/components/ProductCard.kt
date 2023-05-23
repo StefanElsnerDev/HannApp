@@ -4,9 +4,21 @@ import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +36,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 fun ProductCard(
     modifier: Modifier = Modifier,
     product: Product,
-    onItemClick: (Product)-> Unit
+    onItemClick: (Product) -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -39,9 +51,13 @@ fun ProductCard(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val painter = if(product.image.isNullOrBlank()) painterResource(id = R.drawable.food) else rememberAsyncImagePainter(
-                model = product.image
-            )
+            val painter = if (product.image.isNullOrBlank()) {
+                painterResource(id = R.drawable.food)
+            } else {
+                rememberAsyncImagePainter(
+                    model = product.image
+                )
+            }
 
             Image(
                 modifier = Modifier
@@ -115,7 +131,13 @@ fun ProductCard_LightMode() {
                 code = "124",
                 productName = "Cola",
                 nutriments = Nutriments(
-                    1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7
+                    1.1,
+                    2.2,
+                    3.3,
+                    4.4,
+                    5.5,
+                    6.6,
+                    7.7
                 ),
                 image = ""
             ),

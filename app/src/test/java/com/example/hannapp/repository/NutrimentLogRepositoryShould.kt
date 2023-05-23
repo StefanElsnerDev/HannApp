@@ -84,7 +84,7 @@ class NutrimentLogRepositoryShould {
             nutrimentLogRepository.update(
                 logId = logId,
                 nutrimentId = nutrimentId,
-                quantity = quantity,
+                quantity = quantity
             )
 
             verify(nutrimentLogDao).get(logId = any())

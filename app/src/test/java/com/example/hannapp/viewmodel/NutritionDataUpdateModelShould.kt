@@ -1,7 +1,8 @@
 package com.example.hannapp.viewmodel
 
 import androidx.paging.PagingData
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.domain.DeleteNutritionUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
@@ -9,10 +10,17 @@ import com.example.hannapp.domain.UpdateNutritionUseCase
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
@@ -164,7 +172,7 @@ class NutritionDataUpdateModelShould {
         }
 
         @Test
-        fun emitStateWithUpdatedNutritionUiModel(){
+        fun emitStateWithUpdatedNutritionUiModel() {
             nutritionDataUpdateViewModel.selectItem(nutritionUiModels.last())
 
             nutritionDataUpdateViewModel.update()

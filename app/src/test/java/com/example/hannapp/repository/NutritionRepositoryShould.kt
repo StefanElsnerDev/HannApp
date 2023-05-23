@@ -62,7 +62,7 @@ class NutritionRepositoryShould {
 
     @Test
     fun getFoodWithNamesAndID() = runTest {
-        val foodList = listOf(Food(1, "Apple"), Food(2, "Banana"),Food(3, "Grapefruit"))
+        val foodList = listOf(Food(1, "Apple"), Food(2, "Banana"), Food(3, "Grapefruit"))
         whenever(nutritionDao.getFood()).thenReturn(
             flowOf(foodList)
         )
@@ -73,13 +73,12 @@ class NutritionRepositoryShould {
     }
 
     @Nested
-    inner class Update{
+    inner class Update {
 
         @BeforeEach
         fun beforeEach() = runTest {
             whenever(nutritionDao.update(any())).thenReturn(1)
         }
-
 
         @Test
         fun invokeUpdate() = runTest {
@@ -106,7 +105,6 @@ class NutritionRepositoryShould {
             Assertions.assertEquals(false, result)
         }
     }
-
 
     @Test
     fun deleteNutrition() = runTest {

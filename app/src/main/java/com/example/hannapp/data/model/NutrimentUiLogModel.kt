@@ -6,5 +6,5 @@ data class NutrimentUiLogModel(
     val quantity: Double,
     val unit: String,
     val createdAt: Long,
-    val modifiedAt: Long?,
+    val modifiedAt: Long?
 )

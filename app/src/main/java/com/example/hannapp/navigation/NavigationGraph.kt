@@ -19,19 +19,19 @@ enum class Destination(val value: String) {
 }
 
 @Composable
-fun NavigationGraph (
+fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
-    isCompactScreen: Boolean,
-){
+    isCompactScreen: Boolean
+) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Destination.SELECTION.value) {
-            val viewModel = hiltViewModel <NutritionSelectViewModel>()
+            val viewModel = hiltViewModel<NutritionSelectViewModel>()
 
             NutrimentLogScreen(
                 viewModel = viewModel,
                 navController = navController,
-                isCompactScreen = isCompactScreen,
+                isCompactScreen = isCompactScreen
             )
         }
         composable(Destination.DATA.value) {
