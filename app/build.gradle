@@ -50,6 +50,10 @@ android {
     }
 }
 
+tasks.named('preBuild'){
+    dependsOn 'ktlintCheck'
+}
+
 dependencies {
     def room_version = "2.5.1"
     def hilt_version = "2.44"
