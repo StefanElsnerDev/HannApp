@@ -1,7 +1,11 @@
 package com.example.hannapp.data.database.dao
 
 import androidx.paging.PagingSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.example.hannapp.Constants.FOOD_NAME
 import com.example.hannapp.Constants.NUTRITION_TABLE
 import com.example.hannapp.data.model.Food

@@ -1,7 +1,16 @@
 package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.hannapp.data.distinct.*
+import com.example.hannapp.data.distinct.Alcohol
+import com.example.hannapp.data.distinct.Carbohydrates
+import com.example.hannapp.data.distinct.Fat
+import com.example.hannapp.data.distinct.Fiber
+import com.example.hannapp.data.distinct.Kcal
+import com.example.hannapp.data.distinct.Name
+import com.example.hannapp.data.distinct.NutritionComponent
+import com.example.hannapp.data.distinct.NutritionDataComponent
+import com.example.hannapp.data.distinct.Protein
+import com.example.hannapp.data.distinct.Sugar
 import com.example.hannapp.data.model.NutritionUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
