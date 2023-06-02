@@ -14,4 +14,9 @@ object Constants {
     const val SUGAR = "sugar"
     const val FIBER = "fiber"
     const val ALCOHOL = "alcohol"
+
+    const val KCAL_MAX = "kcal_max"
+    const val PROTEIN_MAX = "kcal_max"
+    const val CARBOHYDRATES_MAX = "kcal_max"
+    const val FAT_MAX = "kcal_max"
 }
