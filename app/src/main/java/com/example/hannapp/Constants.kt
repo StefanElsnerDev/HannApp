@@ -19,4 +19,9 @@ object Constants {
     const val PROTEIN_MAX = "kcal_max"
     const val CARBOHYDRATES_MAX = "kcal_max"
     const val FAT_MAX = "kcal_max"
+
+    const val QUANTITY_MAX = "quantityMax"
+    const val DAYTIME_QUANTITY = "dayTimeQuantity"
+    const val PRE_NIGHT_QUANTITY = "preNightQuantity"
+    const val NIGHT_QUANTITY = "nightQuantity"
 }
