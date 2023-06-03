@@ -27,7 +27,7 @@ class NutritionReferenceDataSource @Inject constructor(
             carbohydrates?.let { preferences[doublePreferencesKey(CARBOHYDRATES_MAX)] = it }
             fat?.let { preferences[doublePreferencesKey(FAT_MAX)] = it }
         }
-    }
+    }.asMap().size
 
     fun emitReferences(): Flow<NutritionReferences> = dataStore.data.map { preferences ->
         NutritionReferences(
