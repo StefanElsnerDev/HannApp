@@ -16,32 +16,21 @@ import javax.inject.Inject
 class MilkReferenceDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
-    suspend fun save(milkReferenceModel: MilkReferenceModel) =
-        dataStore.edit { preferences ->
-            milkReferenceModel.apply {
-                preferences[floatPreferencesKey(QUANTITY_MAX)] = maxQuantity
-                preferences[floatPreferencesKey(DAYTIME_QUANTITY)] = dayTimeQuantity
-                preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)] = preNightQuantity
-                preferences[floatPreferencesKey(NIGHT_QUANTITY)] = nightQuantity
-            }
+    suspend fun save(milkReferenceModel: MilkReferenceModel) = dataStore.edit { preferences ->
+        milkReferenceModel.apply {
+            maxQuantity?.let { preferences[floatPreferencesKey(QUANTITY_MAX)] }
+            dayTimeQuantity?.let { preferences[floatPreferencesKey(DAYTIME_QUANTITY)] }
+            preNightQuantity?.let { preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)] }
+            nightQuantity?.let { preferences[floatPreferencesKey(NIGHT_QUANTITY)] }
         }
+    }.asMap().size
 
     fun emitReferences(): Flow<MilkReferenceModel> = dataStore.data.map { preferences ->
-        val quantityMax = preferences[floatPreferencesKey(QUANTITY_MAX)]
-        val dayTimeQuantity = preferences[floatPreferencesKey(DAYTIME_QUANTITY)]
-        val preNightQuantity = preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)]
-        val nightQuantity = preferences[floatPreferencesKey(NIGHT_QUANTITY)]
-
-        require(quantityMax != null)
-        require(dayTimeQuantity != null)
-        require(preNightQuantity != null)
-        require(nightQuantity != null)
-
         MilkReferenceModel(
-            maxQuantity = quantityMax,
-            dayTimeQuantity = dayTimeQuantity,
-            preNightQuantity = preNightQuantity,
-            nightQuantity = nightQuantity
+            maxQuantity = preferences[floatPreferencesKey(QUANTITY_MAX)],
+            dayTimeQuantity = preferences[floatPreferencesKey(DAYTIME_QUANTITY)],
+            preNightQuantity = preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)],
+            nightQuantity = preferences[floatPreferencesKey(NIGHT_QUANTITY)]
         )
     }
 }
