@@ -1,7 +1,10 @@
 package com.example.hannapp.data.repository
 
 import com.example.hannapp.data.model.MilkReferenceModel
+import com.example.hannapp.data.model.MilkReferenceUiModel
 import com.example.hannapp.data.source.MilkReferenceDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MilkReferenceRepository @Inject constructor(
@@ -28,5 +31,18 @@ class MilkReferenceRepository @Inject constructor(
         )
     }
 
-    fun emitReference() = milkReferenceDataSource.emitReferences()
+    fun emitReference(): Flow<MilkReferenceUiModel> =
+        milkReferenceDataSource.emitReferences().map {
+            require(it.maxQuantity != null)
+            require(it.dayTimeQuantity != null)
+            require(it.preNightQuantity != null)
+            require(it.nightQuantity != null)
+
+            MilkReferenceUiModel(
+                maxQuantity = it.maxQuantity,
+                dayTimeQuantity = it.dayTimeQuantity,
+                preNightQuantity = it.preNightQuantity,
+                nightQuantity = it.nightQuantity
+            )
+        }
 }
