@@ -106,7 +106,7 @@ class NutritionSelectViewModel @Inject constructor(
     val nutriments = _nutriments.cachedIn(viewModelScope)
 
     val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> =
-        getNutrimentLogUseCase.observeNutrimentLog().catch {
+        getNutrimentLogUseCase().catch {
             _uiState.update { state ->
                 state.copy(
                     isLoading = false,

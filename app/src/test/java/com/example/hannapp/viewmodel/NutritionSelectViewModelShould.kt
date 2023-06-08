@@ -85,7 +85,7 @@ class NutritionSelectViewModelShould {
             nutrimentsUiFlow
         )
 
-        whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
+        whenever(getNutrimentLogUseCase()).thenReturn(
             flowOf(nutrimentUiLog)
         )
 
@@ -157,7 +157,7 @@ class NutritionSelectViewModelShould {
         @Test
         fun emitsErrorStateOnFailingNutrimentLog() = runTest {
             val errorMessage = "Error"
-            whenever(getNutrimentLogUseCase.observeNutrimentLog()).thenReturn(
+            whenever(getNutrimentLogUseCase()).thenReturn(
                 flow {
                     throw RuntimeException(errorMessage)
                 }
