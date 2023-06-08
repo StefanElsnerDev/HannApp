@@ -1,8 +1,7 @@
 package com.example.hannapp.data.repository
 
 import com.example.hannapp.data.database.dao.NutrimentLogDao
-import com.example.hannapp.data.model.NutrimentUiLogModel
-import com.example.hannapp.data.model.convert.NutritionConverter
+import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.entity.NutrimentLog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,14 +20,13 @@ class NutrimentLogRepository @Inject constructor(
         )
     )
 
-    fun getLogs(): Flow<List<NutrimentUiLogModel>> =
+    fun getLogs(): Flow<List<NutrimentLogModel>> =
         nutrimentLogDao.getLogs().map { logList ->
             logList.map {
-                NutrimentUiLogModel(
+                NutrimentLogModel(
                     id = it.nutrimentLog.id,
-                    nutrition = NutritionConverter.entity(it.nutrition).toUiModel(),
+                    nutrition = it.nutrition,
                     quantity = it.nutrimentLog.quantity,
-                    unit = "g / ml",
                     createdAt = it.nutrimentLog.createdAt,
                     modifiedAt = it.nutrimentLog.lastModifiedAt
                 )
