@@ -8,7 +8,7 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
-import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
+import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +21,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -106,7 +105,7 @@ class NutritionSelectViewModelShould {
 
     @Test
     fun invokeGetNutritionUseCaseOn() = runTest {
-        nutritionViewModel.getAll()
+        nutritionViewModel.event(NutrimentSelectContract.Event.OnGetAll)
 
         verify(getNutritionUseCase).getAll()
     }
@@ -122,13 +121,13 @@ class NutritionSelectViewModelShould {
             dispatcher = testDispatcher
         )
 
-        Assertions.assertEquals(
-            NutrimentSelectUiState.LogUiState(
-                isLoading = true,
-                errorMessage = null
-            ),
-            nutritionViewModel.uiState.first()
-        )
+        assertThat(nutritionViewModel.state.first())
+            .isEqualTo(
+                NutrimentSelectContract.State(
+                    isLoading = true,
+                    errorMessage = null
+                )
+            )
     }
 
     @Test
@@ -140,10 +139,10 @@ class NutritionSelectViewModelShould {
             }
         )
 
-        nutritionViewModel.getAll()
+        nutritionViewModel.event(NutrimentSelectContract.Event.OnGetAll)
 
-        assertThat(nutritionViewModel.uiState.first().errorMessage?.messageRes).isNotNull
-        assertThat(nutritionViewModel.uiState.first().errorMessage?.message).isEqualTo(errorMessage)
+        assertThat(nutritionViewModel.state.first().errorMessage?.messageRes).isNotNull
+        assertThat(nutritionViewModel.state.first().errorMessage?.message).isEqualTo(errorMessage)
     }
 
     @Nested
@@ -172,8 +171,8 @@ class NutritionSelectViewModelShould {
                 dispatcher = testDispatcher
             )
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNull()
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
+            assertThat(nutritionViewModel.state.value.errorMessage?.messageRes).isNull()
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isEqualTo(errorMessage)
         }
     }
 
@@ -182,38 +181,38 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitUiStateWithEmptyNutrimentUiModel() {
-            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
+            assertThat(nutritionViewModel.state.value.nutritionUiModel).isEqualTo(
                 NutritionUiModel()
             )
         }
 
         @Test
         fun emitUiStateWithErrorStateByDefault() {
-            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNull()
+            assertThat(nutritionViewModel.state.value.nutritionUiModel.id).isNull()
         }
 
         @Test
         fun emitUiStateWithSelectedNutrimentUiModel() {
-            nutritionViewModel.select(nutritionUiModels.first())
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(nutritionUiModels.first()))
 
-            assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
+            assertThat(nutritionViewModel.state.value.nutritionUiModel).isEqualTo(
                 nutritionUiModels.first()
             )
         }
 
         @Test
         fun emitUiStateWithValidationBasedOnModelId() {
-            nutritionViewModel.select(nutritionUiModels.first())
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(nutritionUiModels.first()))
 
-            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNotNull()
+            assertThat(nutritionViewModel.state.value.nutritionUiModel.id).isNotNull
         }
 
         @Test
         fun emitErrorStateOnInvalidSelection() {
-            nutritionViewModel.select(NutritionUiModel(id = null))
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(NutritionUiModel(id = null)))
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
+            assertThat(nutritionViewModel.state.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNull()
         }
     }
 
@@ -224,9 +223,9 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitStateWithQuantity() {
-            nutritionViewModel.setQuantity(quantity = quantity)
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSetQuantity(quantity = quantity))
 
-            assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity)
+            assertThat(nutritionViewModel.state.value.quantity).isEqualTo(quantity)
         }
     }
 
@@ -237,14 +236,14 @@ class NutritionSelectViewModelShould {
 
         @BeforeEach
         fun beforeEach() = runTest {
-            nutritionViewModel.select(nutritionUiModels.first())
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(nutritionUiModels.first()))
 
-            nutritionViewModel.setQuantity(quantity = quantity.toString())
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnSetQuantity(quantity = quantity.toString()))
         }
 
         @Test
         fun callsUseCaseForAddingNutriment() = runTest {
-            nutritionViewModel.add()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnAdd)
 
             verify(insertNutrimentLogUseCase).invoke(any(), any())
         }
@@ -253,11 +252,11 @@ class NutritionSelectViewModelShould {
         fun emitsErrorStateOnFailingInsertion() = runTest {
             whenever(insertNutrimentLogUseCase.invoke(any(), any())).thenReturn(false)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage).isNull()
+            assertThat(nutritionViewModel.state.value.errorMessage).isNull()
 
-            nutritionViewModel.add()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnAdd)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNotBlank()
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNotBlank()
         }
 
         @Test
@@ -269,16 +268,16 @@ class NutritionSelectViewModelShould {
                 )
             )
 
-            nutritionViewModel.add()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnAdd)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isEqualTo(errorMessage)
         }
 
         @Test
-        fun clearsQuantityOnSuccesfulLog() {
-            nutritionViewModel.add()
+        fun clearsQuantityOnSuccessfulLog() {
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnAdd)
 
-            assertThat(nutritionViewModel.uiState.value.quantity).isEmpty()
+            assertThat(nutritionViewModel.state.value.quantity).isEmpty()
         }
     }
 
@@ -287,7 +286,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun invokeDeleteLogUseCase() = runTest {
-            nutritionViewModel.clearAll()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnClearAll)
 
             verify(deleteNutrimentLogUseCase).clear()
         }
@@ -296,10 +295,10 @@ class NutritionSelectViewModelShould {
         fun emitErrorStateOnFailingDeletion() = runTest {
             whenever(deleteNutrimentLogUseCase.clear()).thenReturn(false)
 
-            nutritionViewModel.clearAll()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnClearAll)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
+            assertThat(nutritionViewModel.state.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNull()
         }
 
         @Test
@@ -307,27 +306,27 @@ class NutritionSelectViewModelShould {
             val errorMessage = "Any strange error"
             whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException(errorMessage))
 
-            nutritionViewModel.clearAll()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnClearAll)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isEqualTo(errorMessage)
+            assertThat(nutritionViewModel.state.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isEqualTo(errorMessage)
         }
 
         @Test
         fun emitErrorStateOnUnexpectedErrorDuringDeletion() = runTest {
             whenever(deleteNutrimentLogUseCase.clear()).thenThrow(RuntimeException())
 
-            nutritionViewModel.clearAll()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnClearAll)
 
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.messageRes).isNotNull
-            assertThat(nutritionViewModel.uiState.value.errorMessage?.message).isNull()
+            assertThat(nutritionViewModel.state.value.errorMessage?.messageRes).isNotNull
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNull()
         }
 
         @Test
         fun emitStateWithEmptyModelState() {
-            nutritionViewModel.clearAll()
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnClearAll)
 
-            assertThat(nutritionViewModel.uiState.value.nutritionUiModel.id).isNull()
+            assertThat(nutritionViewModel.state.value.nutritionUiModel.id).isNull()
         }
     }
 
@@ -365,12 +364,12 @@ class NutritionSelectViewModelShould {
 
             @Test
             fun emitLogNutrimentAndQuantity() {
-                nutritionViewModel.edit(nutrimentUiLogModel)
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnEdit(nutrimentUiLogModel))
 
-                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(
+                assertThat(nutritionViewModel.state.value.nutritionUiModel).isEqualTo(
                     nutritionUiModel
                 )
-                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity.toString())
+                assertThat(nutritionViewModel.state.value.quantity).isEqualTo(quantity.toString())
             }
         }
 
@@ -379,22 +378,26 @@ class NutritionSelectViewModelShould {
 
             @BeforeEach
             fun beforeEach() {
-                nutritionViewModel.edit(nutrimentUiLogModel)
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnEdit(nutrimentUiLogModel))
 
-                nutritionViewModel.select(substitutedNutriment)
-                nutritionViewModel.setQuantity(substitutedQuantity.toString())
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(substitutedNutriment))
+                nutritionViewModel.event(
+                    NutrimentSelectContract.Event.OnSetQuantity(
+                        substitutedQuantity.toString()
+                    )
+                )
             }
 
             @Test
             fun invokeDaoOnSelectedLogNutriment() = runTest {
-                nutritionViewModel.update()
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnUpdate)
 
                 verify(updateNutrimentLogUseCase).update(any(), any(), any())
             }
 
             @Test
             fun saveChangedNutrimentAndModifiedQuantity() = runTest {
-                nutritionViewModel.update()
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnUpdate)
 
                 verify(updateNutrimentLogUseCase).update(
                     logId = logId,
@@ -409,32 +412,40 @@ class NutritionSelectViewModelShould {
 
             @BeforeEach
             fun beforeEach() {
-                nutritionViewModel.select(nutritionUiModel = nutritionUiModel)
-                nutritionViewModel.setQuantity(quantity.toString())
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(nutritionUiModel = nutritionUiModel))
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnSetQuantity(quantity.toString()))
 
-                nutritionViewModel.edit(nutrimentUiLogModel)
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnEdit(nutrimentUiLogModel))
             }
 
             @Test
             fun restoreLogNutriment() {
-                nutritionViewModel.select(substitutedNutriment)
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnSelect(substitutedNutriment))
 
-                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(substitutedNutriment)
+                assertThat(nutritionViewModel.state.value.nutritionUiModel).isEqualTo(
+                    substitutedNutriment
+                )
 
-                nutritionViewModel.abort()
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnAbort)
 
-                assertThat(nutritionViewModel.uiState.value.nutritionUiModel).isEqualTo(nutritionUiModel)
+                assertThat(nutritionViewModel.state.value.nutritionUiModel).isEqualTo(
+                    nutritionUiModel
+                )
             }
 
             @Test
             fun restoreQuantity() {
-                nutritionViewModel.setQuantity(substitutedQuantity.toString())
+                nutritionViewModel.event(
+                    NutrimentSelectContract.Event.OnSetQuantity(
+                        substitutedQuantity.toString()
+                    )
+                )
 
-                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(substitutedQuantity.toString())
+                assertThat(nutritionViewModel.state.value.quantity).isEqualTo(substitutedQuantity.toString())
 
-                nutritionViewModel.abort()
+                nutritionViewModel.event(NutrimentSelectContract.Event.OnAbort)
 
-                assertThat(nutritionViewModel.uiState.value.quantity).isEqualTo(quantity.toString())
+                assertThat(nutritionViewModel.state.value.quantity).isEqualTo(quantity.toString())
             }
         }
     }
