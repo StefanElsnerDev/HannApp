@@ -29,13 +29,13 @@ import com.example.hannapp.ui.dropdown.EmptySelectionDropDownMenu
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
+import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun SelectionContent(
     modifier: Modifier,
-    uiState: NutrimentSelectUiState,
+    uiState: NutrimentSelectContract.State,
     onClickBoxClick: () -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
@@ -110,7 +110,7 @@ fun SelectionContent_LightMode() {
     HannAppTheme {
         SelectionContent(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             quantity = "",
             onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),

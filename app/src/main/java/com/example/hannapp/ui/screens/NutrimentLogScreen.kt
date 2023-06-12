@@ -54,7 +54,7 @@ import com.example.hannapp.ui.output.LogGroup
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.Constraints.SPACE_VERTICAL
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
+import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.utils.WindowSize
 import kotlinx.coroutines.flow.flowOf
@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun NutrimentLogContent(
     modifier: Modifier,
-    uiState: NutrimentSelectUiState,
+    uiState: NutrimentSelectContract.State,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>,
     quantity: String,
@@ -256,7 +256,7 @@ fun NutrimentLogScreen(
     navController: NavHostController,
     isCompactScreen: Boolean
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
     val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
 
@@ -266,18 +266,18 @@ fun NutrimentLogScreen(
         pagingItems = nutriments,
         loggedNutriments = logged,
         quantity = uiState.quantity,
-        onQuantityChanged = { viewModel.setQuantity(it) },
-        isEditMode = uiState is NutrimentSelectUiState.EditLogUiState,
+        onQuantityChanged = { viewModel.event(NutrimentSelectContract.Event.OnSetQuantity(it)) },
+        isEditMode = uiState.isEditMode,
         isCompactScreen = isCompactScreen,
-        onAdd = { viewModel.add() },
+        onAdd = { viewModel.event(NutrimentSelectContract.Event.OnAdd) },
         navController = navController,
-        onClickBoxClick = { viewModel.getAll() },
+        onClickBoxClick = { viewModel.event(NutrimentSelectContract.Event.OnGetAll) },
         selectedNutriment = uiState.nutritionUiModel,
-        onNutrimentSelected = { viewModel.select(it) },
-        onLoggedNutrimentSelected = { viewModel.edit(it) },
-        onSaveEdit = { viewModel.update() },
-        onAbort = { viewModel.abort() },
-        clear = { viewModel.clearAll() }
+        onNutrimentSelected = { viewModel.event(NutrimentSelectContract.Event.OnSelect(it)) },
+        onLoggedNutrimentSelected = { viewModel.event(NutrimentSelectContract.Event.OnEdit(it)) },
+        onSaveEdit = { viewModel.event(NutrimentSelectContract.Event.OnUpdate) },
+        onAbort = { viewModel.event(NutrimentSelectContract.Event.OnAbort) },
+        clear = { viewModel.event(NutrimentSelectContract.Event.OnClearAll) }
     )
 }
 
@@ -320,7 +320,7 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -344,7 +344,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -368,7 +368,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
     HannAppTheme {
         NutrimentLogContent(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",

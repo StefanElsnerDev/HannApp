@@ -19,13 +19,13 @@ import com.example.hannapp.ui.history.NutrimentHistoryContent
 import com.example.hannapp.ui.selection.SelectionContent
 import com.example.hannapp.ui.theme.Constraints
 import com.example.hannapp.ui.theme.HannAppTheme
-import com.example.hannapp.ui.viewmodel.NutrimentSelectUiState
+import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun LogGroup(
     modifier: Modifier,
-    uiState: NutrimentSelectUiState,
+    uiState: NutrimentSelectContract.State,
     onClickBoxClick: () -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
@@ -108,7 +108,7 @@ fun NutrimentLogScreen_LightMode() {
     HannAppTheme {
         LogGroup(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -129,7 +129,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
     HannAppTheme {
         LogGroup(
             modifier = Modifier,
-            uiState = NutrimentSelectUiState.LogUiState(),
+            uiState = NutrimentSelectContract.State(),
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
