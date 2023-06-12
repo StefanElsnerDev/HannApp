@@ -19,12 +19,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,9 +31,10 @@ interface NutrimentSelectContract :
     UnidirectionalViewModel<NutrimentSelectContract.State, NutrimentSelectContract.Event> {
 
     data class State(
-        var nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+        val nutritionUiModel: NutritionUiModel = NutritionUiModel(),
+        val log: List<NutrimentUiLogModel> = emptyList(),
         val nutrimentLogId: Long? = null,
-        var quantity: String = "",
+        val quantity: String = "",
         val isEditMode: Boolean = false,
         val isLoading: Boolean = false,
         val errorMessage: Message? = null
@@ -62,11 +61,14 @@ class NutritionSelectViewModel @Inject constructor(
     private val getNutrimentLogUseCase: GetNutrimentLogUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
-
     private lateinit var memento: Memento
 
     private val _uiState = MutableStateFlow(NutrimentSelectContract.State(isLoading = true))
     override val state: StateFlow<NutrimentSelectContract.State> = _uiState.asStateFlow()
+
+    init {
+        getLog()
+    }
 
     private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
     val nutriments = _nutriments.cachedIn(viewModelScope)
@@ -84,22 +86,24 @@ class NutritionSelectViewModel @Inject constructor(
         }
     }
 
-    val nutrimentLog: StateFlow<List<NutrimentUiLogModel>> =
-        getNutrimentLogUseCase().catch {
-            _uiState.update { state ->
-                state.copy(
-                    isLoading = false,
-                    errorMessage = Message(
-                        messageRes = null,
-                        message = it.message
-                    )
-                )
-            }
-        }.stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            emptyList()
-        )
+    private fun getLog() {
+        viewModelScope.launch(dispatcher) {
+            getNutrimentLogUseCase()
+                .catch {
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            errorMessage = Message(
+                                messageRes = null,
+                                message = it.message
+                            )
+                        )
+                    }
+                }.collectLatest { log ->
+                    _uiState.update { it.copy(log = log) }
+                }
+        }
+    }
 
     private fun getAll() {
         _uiState.update { it.copy(isLoading = true) }
@@ -267,10 +271,10 @@ class NutritionSelectViewModel @Inject constructor(
     }
 
     private fun unselect() {
-        _uiState.value.nutritionUiModel = NutritionUiModel()
+        _uiState.update { state -> state.copy(NutritionUiModel()) }
     }
 
-    inner class Memento(
+    private inner class Memento(
         val nutritionUiModel: NutritionUiModel,
         val quantity: String
     )

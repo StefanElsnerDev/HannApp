@@ -150,7 +150,8 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitsNutrimentLog() = runTest {
-            assertThat(nutritionViewModel.nutrimentLog.first()).isEqualTo(nutrimentUiLog)
+            verify(getNutrimentLogUseCase).invoke()
+            assertThat(nutritionViewModel.state.value.log).isEqualTo(nutrimentUiLog)
         }
 
         @Test

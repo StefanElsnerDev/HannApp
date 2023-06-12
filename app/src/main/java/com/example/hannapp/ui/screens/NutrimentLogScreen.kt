@@ -34,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
@@ -258,13 +257,12 @@ fun NutrimentLogScreen(
 ) {
     val uiState by viewModel.state.collectAsState()
     val nutriments = viewModel.nutriments.collectAsLazyPagingItems()
-    val logged by viewModel.nutrimentLog.collectAsStateWithLifecycle()
 
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
         pagingItems = nutriments,
-        loggedNutriments = logged,
+        loggedNutriments = uiState.log,
         quantity = uiState.quantity,
         onQuantityChanged = { viewModel.event(NutrimentSelectContract.Event.OnSetQuantity(it)) },
         isEditMode = uiState.isEditMode,
