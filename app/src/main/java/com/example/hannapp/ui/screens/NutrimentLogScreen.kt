@@ -63,6 +63,7 @@ fun NutrimentLogContent(
     modifier: Modifier,
     uiState: NutrimentSelectContract.State,
     pagingItems: LazyPagingItems<NutritionUiModel>,
+    event: (NutrimentSelectContract.Event) -> Unit,
     loggedNutriments: List<NutrimentUiLogModel>,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
@@ -73,10 +74,7 @@ fun NutrimentLogContent(
     onClickBoxClick: () -> Unit,
     selectedNutriment: NutritionUiModel,
     onNutrimentSelected: (NutritionUiModel) -> Unit,
-    onLoggedNutrimentSelected: (NutrimentUiLogModel) -> Unit,
-    onSaveEdit: () -> Unit = {},
-    onAbort: () -> Unit = {},
-    clear: () -> Unit
+    onLoggedNutrimentSelected: (NutrimentUiLogModel) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
@@ -91,7 +89,7 @@ fun NutrimentLogContent(
                     true -> {
                         IconButton(
                             onClick = {
-                                onAbort()
+                                event(NutrimentSelectContract.Event.OnAbort)
                                 focusManager.clearFocus()
                             }
                         ) {
@@ -104,7 +102,7 @@ fun NutrimentLogContent(
 
                         IconButton(
                             onClick = {
-                                onSaveEdit()
+                                event(NutrimentSelectContract.Event.OnUpdate)
                                 focusManager.clearFocus()
                             }
                         ) {
@@ -117,7 +115,7 @@ fun NutrimentLogContent(
                     }
 
                     false -> {
-                        IconButton(onClick = { clear() }) {
+                        IconButton(onClick = { event(NutrimentSelectContract.Event.OnClearAll) }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.restore),
                                 contentDescription = null
@@ -152,7 +150,7 @@ fun NutrimentLogContent(
         floatingActionButton = {
             if (!isEditMode) {
                 FAB({ Icon(Icons.Default.Add, null) }) {
-                    onAdd()
+                    event(NutrimentSelectContract.Event.OnAdd)
                     focusManager.clearFocus()
                 }
             }
@@ -261,6 +259,7 @@ fun NutrimentLogScreen(
     NutrimentLogContent(
         modifier = Modifier.fillMaxSize(),
         uiState = uiState,
+        event = { viewModel.event(it) },
         pagingItems = nutriments,
         loggedNutriments = uiState.log,
         quantity = uiState.quantity,
@@ -272,10 +271,7 @@ fun NutrimentLogScreen(
         onClickBoxClick = { viewModel.event(NutrimentSelectContract.Event.OnGetAll) },
         selectedNutriment = uiState.nutritionUiModel,
         onNutrimentSelected = { viewModel.event(NutrimentSelectContract.Event.OnSelect(it)) },
-        onLoggedNutrimentSelected = { viewModel.event(NutrimentSelectContract.Event.OnEdit(it)) },
-        onSaveEdit = { viewModel.event(NutrimentSelectContract.Event.OnUpdate) },
-        onAbort = { viewModel.event(NutrimentSelectContract.Event.OnAbort) },
-        clear = { viewModel.event(NutrimentSelectContract.Event.OnClearAll) }
+        onLoggedNutrimentSelected = { viewModel.event(NutrimentSelectContract.Event.OnEdit(it)) }
     )
 }
 
@@ -319,6 +315,7 @@ fun NutrimentLogScreen_LightMode() {
         NutrimentLogContent(
             modifier = Modifier,
             uiState = NutrimentSelectContract.State(),
+            event = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -330,8 +327,7 @@ fun NutrimentLogScreen_LightMode() {
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
-            onLoggedNutrimentSelected = {},
-            clear = {}
+            onLoggedNutrimentSelected = {}
         )
     }
 }
@@ -343,6 +339,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
         NutrimentLogContent(
             modifier = Modifier,
             uiState = NutrimentSelectContract.State(),
+            event = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -354,8 +351,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
-            onLoggedNutrimentSelected = {},
-            clear = {}
+            onLoggedNutrimentSelected = {}
         )
     }
 }
@@ -367,6 +363,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
         NutrimentLogContent(
             modifier = Modifier,
             uiState = NutrimentSelectContract.State(),
+            event = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
@@ -378,8 +375,7 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel(),
             onNutrimentSelected = {},
-            onLoggedNutrimentSelected = {},
-            clear = {}
+            onLoggedNutrimentSelected = {}
         )
     }
 }
