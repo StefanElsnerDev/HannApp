@@ -27,7 +27,6 @@ fun LogGroup(
     modifier: Modifier,
     uiState: NutrimentSelectContract.State,
     event: (NutrimentSelectContract.Event) -> Unit,
-    onClickBoxClick: () -> Unit,
     quantity: String,
     focusManager: FocusManager,
     selectedNutriment: NutritionUiModel,
@@ -41,7 +40,7 @@ fun LogGroup(
         SelectionContent(
             modifier = Modifier.fillMaxWidth(),
             uiState = uiState,
-            onClickBoxClick = onClickBoxClick,
+            event = event,
             quantity = quantity,
             onQuantityChanged = { event(NutrimentSelectContract.Event.OnSetQuantity(it)) },
             onQuantityEntered = {
@@ -110,7 +109,6 @@ fun NutrimentLogScreen_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
-            onClickBoxClick = {},
             selectedNutriment = NutritionUiModel(),
             focusManager = LocalFocusManager.current
         )
@@ -128,7 +126,6 @@ fun NutrimentLogScreen_Compact_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
-            onClickBoxClick = {},
             selectedNutriment = NutritionUiModel(),
             focusManager = LocalFocusManager.current
         )

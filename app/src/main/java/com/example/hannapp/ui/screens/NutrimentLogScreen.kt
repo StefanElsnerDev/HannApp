@@ -69,7 +69,6 @@ fun NutrimentLogContent(
     isEditMode: Boolean,
     isCompactScreen: Boolean,
     navController: NavHostController,
-    onClickBoxClick: () -> Unit,
     selectedNutriment: NutritionUiModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -172,7 +171,6 @@ fun NutrimentLogContent(
                             ),
                         uiState = uiState,
                         event = event,
-                        onClickBoxClick = onClickBoxClick,
                         quantity = quantity,
                         focusManager = focusManager,
                         selectedNutriment = selectedNutriment,
@@ -203,7 +201,6 @@ fun NutrimentLogContent(
                         modifier = Modifier.fillMaxWidth(0.5f),
                         uiState = uiState,
                         event = event,
-                        onClickBoxClick = onClickBoxClick,
                         quantity = quantity,
                         focusManager = focusManager,
                         selectedNutriment = selectedNutriment,
@@ -256,7 +253,6 @@ fun NutrimentLogScreen(
         isEditMode = uiState.isEditMode,
         isCompactScreen = isCompactScreen,
         navController = navController,
-        onClickBoxClick = { viewModel.event(NutrimentSelectContract.Event.OnGetAll) },
         selectedNutriment = uiState.nutritionUiModel
     )
 }
@@ -307,7 +303,6 @@ fun NutrimentLogScreen_LightMode() {
             quantity = "12.34",
             isEditMode = false,
             isCompactScreen = false,
-            onClickBoxClick = {},
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel()
         )
@@ -327,7 +322,6 @@ fun NutrimentLogScreen_Compact_LightMode() {
             quantity = "12.34",
             isEditMode = false,
             isCompactScreen = true,
-            onClickBoxClick = {},
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel()
         )
@@ -347,7 +341,6 @@ fun NutrimentLogScreen_EditMode_LightMode() {
             quantity = "12.34",
             isEditMode = true,
             isCompactScreen = false,
-            onClickBoxClick = {},
             navController = rememberNavController(),
             selectedNutriment = NutritionUiModel()
         )

@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.flowOf
 fun SelectionContent(
     modifier: Modifier,
     uiState: NutrimentSelectContract.State,
-    onClickBoxClick: () -> Unit,
+    event: (NutrimentSelectContract.Event) -> Unit,
     quantity: String,
     onQuantityChanged: (String) -> Unit,
     selectedNutriment: NutritionUiModel,
@@ -61,14 +61,14 @@ fun SelectionContent(
                 false -> EmptySelectionDropDownMenu(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    onClickBoxClick()
+                    event(NutrimentSelectContract.Event.OnGetAll)
                     expanded = true
                 }
 
                 true -> NutrimentCard(
                     nutritionUiModel = selectedNutriment,
                     onClick = {
-                        onClickBoxClick()
+                        event(NutrimentSelectContract.Event.OnGetAll)
                         expanded = true
                     }
                 )
@@ -111,10 +111,10 @@ fun SelectionContent_LightMode() {
         SelectionContent(
             modifier = Modifier,
             uiState = NutrimentSelectContract.State(),
+            event = {},
             quantity = "",
             onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
-            onClickBoxClick = {},
             selectedNutriment = NutritionUiModel(),
             onNutrimentChanged = {}
         )
