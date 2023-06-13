@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -28,7 +26,6 @@ fun LogGroup(
     uiState: NutrimentSelectContract.State,
     event: (NutrimentSelectContract.Event) -> Unit,
     quantity: String,
-    focusManager: FocusManager,
     selectedNutriment: NutritionUiModel,
     pagingItems: LazyPagingItems<NutritionUiModel>,
     loggedNutriments: List<NutrimentUiLogModel>
@@ -42,13 +39,7 @@ fun LogGroup(
             uiState = uiState,
             event = event,
             quantity = quantity,
-            onQuantityChanged = { event(NutrimentSelectContract.Event.OnSetQuantity(it)) },
-            onQuantityEntered = {
-                focusManager.clearFocus()
-                event(NutrimentSelectContract.Event.OnAdd)
-            },
             selectedNutriment = selectedNutriment,
-            onNutrimentChanged = { event(NutrimentSelectContract.Event.OnSelect(it)) },
             pagingItems = pagingItems
         )
 
@@ -109,8 +100,7 @@ fun NutrimentLogScreen_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
-            selectedNutriment = NutritionUiModel(),
-            focusManager = LocalFocusManager.current
+            selectedNutriment = NutritionUiModel()
         )
     }
 }
@@ -126,8 +116,7 @@ fun NutrimentLogScreen_Compact_LightMode() {
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
             loggedNutriments = dummyList,
             quantity = "12.34",
-            selectedNutriment = NutritionUiModel(),
-            focusManager = LocalFocusManager.current
+            selectedNutriment = NutritionUiModel()
         )
     }
 }

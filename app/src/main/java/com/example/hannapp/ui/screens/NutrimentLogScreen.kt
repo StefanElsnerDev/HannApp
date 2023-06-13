@@ -172,7 +172,6 @@ fun NutrimentLogContent(
                         uiState = uiState,
                         event = event,
                         quantity = quantity,
-                        focusManager = focusManager,
                         selectedNutriment = selectedNutriment,
                         pagingItems = pagingItems,
                         loggedNutriments = loggedNutriments
@@ -202,7 +201,6 @@ fun NutrimentLogContent(
                         uiState = uiState,
                         event = event,
                         quantity = quantity,
-                        focusManager = focusManager,
                         selectedNutriment = selectedNutriment,
                         pagingItems = pagingItems,
                         loggedNutriments = loggedNutriments

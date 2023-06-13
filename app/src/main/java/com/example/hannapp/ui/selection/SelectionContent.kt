@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.PagingData
@@ -38,12 +39,11 @@ fun SelectionContent(
     uiState: NutrimentSelectContract.State,
     event: (NutrimentSelectContract.Event) -> Unit,
     quantity: String,
-    onQuantityChanged: (String) -> Unit,
     selectedNutriment: NutritionUiModel,
-    onNutrimentChanged: (NutritionUiModel) -> Unit,
-    onQuantityEntered: () -> Unit = {},
     pagingItems: LazyPagingItems<NutritionUiModel>
 ) {
+    val focusManager = LocalFocusManager.current
+
     Surface(
         modifier = modifier.wrapContentHeight(),
         shape = MaterialTheme.shapes.medium
@@ -76,12 +76,15 @@ fun SelectionContent(
 
             InputField(
                 value = quantity,
-                onValueChange = { onQuantityChanged(it) },
+                onValueChange = { event(NutrimentSelectContract.Event.OnSetQuantity(it)) },
                 modifier = Modifier,
                 label = stringResource(id = R.string.quantity),
                 isError = false,
                 keyboardActions = KeyboardActions(
-                    onDone = { onQuantityEntered() }
+                    onDone = {
+                        focusManager.clearFocus()
+                        event(NutrimentSelectContract.Event.OnAdd)
+                    }
                 )
             )
 
@@ -93,7 +96,7 @@ fun SelectionContent(
                         NutrimentCard(
                             nutritionUiModel = it,
                             onClick = { nutriment ->
-                                onNutrimentChanged(nutriment)
+                                event(NutrimentSelectContract.Event.OnSelect(nutriment))
                                 expanded = false
                             }
                         )
@@ -113,10 +116,8 @@ fun SelectionContent_LightMode() {
             uiState = NutrimentSelectContract.State(),
             event = {},
             quantity = "",
-            onQuantityChanged = {},
             pagingItems = flowOf(PagingData.from(listOf(NutritionUiModel()))).collectAsLazyPagingItems(),
-            selectedNutriment = NutritionUiModel(),
-            onNutrimentChanged = {}
+            selectedNutriment = NutritionUiModel()
         )
     }
 }
