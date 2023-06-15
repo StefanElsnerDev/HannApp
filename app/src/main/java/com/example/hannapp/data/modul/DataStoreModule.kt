@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.example.hannapp.Constants.NUTRITION_REFERENCE
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -19,6 +20,7 @@ import javax.inject.Singleton
 object DataStoreModule {
 
     @Singleton
+    @Provides
     fun providePreferencesDataStore(@ApplicationContext applicationContext: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
