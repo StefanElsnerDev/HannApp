@@ -12,12 +12,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import kotlin.IllegalArgumentException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NutritionReferenceRepositoryShould {
@@ -60,23 +58,16 @@ class NutritionReferenceRepositoryShould {
 
         @Test
         fun invokeDataSource() = runTest {
-            nutritionReferenceRepository.save(nutritionReferences)
+            nutritionReferenceRepository.save(nutritionUiReferences)
 
             verify(nutritionReferenceDataSource).save(nutritionReferences)
         }
 
         @Test
         fun returnCountOfChangedProperties() = runTest {
-            val result = nutritionReferenceRepository.save(nutritionReferences)
+            val result = nutritionReferenceRepository.save(nutritionUiReferences)
 
             assertThat(result).isEqualTo(propertyCount)
-        }
-
-        @Test
-        fun throwOnMissingProperties() = runTest {
-            assertThrows<IllegalArgumentException> {
-                nutritionReferenceRepository.save(nutritionReferences.copy(kcal = null))
-            }
         }
     }
 
