@@ -1,6 +1,7 @@
 package com.example.hannapp.repository
 
 import com.example.hannapp.data.model.MilkReferenceModel
+import com.example.hannapp.data.model.MilkReferenceUiModel
 import com.example.hannapp.data.repository.MilkReferenceRepository
 import com.example.hannapp.data.source.MilkReferenceDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,7 +12,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -24,6 +24,13 @@ class MilkReferenceRepositoryShould {
     private val milkReferenceDataSource = mock<MilkReferenceDataSource>()
 
     private val milkReferenceModel = MilkReferenceModel(
+        maxQuantity = 123.4f,
+        dayTimeQuantity = 24.34f,
+        preNightQuantity = 22.1f,
+        nightQuantity = 223.11f
+    )
+
+    private val milkReferenceUiModel = MilkReferenceUiModel(
         maxQuantity = 123.4f,
         dayTimeQuantity = 24.34f,
         preNightQuantity = 22.1f,
@@ -51,23 +58,16 @@ class MilkReferenceRepositoryShould {
 
         @Test
         fun invokeDataSource() = runTest {
-            milkReferenceRepository.save(milkReferenceModel)
+            milkReferenceRepository.save(milkReferenceUiModel)
 
             verify(milkReferenceDataSource).save(milkReferenceModel)
         }
 
         @Test
         fun returnCountOfChangedProperties() = runTest {
-            val result = milkReferenceRepository.save(milkReferenceModel)
+            val result = milkReferenceRepository.save(milkReferenceUiModel)
 
             assertThat(result).isEqualTo(propertyCount)
-        }
-
-        @Test
-        fun throwOnMissingProperties() = runTest {
-            assertThrows<IllegalArgumentException> {
-                milkReferenceRepository.save(milkReferenceModel.copy(maxQuantity = null))
-            }
         }
     }
 
@@ -94,8 +94,7 @@ class MilkReferenceRepositoryShould {
         fun emitNutritionReferencesFromDataSource() = runTest {
             val result = milkReferenceRepository.emitReference()
 
-            assertThat(result).isEqualTo(referencesFlow)
-            assertThat(result.first()).isEqualTo(milkReferenceModel)
+            assertThat(result.first()).isEqualTo(milkReferenceUiModel)
         }
     }
 }
