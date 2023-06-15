@@ -1,6 +1,7 @@
 package com.example.hannapp.repository
 
 import com.example.hannapp.data.model.NutritionReferences
+import com.example.hannapp.data.model.NutritionUiReferences
 import com.example.hannapp.data.repository.NutritionReferenceRepository
 import com.example.hannapp.data.source.NutritionReferenceDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,6 +26,13 @@ class NutritionReferenceRepositoryShould {
     private val nutritionReferenceDataSource = mock<NutritionReferenceDataSource>()
 
     private val nutritionReferences = NutritionReferences(
+        kcal = 123.4,
+        protein = 892.3,
+        carbohydrates = 293.1,
+        fat = 221.2
+    )
+
+    private val nutritionUiReferences = NutritionUiReferences(
         kcal = 123.4,
         protein = 892.3,
         carbohydrates = 293.1,
@@ -95,8 +103,7 @@ class NutritionReferenceRepositoryShould {
         fun emitNutritionReferencesFromDataSource() = runTest {
             val result = nutritionReferenceRepository.emitReference()
 
-            assertThat(result).isEqualTo(referencesFlow)
-            assertThat(result.first()).isEqualTo(nutritionReferences)
+            assertThat(result.first()).isEqualTo(nutritionUiReferences)
         }
     }
 }
