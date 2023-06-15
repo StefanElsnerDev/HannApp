@@ -212,7 +212,7 @@ fun NutrimentLogContent(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                             .padding(horizontal = PADDING),
-                        mood = Mood.GREEN
+                        mood = uiState.validation
                     )
                 }
             }
