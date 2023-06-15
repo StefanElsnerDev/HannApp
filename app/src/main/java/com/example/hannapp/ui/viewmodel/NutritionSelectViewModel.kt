@@ -15,6 +15,8 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
+import com.example.hannapp.domain.ValidateNutrimentLogUseCase
+import com.example.hannapp.ui.mood.Mood
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,11 +37,11 @@ interface NutrimentSelectContract :
         val log: List<NutrimentUiLogModel> = emptyList(),
         val nutrimentLogId: Long? = null,
         val quantity: String = "",
+        val validation: Mood = Mood.GREEN,
         val isEditMode: Boolean = false,
         val isLoading: Boolean = false,
         val errorMessage: Message? = null
     )
-
     sealed class Event {
         object OnGetAll : Event()
         data class OnSelect(val nutritionUiModel: NutritionUiModel) : Event()
@@ -49,6 +51,7 @@ interface NutrimentSelectContract :
         object OnUpdate : Event()
         object OnAbort : Event()
         object OnClearAll : Event()
+        object OnValidate : Event()
     }
 }
 
@@ -59,6 +62,7 @@ class NutritionSelectViewModel @Inject constructor(
     private val deleteNutrimentLogUseCase: DeleteNutrimentLogUseCase,
     private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     private val getNutrimentLogUseCase: GetNutrimentLogUseCase,
+    private val validateNutrimentLogUseCase: ValidateNutrimentLogUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
     private lateinit var memento: Memento
@@ -68,6 +72,7 @@ class NutritionSelectViewModel @Inject constructor(
 
     init {
         getLog()
+        validate()
     }
 
     private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
@@ -83,6 +88,7 @@ class NutritionSelectViewModel @Inject constructor(
             is NutrimentSelectContract.Event.OnUpdate -> update()
             is NutrimentSelectContract.Event.OnGetAll -> getAll()
             is NutrimentSelectContract.Event.OnSetQuantity -> setQuantity(event.quantity)
+            is NutrimentSelectContract.Event.OnValidate -> validate()
         }
     }
 
@@ -272,6 +278,26 @@ class NutritionSelectViewModel @Inject constructor(
 
     private fun unselect() {
         _uiState.update { state -> state.copy(NutritionUiModel()) }
+    }
+
+    private fun validate() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                validateNutrimentLogUseCase().collectLatest { mood ->
+                    _uiState.update { it.copy(validation = mood) }
+                }
+            } catch (e: IllegalArgumentException) {
+                updateErrorState(
+                    stringRes = R.string.missing_nutrition_limits,
+                    string = e.message
+                )
+            } catch (e: Exception) {
+                updateErrorState(
+                    stringRes = null,
+                    string = e.message
+                )
+            }
+        }
     }
 
     private inner class Memento(

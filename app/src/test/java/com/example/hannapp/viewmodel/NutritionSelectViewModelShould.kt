@@ -8,6 +8,8 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
+import com.example.hannapp.domain.ValidateNutrimentLogUseCase
+import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +40,7 @@ class NutritionSelectViewModelShould {
     private val updateNutrimentLogUseCase = mock(UpdateNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
+    private val validateNutrimentLogUseCase = mock(ValidateNutrimentLogUseCase::class.java)
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -88,12 +91,17 @@ class NutritionSelectViewModelShould {
             flowOf(nutrimentUiLog)
         )
 
+        whenever(validateNutrimentLogUseCase.invoke()).thenReturn(
+            flowOf(Mood.GREEN)
+        )
+
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase = getNutritionUseCase,
             insertNutrimentLogUseCase = insertNutrimentLogUseCase,
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
+            validateNutrimentLogUseCase = validateNutrimentLogUseCase,
             dispatcher = testDispatcher
         )
     }
@@ -118,6 +126,7 @@ class NutritionSelectViewModelShould {
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
+            validateNutrimentLogUseCase = validateNutrimentLogUseCase,
             dispatcher = testDispatcher
         )
 
@@ -169,6 +178,7 @@ class NutritionSelectViewModelShould {
                 deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
                 updateNutrimentLogUseCase = updateNutrimentLogUseCase,
                 getNutrimentLogUseCase = getNutrimentLogUseCase,
+                validateNutrimentLogUseCase = validateNutrimentLogUseCase,
                 dispatcher = testDispatcher
             )
 
@@ -448,6 +458,55 @@ class NutritionSelectViewModelShould {
 
                 assertThat(nutritionViewModel.state.value.quantity).isEqualTo(quantity.toString())
             }
+        }
+    }
+
+    @Nested
+    inner class EmitMood {
+
+        @Test
+        fun invokeValidationUseCaseOnInstantiation() = runTest {
+            verify(validateNutrimentLogUseCase).invoke()
+            assertThat(nutritionViewModel.state.value.validation).isEqualTo(Mood.GREEN)
+        }
+
+        @Test
+        fun emitValidation() = runTest {
+            whenever(validateNutrimentLogUseCase.invoke()).thenReturn(
+                flowOf(Mood.RED)
+            )
+
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnValidate)
+
+            assertThat(nutritionViewModel.state.value.validation).isEqualTo(Mood.RED)
+        }
+
+        @Test
+        fun emitErrorOnValidationError() = runTest {
+            val errorMessage = "Failed requirement"
+
+            whenever(validateNutrimentLogUseCase.invoke()).thenThrow(
+                IllegalArgumentException(errorMessage)
+            )
+
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNull()
+
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnValidate)
+
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNotNull.isEqualTo(errorMessage)
+        }
+
+        @Test
+        fun emitErrorOnUnexpectedError() = runTest {
+            val errorMessage = "Unexpected Error"
+
+            whenever(validateNutrimentLogUseCase.invoke()).thenThrow(
+                RuntimeException(errorMessage)
+            )
+
+            nutritionViewModel.event(NutrimentSelectContract.Event.OnValidate)
+
+            assertThat(nutritionViewModel.state.value.errorMessage?.message).isNotNull.isEqualTo(errorMessage)
         }
     }
 }

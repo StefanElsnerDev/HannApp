@@ -34,4 +34,5 @@
     <string name="insertion_failed">Insertion of log entry failed</string>
     <string name="invalid_log_id">Invalid log ID</string>
     <string name="nutriment_update_failed">Update of nutriment failed</string>
+    <string name="missing_nutrition_limits">Missing nutrition limits</string>
 </resources>
