@@ -2,8 +2,6 @@ package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.hannapp.data.Message
-import com.example.hannapp.data.model.MilkLimitReferenceUiModel
-import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,22 +9,57 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-enum class NutritionReference {
-    KCAL, PROTEIN, CARBOHYDRATES, FAT
+interface Reference
+
+enum class NutritionReference : Reference {
+    KCAL,
+    PROTEIN,
+    CARBOHYDRATES,
+    FAT
 }
 
-enum class MilkReference {
-    TOTAL, PRE_NIGHT, NIGHT
+enum class MilkReference : Reference {
+    TOTAL,
+    PRE_NIGHT,
+    NIGHT
+}
+
+interface ValidationStrategy {
+    fun validate(value: String, reference: Reference)
+}
+
+class InvalidReferencesList(private val references: MutableList<Reference>) : ValidationStrategy {
+    override fun validate(value: String, reference: Reference) {
+        if (value.toFloatOrNull() == null) references.add(reference)
+    }
 }
 
 interface NutritionLimitContract :
     UnidirectionalViewModel<NutritionLimitContract.State, NutritionLimitContract.Event> {
 
+    sealed class ReferenceState {
+        data class State(
+            val value: String = "",
+            val isError: Boolean = false
+        ) {
+            fun validate(validationStrategy: ValidationStrategy, reference: Reference) {
+                validationStrategy.validate(value, reference)
+            }
+        }
+    }
+
     data class State(
-        val nutritionLimitReferenceUiModel: NutritionLimitReferenceUiModel = NutritionLimitReferenceUiModel(),
-        val milkLimitReferenceUiModel: MilkLimitReferenceUiModel = MilkLimitReferenceUiModel(),
+        val kcal: ReferenceState.State = ReferenceState.State(),
+        val protein: ReferenceState.State = ReferenceState.State(),
+        val carbohydrates: ReferenceState.State = ReferenceState.State(),
+        val fat: ReferenceState.State = ReferenceState.State(),
+        val totalQuantity: ReferenceState.State = ReferenceState.State(),
+        val preNightQuantity: ReferenceState.State = ReferenceState.State(),
+        val nightQuantity: ReferenceState.State = ReferenceState.State(),
         val isLoading: Boolean = false,
-        val errorMessage: Message? = null
+        val errorMessage: Message? = null,
+        val invalidReferences: List<Reference> = emptyList(),
+        val isDataValid: Boolean = false
     )
 
     sealed class Event {
@@ -39,6 +72,8 @@ interface NutritionLimitContract :
             val milkReference: MilkReference,
             val value: String
         ) : Event()
+
+        object OnValidate : Event()
     }
 }
 
@@ -61,6 +96,11 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
                 event.milkReference,
                 event.value
             )
+
+            is NutritionLimitContract.Event.OnValidate -> {
+                emitEmptyReferences()
+                validate()
+            }
         }
     }
 
@@ -69,9 +109,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             NutritionReference.KCAL -> {
                 _state.update {
                     it.copy(
-                        nutritionLimitReferenceUiModel = _state.value.nutritionLimitReferenceUiModel.copy(
-                            kcal = value
-                        )
+                        kcal = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -79,9 +117,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             NutritionReference.PROTEIN -> {
                 _state.update {
                     it.copy(
-                        nutritionLimitReferenceUiModel = _state.value.nutritionLimitReferenceUiModel.copy(
-                            protein = value
-                        )
+                        protein = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -89,9 +125,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             NutritionReference.CARBOHYDRATES -> {
                 _state.update {
                     it.copy(
-                        nutritionLimitReferenceUiModel = _state.value.nutritionLimitReferenceUiModel.copy(
-                            carbohydrates = value
-                        )
+                        carbohydrates = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -99,9 +133,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             NutritionReference.FAT -> {
                 _state.update {
                     it.copy(
-                        nutritionLimitReferenceUiModel = _state.value.nutritionLimitReferenceUiModel.copy(
-                            fat = value
-                        )
+                        fat = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -113,9 +145,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             MilkReference.TOTAL -> {
                 _state.update {
                     it.copy(
-                        milkLimitReferenceUiModel = _state.value.milkLimitReferenceUiModel.copy(
-                            total = value
-                        )
+                        totalQuantity = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -123,9 +153,7 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             MilkReference.PRE_NIGHT -> {
                 _state.update {
                     it.copy(
-                        milkLimitReferenceUiModel = _state.value.milkLimitReferenceUiModel.copy(
-                            preNight = value
-                        )
+                        preNightQuantity = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
@@ -133,12 +161,47 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             MilkReference.NIGHT -> {
                 _state.update {
                     it.copy(
-                        milkLimitReferenceUiModel = _state.value.milkLimitReferenceUiModel.copy(
-                            night = value
-                        )
+                        nightQuantity = NutritionLimitContract.ReferenceState.State(value = value)
                     )
                 }
             }
         }
     }
+
+    private fun emitEmptyReferences() {
+        val invalids = mutableListOf<Reference>()
+        _state.value.apply {
+            kcal.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = NutritionReference.KCAL
+            )
+            protein.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = NutritionReference.PROTEIN
+            )
+            carbohydrates.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = NutritionReference.CARBOHYDRATES
+            )
+            fat.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = NutritionReference.FAT
+            )
+            totalQuantity.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = MilkReference.TOTAL
+            )
+            preNightQuantity.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = MilkReference.PRE_NIGHT
+            )
+            nightQuantity.validate(
+                validationStrategy = InvalidReferencesList(invalids),
+                reference = MilkReference.NIGHT
+            )
+        }
+        _state.update { it.copy(invalidReferences = invalids.toList()) }
+    }
+
+    private fun validate() = _state.update { it.copy(isDataValid = it.invalidReferences.isEmpty()) }
 }
