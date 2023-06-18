@@ -9,31 +9,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-interface Reference
-
-enum class NutritionReference : Reference {
-    KCAL,
-    PROTEIN,
-    CARBOHYDRATES,
-    FAT
-}
-
-enum class MilkReference : Reference {
-    TOTAL,
-    PRE_NIGHT,
-    NIGHT
-}
-
-interface ValidationStrategy {
-    fun validate(value: String, reference: Reference)
-}
-
-class InvalidReferencesList(private val references: MutableList<Reference>) : ValidationStrategy {
-    override fun validate(value: String, reference: Reference) {
-        if (value.toFloatOrNull() == null) references.add(reference)
-    }
-}
-
 interface NutritionLimitContract :
     UnidirectionalViewModel<NutritionLimitContract.State, NutritionLimitContract.Event> {
 
@@ -42,8 +17,11 @@ interface NutritionLimitContract :
             val value: String = "",
             val isError: Boolean = false
         ) {
-            fun validate(validationStrategy: ValidationStrategy, reference: Reference) {
-                validationStrategy.validate(value, reference)
+            fun validate(
+                referenceValidationStrategy: ReferenceValidationStrategy,
+                reference: Reference
+            ) {
+                referenceValidationStrategy.validate(value, reference)
             }
         }
     }
@@ -172,31 +150,31 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
         val invalids = mutableListOf<Reference>()
         _state.value.apply {
             kcal.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = NutritionReference.KCAL
             )
             protein.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = NutritionReference.PROTEIN
             )
             carbohydrates.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = NutritionReference.CARBOHYDRATES
             )
             fat.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = NutritionReference.FAT
             )
             totalQuantity.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = MilkReference.TOTAL
             )
             preNightQuantity.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = MilkReference.PRE_NIGHT
             )
             nightQuantity.validate(
-                validationStrategy = InvalidReferencesList(invalids),
+                referenceValidationStrategy = InvalidReferencesList(invalids),
                 reference = MilkReference.NIGHT
             )
         }
