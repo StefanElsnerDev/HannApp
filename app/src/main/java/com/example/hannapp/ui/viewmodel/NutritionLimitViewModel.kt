@@ -1,12 +1,16 @@
 package com.example.hannapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.Message
+import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.SaveNutritionReferencesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface NutritionLimitContract :
@@ -52,11 +56,15 @@ interface NutritionLimitContract :
         ) : Event()
 
         object OnValidate : Event()
+
+        object OnSave : Event()
     }
 }
 
 @HiltViewModel
-class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimitContract {
+class NutritionLimitViewModel @Inject constructor(
+    private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase
+) : ViewModel(), NutritionLimitContract {
     // private save(uiLimitModel) = useCase(uiLimitModel) // use case transforms to to ReferenceModel with require
 
     // private save(milkUiModel) = useCase(milkUiModel) // use case transforms to to MilkModel with require
@@ -78,6 +86,10 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
             is NutritionLimitContract.Event.OnValidate -> {
                 emitEmptyReferences()
                 validate()
+            }
+
+            is NutritionLimitContract.Event.OnSave -> {
+                saveNutritionReferences()
             }
         }
     }
@@ -182,4 +194,30 @@ class NutritionLimitViewModel @Inject constructor() : ViewModel(), NutritionLimi
     }
 
     private fun validate() = _state.update { it.copy(isDataValid = it.invalidReferences.isEmpty()) }
+
+    private fun saveNutritionReferences() {
+        viewModelScope.launch {
+            try {
+                _state.value.apply {
+                    saveNutritionReferencesUseCase(
+                        NutritionLimitReferenceUiModel(
+                            kcal = kcal.value,
+                            protein = protein.value,
+                            carbohydrates = carbohydrates.value,
+                            fat = fat.value
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        errorMessage = Message(
+                            messageRes = null,
+                            message = e.message
+                        )
+                    )
+                }
+            }
+        }
+    }
 }
