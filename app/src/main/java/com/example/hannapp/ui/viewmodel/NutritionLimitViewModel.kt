@@ -3,7 +3,9 @@ package com.example.hannapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.Message
+import com.example.hannapp.data.model.MilkLimitReferenceUiModel
 import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.SaveMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.SaveNutritionReferencesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,7 +65,8 @@ interface NutritionLimitContract :
 
 @HiltViewModel
 class NutritionLimitViewModel @Inject constructor(
-    private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase
+    private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase,
+    private val saveMilkQuantityReferencesUseCase: SaveMilkQuantityReferencesUseCase
 ) : ViewModel(), NutritionLimitContract {
     // private save(uiLimitModel) = useCase(uiLimitModel) // use case transforms to to ReferenceModel with require
 
@@ -90,6 +93,7 @@ class NutritionLimitViewModel @Inject constructor(
 
             is NutritionLimitContract.Event.OnSave -> {
                 saveNutritionReferences()
+                saveMilkQuantityReferences()
             }
         }
     }
@@ -205,6 +209,32 @@ class NutritionLimitViewModel @Inject constructor(
                             protein = protein.value,
                             carbohydrates = carbohydrates.value,
                             fat = fat.value
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        errorMessage = Message(
+                            messageRes = null,
+                            message = e.message
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun saveMilkQuantityReferences() {
+        viewModelScope.launch {
+            try {
+                _state.value.apply {
+                    saveMilkQuantityReferencesUseCase(
+                        MilkLimitReferenceUiModel(
+                            total = totalQuantity.value,
+                            day = "",
+                            preNight = totalQuantity.value,
+                            night = nightQuantity.value
                         )
                     )
                 }
