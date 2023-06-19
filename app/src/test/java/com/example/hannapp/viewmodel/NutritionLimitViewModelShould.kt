@@ -1,5 +1,7 @@
 package com.example.hannapp.viewmodel
 
+import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.GetNutritionReferencesUseCase
 import com.example.hannapp.domain.SaveMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.SaveNutritionReferencesUseCase
 import com.example.hannapp.ui.viewmodel.MilkReference
@@ -8,6 +10,7 @@ import com.example.hannapp.ui.viewmodel.NutritionLimitViewModel
 import com.example.hannapp.ui.viewmodel.NutritionReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -18,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -30,6 +34,7 @@ class NutritionLimitViewModelShould {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val saveNutritionReferencesUseCase = mock<SaveNutritionReferencesUseCase>()
     private val saveMilkQuantityReferencesUseCase = mock<SaveMilkQuantityReferencesUseCase>()
+    private val getNutritionReferencesUseCase = mock<GetNutritionReferencesUseCase>()
 
     @BeforeEach
     fun beforeEach() = runTest {
@@ -40,7 +45,8 @@ class NutritionLimitViewModelShould {
 
         nutritionLimitViewModel = NutritionLimitViewModel(
             saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
-            saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase
+            saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
+            getNutritionReferencesUseCase = getNutritionReferencesUseCase
         )
     }
 
@@ -321,6 +327,50 @@ class NutritionLimitViewModelShould {
             assertThat(nutritionLimitViewModel.state.value.errorMessage?.message).isEqualTo(
                 errorMessage
             )
+        }
+    }
+
+    @Nested
+    inner class GetNutritionReferencesOnInstantiation {
+
+        private val kcal = "12.3"
+        private val protein = "34.5"
+        private val carbohydrates = "567.8"
+        private val fat = "11.2"
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            clearInvocations(getNutritionReferencesUseCase)
+
+            whenever(getNutritionReferencesUseCase.invoke()).thenReturn(
+                flowOf(
+                    NutritionLimitReferenceUiModel(
+                        kcal = kcal,
+                        protein = protein,
+                        carbohydrates = carbohydrates,
+                        fat = fat
+                    )
+                )
+            )
+
+            nutritionLimitViewModel = NutritionLimitViewModel(
+                saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
+                saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
+                getNutritionReferencesUseCase = getNutritionReferencesUseCase
+            )
+        }
+
+        @Test
+        fun invokeUseCase() = runTest {
+            verify(getNutritionReferencesUseCase).invoke()
+        }
+
+        @Test
+        fun emitNutritionReferences() = runTest {
+            assertThat(nutritionLimitViewModel.state.value.kcal.value).isEqualTo(kcal)
+            assertThat(nutritionLimitViewModel.state.value.protein.value).isEqualTo(protein)
+            assertThat(nutritionLimitViewModel.state.value.carbohydrates.value).isEqualTo(carbohydrates)
+            assertThat(nutritionLimitViewModel.state.value.fat.value).isEqualTo(fat)
         }
     }
 }

@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.Message
 import com.example.hannapp.data.model.MilkLimitReferenceUiModel
 import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.GetNutritionReferencesUseCase
 import com.example.hannapp.domain.SaveMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.SaveNutritionReferencesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -66,7 +68,8 @@ interface NutritionLimitContract :
 @HiltViewModel
 class NutritionLimitViewModel @Inject constructor(
     private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase,
-    private val saveMilkQuantityReferencesUseCase: SaveMilkQuantityReferencesUseCase
+    private val saveMilkQuantityReferencesUseCase: SaveMilkQuantityReferencesUseCase,
+    private val getNutritionReferencesUseCase: GetNutritionReferencesUseCase
 ) : ViewModel(), NutritionLimitContract {
     private val _state = MutableStateFlow(NutritionLimitContract.State(isLoading = true))
     override val state: StateFlow<NutritionLimitContract.State> = _state.asStateFlow()
@@ -246,5 +249,43 @@ class NutritionLimitViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getNutritionReferences() {
+        viewModelScope.launch {
+            try {
+                getNutritionReferencesUseCase().collectLatest { model ->
+                    _state.update {
+                        it.copy(
+                            kcal = NutritionLimitContract.ReferenceState.State(
+                                value = model.kcal
+                            ),
+                            protein = NutritionLimitContract.ReferenceState.State(
+                                value = model.protein
+                            ),
+                            carbohydrates = NutritionLimitContract.ReferenceState.State(
+                                value = model.carbohydrates
+                            ),
+                            fat = NutritionLimitContract.ReferenceState.State(
+                                value = model.fat
+                            )
+                        )
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                _state.update {
+                    it.copy(
+                        errorMessage = Message(
+                            messageRes = null,
+                            message = e.message
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    init {
+        getNutritionReferences()
     }
 }
