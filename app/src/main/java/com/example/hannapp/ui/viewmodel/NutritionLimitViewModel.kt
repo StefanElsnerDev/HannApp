@@ -68,9 +68,6 @@ class NutritionLimitViewModel @Inject constructor(
     private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase,
     private val saveMilkQuantityReferencesUseCase: SaveMilkQuantityReferencesUseCase
 ) : ViewModel(), NutritionLimitContract {
-    // private save(uiLimitModel) = useCase(uiLimitModel) // use case transforms to to ReferenceModel with require
-
-    // private save(milkUiModel) = useCase(milkUiModel) // use case transforms to to MilkModel with require
     private val _state = MutableStateFlow(NutritionLimitContract.State(isLoading = true))
     override val state: StateFlow<NutritionLimitContract.State> = _state.asStateFlow()
 
