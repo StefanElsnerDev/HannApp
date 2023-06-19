@@ -19,7 +19,7 @@ class SaveNutritionReferencesUseCase @Inject constructor(
                     NutritionUiReferences(
                         kcal = it.kcal.toDouble(),
                         protein = it.protein.toDouble(),
-                        carbohydrates = it.protein.toDouble(),
+                        carbohydrates = it.carbohydrates.toDouble(),
                         fat = it.fat.toDouble()
                     )
                 }
