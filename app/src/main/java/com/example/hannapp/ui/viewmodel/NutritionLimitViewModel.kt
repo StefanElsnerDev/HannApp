@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hannapp.data.Message
 import com.example.hannapp.data.model.MilkLimitReferenceUiModel
 import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.GetMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.GetNutritionReferencesUseCase
 import com.example.hannapp.domain.SaveMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.SaveNutritionReferencesUseCase
@@ -69,7 +70,8 @@ interface NutritionLimitContract :
 class NutritionLimitViewModel @Inject constructor(
     private val saveNutritionReferencesUseCase: SaveNutritionReferencesUseCase,
     private val saveMilkQuantityReferencesUseCase: SaveMilkQuantityReferencesUseCase,
-    private val getNutritionReferencesUseCase: GetNutritionReferencesUseCase
+    private val getNutritionReferencesUseCase: GetNutritionReferencesUseCase,
+    private val getMilkQuantityReferencesUseCase: GetMilkQuantityReferencesUseCase
 ) : ViewModel(), NutritionLimitContract {
     private val _state = MutableStateFlow(NutritionLimitContract.State(isLoading = true))
     override val state: StateFlow<NutritionLimitContract.State> = _state.asStateFlow()
@@ -285,7 +287,39 @@ class NutritionLimitViewModel @Inject constructor(
         }
     }
 
+    private fun getMilkReferences() {
+        viewModelScope.launch {
+            try {
+                getMilkQuantityReferencesUseCase().collectLatest { model ->
+                    _state.update {
+                        it.copy(
+                            totalQuantity = NutritionLimitContract.ReferenceState.State(
+                                value = model.total
+                            ),
+                            preNightQuantity = NutritionLimitContract.ReferenceState.State(
+                                value = model.preNight
+                            ),
+                            nightQuantity = NutritionLimitContract.ReferenceState.State(
+                                value = model.night
+                            )
+                        )
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                _state.update {
+                    it.copy(
+                        errorMessage = Message(
+                            messageRes = null,
+                            message = e.message
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     init {
         getNutritionReferences()
+        getMilkReferences()
     }
 }

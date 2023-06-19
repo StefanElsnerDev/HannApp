@@ -1,6 +1,8 @@
 package com.example.hannapp.viewmodel
 
+import com.example.hannapp.data.model.MilkLimitReferenceUiModel
 import com.example.hannapp.data.model.NutritionLimitReferenceUiModel
+import com.example.hannapp.domain.GetMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.GetNutritionReferencesUseCase
 import com.example.hannapp.domain.SaveMilkQuantityReferencesUseCase
 import com.example.hannapp.domain.SaveNutritionReferencesUseCase
@@ -35,6 +37,7 @@ class NutritionLimitViewModelShould {
     private val saveNutritionReferencesUseCase = mock<SaveNutritionReferencesUseCase>()
     private val saveMilkQuantityReferencesUseCase = mock<SaveMilkQuantityReferencesUseCase>()
     private val getNutritionReferencesUseCase = mock<GetNutritionReferencesUseCase>()
+    private val getMilkQuantityReferencesUseCase = mock<GetMilkQuantityReferencesUseCase>()
 
     @BeforeEach
     fun beforeEach() = runTest {
@@ -46,7 +49,8 @@ class NutritionLimitViewModelShould {
         nutritionLimitViewModel = NutritionLimitViewModel(
             saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
             saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
-            getNutritionReferencesUseCase = getNutritionReferencesUseCase
+            getNutritionReferencesUseCase = getNutritionReferencesUseCase,
+            getMilkQuantityReferencesUseCase = getMilkQuantityReferencesUseCase
         )
     }
 
@@ -356,7 +360,8 @@ class NutritionLimitViewModelShould {
             nutritionLimitViewModel = NutritionLimitViewModel(
                 saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
                 saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
-                getNutritionReferencesUseCase = getNutritionReferencesUseCase
+                getNutritionReferencesUseCase = getNutritionReferencesUseCase,
+                getMilkQuantityReferencesUseCase = getMilkQuantityReferencesUseCase
             )
         }
 
@@ -371,6 +376,50 @@ class NutritionLimitViewModelShould {
             assertThat(nutritionLimitViewModel.state.value.protein.value).isEqualTo(protein)
             assertThat(nutritionLimitViewModel.state.value.carbohydrates.value).isEqualTo(carbohydrates)
             assertThat(nutritionLimitViewModel.state.value.fat.value).isEqualTo(fat)
+        }
+    }
+
+    @Nested
+    inner class GetMilkReferencesOnInstantiation {
+
+        private val total = "400"
+        private val day = "50"
+        private val preNight = "50"
+        private val night = "100"
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            clearInvocations(getMilkQuantityReferencesUseCase)
+
+            whenever(getMilkQuantityReferencesUseCase.invoke()).thenReturn(
+                flowOf(
+                    MilkLimitReferenceUiModel(
+                        total = total,
+                        day = day,
+                        preNight = preNight,
+                        night = night
+                    )
+                )
+            )
+
+            nutritionLimitViewModel = NutritionLimitViewModel(
+                saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
+                saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
+                getNutritionReferencesUseCase = getNutritionReferencesUseCase,
+                getMilkQuantityReferencesUseCase = getMilkQuantityReferencesUseCase
+            )
+        }
+
+        @Test
+        fun invokeUseCase() = runTest {
+            verify(getMilkQuantityReferencesUseCase).invoke()
+        }
+
+        @Test
+        fun emitNutritionReferences() = runTest {
+            assertThat(nutritionLimitViewModel.state.value.totalQuantity.value).isEqualTo(total)
+            assertThat(nutritionLimitViewModel.state.value.preNightQuantity.value).isEqualTo(preNight)
+            assertThat(nutritionLimitViewModel.state.value.nightQuantity.value).isEqualTo(night)
         }
     }
 }
