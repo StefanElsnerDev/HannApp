@@ -18,7 +18,7 @@ class SaveMilkQuantityReferencesUseCase @Inject constructor(
                 milkLimitReferenceUiModel.let {
                     MilkReferenceUiModel(
                         maxQuantity = it.total.toFloat(),
-                        dayTimeQuantity = it.day.toFloat(),
+                        dayTimeQuantity = it.day?.toFloat() ?: (it.total.toFloat() - it.night.toFloat()),
                         preNightQuantity = it.preNight.toFloat(),
                         nightQuantity = it.night.toFloat()
                     )
