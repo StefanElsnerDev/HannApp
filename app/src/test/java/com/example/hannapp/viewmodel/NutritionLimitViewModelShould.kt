@@ -45,6 +45,8 @@ class NutritionLimitViewModelShould {
 
         whenever(saveNutritionReferencesUseCase.invoke(any())).thenReturn(Unit)
         whenever(saveMilkQuantityReferencesUseCase.invoke(any())).thenReturn(Unit)
+        whenever(getNutritionReferencesUseCase.invoke()).thenReturn(flowOf())
+        whenever(getMilkQuantityReferencesUseCase.invoke()).thenReturn(flowOf())
 
         nutritionLimitViewModel = NutritionLimitViewModel(
             saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
