@@ -379,6 +379,25 @@ class NutritionLimitViewModelShould {
             assertThat(nutritionLimitViewModel.state.value.carbohydrates.value).isEqualTo(carbohydrates)
             assertThat(nutritionLimitViewModel.state.value.fat.value).isEqualTo(fat)
         }
+
+        @Test
+        fun emitErrorOnFailingUseCaseCall() = runTest {
+            val errorMessage = "Something unexpected happened"
+
+            whenever(getNutritionReferencesUseCase.invoke()).thenThrow(
+                RuntimeException(errorMessage)
+            )
+
+            nutritionLimitViewModel = NutritionLimitViewModel(
+                saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
+                saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
+                getNutritionReferencesUseCase = getNutritionReferencesUseCase,
+                getMilkQuantityReferencesUseCase = getMilkQuantityReferencesUseCase
+            )
+
+            assertThat(nutritionLimitViewModel.state.value.errorMessage?.messageRes).isNull()
+            assertThat(nutritionLimitViewModel.state.value.errorMessage?.message).isEqualTo(errorMessage)
+        }
     }
 
     @Nested
@@ -422,6 +441,25 @@ class NutritionLimitViewModelShould {
             assertThat(nutritionLimitViewModel.state.value.totalQuantity.value).isEqualTo(total)
             assertThat(nutritionLimitViewModel.state.value.preNightQuantity.value).isEqualTo(preNight)
             assertThat(nutritionLimitViewModel.state.value.nightQuantity.value).isEqualTo(night)
+        }
+
+        @Test
+        fun emitErrorOnFailingUseCaseCall() = runTest {
+            val errorMessage = "Something unexpected happened"
+
+            whenever(getMilkQuantityReferencesUseCase.invoke()).thenThrow(
+                RuntimeException(errorMessage)
+            )
+
+            nutritionLimitViewModel = NutritionLimitViewModel(
+                saveNutritionReferencesUseCase = saveNutritionReferencesUseCase,
+                saveMilkQuantityReferencesUseCase = saveMilkQuantityReferencesUseCase,
+                getNutritionReferencesUseCase = getNutritionReferencesUseCase,
+                getMilkQuantityReferencesUseCase = getMilkQuantityReferencesUseCase
+            )
+
+            assertThat(nutritionLimitViewModel.state.value.errorMessage?.messageRes).isNull()
+            assertThat(nutritionLimitViewModel.state.value.errorMessage?.message).isEqualTo(errorMessage)
         }
     }
 }
