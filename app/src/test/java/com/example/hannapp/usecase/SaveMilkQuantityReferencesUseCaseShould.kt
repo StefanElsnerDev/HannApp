@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -82,6 +83,15 @@ class SaveMilkQuantityReferencesUseCaseShould {
 
             verify(milkReferenceRepository).save(expectedModelWithCalculatedDay)
         }
+
+    @Test
+    fun throwOnInvalidStringNumber() = runTest {
+        val invalidModel = milkLimitReferenceUiModel.copy(day = "abc")
+
+        assertThrows<RuntimeException> {
+            saveMilkQuantityReferencesUseCase.invoke(invalidModel)
+        }
+    }
 
     companion object {
         @JvmStatic
