@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
 import com.example.hannapp.ui.input.InputField
+import com.example.hannapp.ui.supportOnError
 import com.example.hannapp.ui.theme.Constraints
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
@@ -109,10 +110,6 @@ fun MilkQuantityContent(
         }
     }
 }
-
-@Composable
-private fun supportOnError(isError: Boolean) =
-    if (isError) stringResource(id = R.string.fill_field) else ""
 
 @Preview(
     device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
