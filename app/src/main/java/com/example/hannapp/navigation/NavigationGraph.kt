@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.hannapp.ui.screens.NutrimentLogScreen
 import com.example.hannapp.ui.screens.NutritionDataUpdateScreen
 import com.example.hannapp.ui.screens.NutritionInsertScreen
+import com.example.hannapp.ui.screens.ReferenceScreen
 import com.example.hannapp.ui.viewmodel.NutritionInsertViewModel
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
 import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
@@ -15,7 +16,8 @@ import com.example.hannapp.ui.viewmodel.NutritionUpdateViewModel
 enum class Destination(val value: String) {
     DATA("data"),
     DATA_UPDATE("data_update"),
-    SELECTION("selection")
+    SELECTION("selection"),
+    REFERENCE("reference")
 }
 
 @Composable
@@ -47,6 +49,13 @@ fun NavigationGraph(
 
             NutritionDataUpdateScreen(
                 viewModel = viewModel
+            )
+        }
+        composable(Destination.REFERENCE.value) {
+            ReferenceScreen(
+                viewModel = hiltViewModel(),
+                navController = navController,
+                isCompactScreen = isCompactScreen
             )
         }
     }

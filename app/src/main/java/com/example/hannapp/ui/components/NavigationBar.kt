@@ -61,18 +61,23 @@ private fun navigationItems(navController: NavHostController): List<NavigationIt
 
     return listOf(
         NavigationItem(
-            R.string.database,
-            R.drawable.food,
-            Destination.DATA.value,
-            navigationActions.navigateToData
+            label = R.string.database,
+            icon = R.drawable.food,
+            destination = Destination.DATA.value,
+            action = navigationActions.navigateToData
         ),
         NavigationItem(
-            R.string.food_selection,
-            R.drawable.eat,
-            Destination.SELECTION.value,
-            navigationActions.navigateToSelection
+            label = R.string.food_selection,
+            icon = R.drawable.eat,
+            destination = Destination.SELECTION.value,
+            action = navigationActions.navigateToSelection
         ),
-        NavigationItem(R.string.guide, R.drawable.help)
+        NavigationItem(
+            label = R.string.nutrition_references,
+            icon = R.drawable.help,
+            destination = Destination.REFERENCE.value,
+            action = navigationActions.navigateToReference
+        )
     )
 }
 

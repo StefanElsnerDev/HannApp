@@ -20,6 +20,7 @@ fun ReferenceScreen(
     ReferenceContent(
         uiState = uiState,
         event = { viewModel.event(it) },
+        isCompactScreen = isCompactScreen,
         navController = navController,
         modifier = Modifier.fillMaxSize()
     )

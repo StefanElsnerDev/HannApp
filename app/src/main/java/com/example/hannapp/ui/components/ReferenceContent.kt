@@ -26,6 +26,7 @@ import com.example.hannapp.ui.viewmodel.NutritionLimitContract
 fun ReferenceContent(
     uiState: NutritionLimitContract.State,
     event: (NutritionLimitContract.Event) -> Unit,
+    isCompactScreen: Boolean,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -105,6 +106,7 @@ fun ReferencesContent_Preview() {
                     isError = false
                 )
             ),
+            isCompactScreen = false,
             navController = rememberNavController(),
             event = {}
         )
