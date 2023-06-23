@@ -3,11 +3,12 @@ package com.example.hannapp.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.supportOnError
-import com.example.hannapp.ui.theme.Constraints
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionLimitContract
@@ -42,100 +42,96 @@ fun NutritionReferencesContent(
             modifier = Modifier.padding(horizontal = PADDING)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = Constraints.FIELD_WIDTH)
+        Row(
+            modifier = Modifier.width(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            item {
-                kcalState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnNutritionUpdate(
-                                    nutritionReference = NutritionReference.KCAL,
-                                    value = it
-                                )
+            kcalState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnNutritionUpdate(
+                                nutritionReference = NutritionReference.KCAL,
+                                value = it
                             )
-                        },
-                        label = stringResource(id = R.string.energy),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
-            }
-            item {
-                proteinState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnNutritionUpdate(
-                                    nutritionReference = NutritionReference.PROTEIN,
-                                    value = it
-                                )
-                            )
-                        },
-                        label = stringResource(id = R.string.protein),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
-            }
-            item {
-                carbohydratesState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnNutritionUpdate(
-                                    nutritionReference = NutritionReference.CARBOHYDRATES,
-                                    value = it
-                                )
-                            )
-                        },
-                        label = stringResource(id = R.string.carbohydrates),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
+                        )
+                    },
+                    label = stringResource(id = R.string.energy),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
             }
 
-            item {
-                fatState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnNutritionUpdate(
-                                    nutritionReference = NutritionReference.FAT,
-                                    value = it
-                                )
+            proteinState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnNutritionUpdate(
+                                nutritionReference = NutritionReference.PROTEIN,
+                                value = it
                             )
-                        },
-                        label = stringResource(id = R.string.fat),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
+                        )
+                    },
+                    label = stringResource(id = R.string.protein),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
+            }
+
+            carbohydratesState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnNutritionUpdate(
+                                nutritionReference = NutritionReference.CARBOHYDRATES,
+                                value = it
+                            )
+                        )
+                    },
+                    label = stringResource(id = R.string.carbohydrates),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
+            }
+
+            fatState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnNutritionUpdate(
+                                nutritionReference = NutritionReference.FAT,
+                                value = it
+                            )
+                        )
+                    },
+                    label = stringResource(id = R.string.fat),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
             }
         }
     }
 }
 
 @Preview(
-    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
+    device = "spec:width=2280dp,height=800dp,dpi=240,orientation=landscape",
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
