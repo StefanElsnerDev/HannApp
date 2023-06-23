@@ -3,11 +3,12 @@ package com.example.hannapp.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
 import com.example.hannapp.ui.input.InputField
 import com.example.hannapp.ui.supportOnError
-import com.example.hannapp.ui.theme.Constraints
 import com.example.hannapp.ui.theme.Constraints.PADDING
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.MilkReference
@@ -41,78 +41,76 @@ fun MilkQuantityContent(
             modifier = Modifier.padding(horizontal = PADDING)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = Constraints.FIELD_WIDTH)
+        Row(
+            modifier = Modifier.width(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            item {
-                totalState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnMilkUpdate(
-                                    milkReference = MilkReference.TOTAL,
-                                    value = it
-                                )
+            totalState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnMilkUpdate(
+                                milkReference = MilkReference.TOTAL,
+                                value = it
                             )
-                        },
-                        label = stringResource(id = R.string.total),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
+                        )
+                    },
+                    label = stringResource(id = R.string.total),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
             }
-            item {
-                preNightState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnMilkUpdate(
-                                    milkReference = MilkReference.PRE_NIGHT,
-                                    value = it
-                                )
+
+            preNightState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnMilkUpdate(
+                                milkReference = MilkReference.PRE_NIGHT,
+                                value = it
                             )
-                        },
-                        label = stringResource(id = R.string.share_preNight),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
+                        )
+                    },
+                    label = stringResource(id = R.string.share_preNight),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
             }
-            item {
-                nightState.apply {
-                    InputField(
-                        value = value,
-                        onValueChange = {
-                            event(
-                                NutritionLimitContract.Event.OnMilkUpdate(
-                                    milkReference = MilkReference.NIGHT,
-                                    value = it
-                                )
+
+            nightState.apply {
+                InputField(
+                    value = value,
+                    onValueChange = {
+                        event(
+                            NutritionLimitContract.Event.OnMilkUpdate(
+                                milkReference = MilkReference.NIGHT,
+                                value = it
                             )
-                        },
-                        label = stringResource(id = R.string.share_night),
-                        isError = isError,
-                        supportingText = supportOnError(isError = isError),
-                        modifier = Modifier
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                            .padding(horizontal = PADDING)
-                    )
-                }
+                        )
+                    },
+                    label = stringResource(id = R.string.share_night),
+                    isError = isError,
+                    supportingText = supportOnError(isError = isError),
+                    modifier = Modifier
+                        .wrapContentHeight(align = Alignment.CenterVertically)
+                        .padding(horizontal = PADDING)
+                )
             }
         }
     }
 }
 
 @Preview(
-    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
+    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=landscape",
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
