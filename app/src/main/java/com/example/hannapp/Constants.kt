@@ -16,12 +16,12 @@ object Constants {
     const val ALCOHOL = "alcohol"
 
     const val KCAL_MAX = "kcal_max"
-    const val PROTEIN_MAX = "kcal_max"
-    const val CARBOHYDRATES_MAX = "kcal_max"
-    const val FAT_MAX = "kcal_max"
+    const val PROTEIN_MAX = "protein_max"
+    const val CARBOHYDRATES_MAX = "carbohydrates_max"
+    const val FAT_MAX = "fat_max"
 
-    const val QUANTITY_MAX = "quantityMax"
-    const val DAYTIME_QUANTITY = "dayTimeQuantity"
-    const val PRE_NIGHT_QUANTITY = "preNightQuantity"
-    const val NIGHT_QUANTITY = "nightQuantity"
+    const val QUANTITY_MAX = "quantity_max"
+    const val DAYTIME_QUANTITY = "dayTime_quantity"
+    const val PRE_NIGHT_QUANTITY = "preNight_quantity"
+    const val NIGHT_QUANTITY = "night_quantity"
 }
