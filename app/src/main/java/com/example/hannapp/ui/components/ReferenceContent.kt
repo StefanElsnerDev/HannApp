@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hannapp.R
+import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.theme.HannAppTheme
 import com.example.hannapp.ui.viewmodel.NutritionLimitContract
 
@@ -39,18 +39,18 @@ fun ReferenceContent(
         },
         bottomBar = { NavigationBar(navController) },
         floatingActionButton = {
-            IconButton(
+            FAB(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.change),
+                        contentDescription = null
+                    )
+                },
                 onClick = {
                     event(NutritionLimitContract.Event.OnValidate)
                     if (uiState.isDataValid) event(NutritionLimitContract.Event.OnSave)
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.change),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
+            )
         }
     ) {
         Column(
