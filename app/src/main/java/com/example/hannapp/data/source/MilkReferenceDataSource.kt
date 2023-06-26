@@ -18,10 +18,10 @@ class MilkReferenceDataSource @Inject constructor(
 ) {
     suspend fun save(milkReferenceModel: MilkReferenceModel) = dataStore.edit { preferences ->
         milkReferenceModel.apply {
-            maxQuantity?.let { preferences[floatPreferencesKey(QUANTITY_MAX)] }
-            dayTimeQuantity?.let { preferences[floatPreferencesKey(DAYTIME_QUANTITY)] }
-            preNightQuantity?.let { preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)] }
-            nightQuantity?.let { preferences[floatPreferencesKey(NIGHT_QUANTITY)] }
+            maxQuantity?.let { preferences[floatPreferencesKey(QUANTITY_MAX)] = it }
+            dayTimeQuantity?.let { preferences[floatPreferencesKey(DAYTIME_QUANTITY)] = it }
+            preNightQuantity?.let { preferences[floatPreferencesKey(PRE_NIGHT_QUANTITY)] = it }
+            nightQuantity?.let { preferences[floatPreferencesKey(NIGHT_QUANTITY)] = it }
         }
     }.asMap().size
 
