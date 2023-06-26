@@ -71,6 +71,7 @@ fun ReferenceContent(
                         proteinState = protein,
                         carbohydratesState = carbohydrates,
                         fatState = fat,
+                        isCompactScreen = isCompactScreen,
                         event = event
                     )
                 }
