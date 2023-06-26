@@ -85,6 +85,7 @@ fun ReferenceContent(
                         totalState = totalQuantity,
                         preNightState = preNightQuantity,
                         nightState = nightQuantity,
+                        isCompactScreen = isCompactScreen,
                         event = event
                     )
                 }
