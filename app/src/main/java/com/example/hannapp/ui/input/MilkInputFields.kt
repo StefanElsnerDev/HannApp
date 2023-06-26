@@ -2,10 +2,12 @@ package com.example.hannapp.ui.input
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import com.example.hannapp.R
 import com.example.hannapp.ui.supportOnError
 import com.example.hannapp.ui.theme.Constraints
@@ -17,7 +19,9 @@ fun MilkInputFields(
     totalState: NutritionLimitContract.ReferenceState.State,
     event: (NutritionLimitContract.Event) -> Unit,
     preNightState: NutritionLimitContract.ReferenceState.State,
-    nightState: NutritionLimitContract.ReferenceState.State
+    nightState: NutritionLimitContract.ReferenceState.State,
+    keyboardActions: KeyboardActions,
+    imeActionOnLast: ImeAction
 ) {
     totalState.apply {
         InputField(
@@ -35,7 +39,9 @@ fun MilkInputFields(
             supportingText = supportOnError(isError = isError),
             modifier = Modifier
                 .wrapContentHeight(align = Alignment.CenterVertically)
-                .padding(horizontal = Constraints.PADDING)
+                .padding(horizontal = Constraints.PADDING),
+            keyboardActions = keyboardActions,
+            imeAction = ImeAction.Next
         )
     }
 
@@ -55,7 +61,9 @@ fun MilkInputFields(
             supportingText = supportOnError(isError = isError),
             modifier = Modifier
                 .wrapContentHeight(align = Alignment.CenterVertically)
-                .padding(horizontal = Constraints.PADDING)
+                .padding(horizontal = Constraints.PADDING),
+            keyboardActions = keyboardActions,
+            imeAction = ImeAction.Next
         )
     }
 
@@ -75,7 +83,9 @@ fun MilkInputFields(
             supportingText = supportOnError(isError = isError),
             modifier = Modifier
                 .wrapContentHeight(align = Alignment.CenterVertically)
-                .padding(horizontal = Constraints.PADDING)
+                .padding(horizontal = Constraints.PADDING),
+            keyboardActions = keyboardActions,
+            imeAction = imeActionOnLast
         )
     }
 }

@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
 import com.example.hannapp.ui.input.MilkInputFields
@@ -27,8 +31,21 @@ fun MilkQuantityContent(
     nightState: NutritionLimitContract.ReferenceState.State,
     isCompactScreen: Boolean,
     event: (NutritionLimitContract.Event) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLastItem: () -> Unit = {}
 ) {
+    val localFocusManager = LocalFocusManager.current
+
+    val keyboardActions = KeyboardActions(
+        onNext = {
+            localFocusManager.moveFocus(FocusDirection.Next)
+        },
+        onDone = {
+            localFocusManager.clearFocus()
+            onLastItem()
+        }
+    )
+
     Column(
         modifier = modifier.padding(vertical = PADDING),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -46,7 +63,14 @@ fun MilkQuantityContent(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    MilkInputFields(totalState, event, preNightState, nightState)
+                    MilkInputFields(
+                        totalState = totalState,
+                        preNightState = preNightState,
+                        nightState = nightState,
+                        event = event,
+                        keyboardActions = keyboardActions,
+                        imeActionOnLast = ImeAction.Done
+                    )
                 }
             }
 
@@ -56,7 +80,14 @@ fun MilkQuantityContent(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    MilkInputFields(totalState, event, preNightState, nightState)
+                    MilkInputFields(
+                        totalState = totalState,
+                        preNightState = preNightState,
+                        nightState = nightState,
+                        event = event,
+                        keyboardActions = keyboardActions,
+                        imeActionOnLast = ImeAction.Done
+                    )
                 }
             }
         }

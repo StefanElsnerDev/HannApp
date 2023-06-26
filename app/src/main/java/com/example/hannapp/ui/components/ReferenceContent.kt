@@ -86,6 +86,7 @@ fun ReferenceContent(
                         preNightState = preNightQuantity,
                         nightState = nightQuantity,
                         isCompactScreen = isCompactScreen,
+                        onLastItem = { event(NutritionLimitContract.Event.OnSave) },
                         event = event
                     )
                 }
