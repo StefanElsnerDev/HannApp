@@ -235,7 +235,7 @@ class NutritionLimitViewModel @Inject constructor(
                         MilkLimitReferenceUiModel(
                             total = totalQuantity.value,
                             day = null,
-                            preNight = totalQuantity.value,
+                            preNight = preNightQuantity.value,
                             night = nightQuantity.value
                         )
                     )
