@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hannapp.R
 import com.example.hannapp.ui.input.NutritionInputFields
@@ -31,6 +35,14 @@ fun NutritionReferencesContent(
     event: (NutritionLimitContract.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val localFocusManager = LocalFocusManager.current
+
+    val keyboardActions = KeyboardActions(
+        onNext = {
+            localFocusManager.moveFocus(FocusDirection.Next)
+        }
+    )
+
     Column(
         modifier = modifier.padding(vertical = PADDING),
         verticalArrangement = Arrangement.Center,
@@ -49,11 +61,13 @@ fun NutritionReferencesContent(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     NutritionInputFields(
-                        kcalState,
-                        event,
-                        proteinState,
-                        carbohydratesState,
-                        fatState
+                        kcalState = kcalState,
+                        proteinState = proteinState,
+                        carbohydratesState = carbohydratesState,
+                        fatState = fatState,
+                        event = event,
+                        keyboardActions = keyboardActions,
+                        lastImeAction = ImeAction.Next
                     )
                 }
             }
@@ -65,11 +79,13 @@ fun NutritionReferencesContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     NutritionInputFields(
-                        kcalState,
-                        event,
-                        proteinState,
-                        carbohydratesState,
-                        fatState
+                        kcalState = kcalState,
+                        proteinState = proteinState,
+                        carbohydratesState = carbohydratesState,
+                        fatState = fatState,
+                        event = event,
+                        keyboardActions = keyboardActions,
+                        lastImeAction = ImeAction.Next
                     )
                 }
             }
