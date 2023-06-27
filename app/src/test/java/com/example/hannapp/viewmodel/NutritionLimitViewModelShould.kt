@@ -301,9 +301,10 @@ class NutritionLimitViewModelShould {
         private val errorMessage = "Something unexpected happened."
 
         @Test
-        fun invokeSaveNutritionUseCase() = runTest {
+        fun invokeSaveNutritionUseCaseOnValidDataState() = runTest {
             nutritionLimitViewModel.event(NutritionLimitContract.Event.OnSave)
 
+            assertThat(nutritionLimitViewModel.state.value.isDataValid).isTrue
             verify(saveNutritionReferencesUseCase).invoke(any())
         }
 
@@ -339,6 +340,25 @@ class NutritionLimitViewModelShould {
             assertThat(nutritionLimitViewModel.state.value.errorMessage?.messageRes).isNull()
             assertThat(nutritionLimitViewModel.state.value.errorMessage?.message).isEqualTo(
                 errorMessage
+            )
+        }
+
+        @Test
+        fun invokeSaveMethodOnlyOnValidDataState() {
+            nutritionLimitViewModel.event(
+                NutritionLimitContract.Event.OnNutritionUpdate(
+                    NutritionReference.PROTEIN,
+                    "protein%&§"
+                )
+            )
+
+            nutritionLimitViewModel.event(NutritionLimitContract.Event.OnSave)
+
+            assertThat(nutritionLimitViewModel.state.value.isDataValid).isFalse
+
+            verifyNoInteractions(
+                saveNutritionReferencesUseCase,
+                saveMilkQuantityReferencesUseCase
             )
         }
     }

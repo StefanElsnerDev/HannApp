@@ -92,8 +92,10 @@ class NutritionLimitViewModel @Inject constructor(
             }
 
             is NutritionLimitContract.Event.OnSave -> {
-                saveNutritionReferences()
-                saveMilkQuantityReferences()
+                if (_state.value.isDataValid) {
+                    saveNutritionReferences()
+                    saveMilkQuantityReferences()
+                }
             }
         }
     }
