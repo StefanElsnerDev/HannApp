@@ -39,18 +39,17 @@ fun ReferenceContent(
         },
         bottomBar = { NavigationBar(navController) },
         floatingActionButton = {
-            FAB(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.change),
-                        contentDescription = null
-                    )
-                },
-                onClick = {
-                    event(NutritionLimitContract.Event.OnValidate)
-                    if (uiState.isDataValid) event(NutritionLimitContract.Event.OnSave)
-                }
-            )
+            if (uiState.isDataValid) {
+                FAB(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.change),
+                            contentDescription = null
+                        )
+                    },
+                    onClick = { event(NutritionLimitContract.Event.OnSave) }
+                )
+            }
         }
     ) {
         Column(
