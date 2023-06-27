@@ -279,6 +279,20 @@ class NutritionLimitViewModelShould {
                 )
             )
         }
+
+        @Test
+        fun setError() {
+            assertThat(nutritionLimitViewModel.state.value.isDataValid).isTrue
+
+            nutritionLimitViewModel.event(
+                NutritionLimitContract.Event.OnNutritionUpdate(
+                    NutritionReference.PROTEIN,
+                    "protein%&§"
+                )
+            )
+
+            assertThat(nutritionLimitViewModel.state.value.protein.isError).isTrue
+        }
     }
 
     @Nested

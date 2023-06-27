@@ -103,7 +103,10 @@ class NutritionLimitViewModel @Inject constructor(
             NutritionReference.KCAL -> {
                 _state.update {
                     it.copy(
-                        kcal = NutritionLimitContract.ReferenceState.State(value = value)
+                        kcal = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -111,7 +114,10 @@ class NutritionLimitViewModel @Inject constructor(
             NutritionReference.PROTEIN -> {
                 _state.update {
                     it.copy(
-                        protein = NutritionLimitContract.ReferenceState.State(value = value)
+                        protein = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -119,7 +125,10 @@ class NutritionLimitViewModel @Inject constructor(
             NutritionReference.CARBOHYDRATES -> {
                 _state.update {
                     it.copy(
-                        carbohydrates = NutritionLimitContract.ReferenceState.State(value = value)
+                        carbohydrates = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -127,7 +136,10 @@ class NutritionLimitViewModel @Inject constructor(
             NutritionReference.FAT -> {
                 _state.update {
                     it.copy(
-                        fat = NutritionLimitContract.ReferenceState.State(value = value)
+                        fat = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -139,7 +151,10 @@ class NutritionLimitViewModel @Inject constructor(
             MilkReference.TOTAL -> {
                 _state.update {
                     it.copy(
-                        totalQuantity = NutritionLimitContract.ReferenceState.State(value = value)
+                        totalQuantity = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -147,7 +162,10 @@ class NutritionLimitViewModel @Inject constructor(
             MilkReference.PRE_NIGHT -> {
                 _state.update {
                     it.copy(
-                        preNightQuantity = NutritionLimitContract.ReferenceState.State(value = value)
+                        preNightQuantity = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -155,7 +173,10 @@ class NutritionLimitViewModel @Inject constructor(
             MilkReference.NIGHT -> {
                 _state.update {
                     it.copy(
-                        nightQuantity = NutritionLimitContract.ReferenceState.State(value = value)
+                        nightQuantity = NutritionLimitContract.ReferenceState.State(
+                            value = value,
+                            isError = value.isCastableFloat()
+                        )
                     )
                 }
             }
@@ -166,7 +187,7 @@ class NutritionLimitViewModel @Inject constructor(
         _state.apply {
             val invalids = value.invalidReferences.toMutableList()
 
-            if (isCastableFloat(input)) {
+            if (input.isCastableFloat()) {
                 invalids.add(reference)
             } else {
                 invalids.remove(reference)
@@ -181,7 +202,7 @@ class NutritionLimitViewModel @Inject constructor(
         }
     }
 
-    private fun isCastableFloat(input: String) = input.toFloatOrNull() == null
+    private fun String.isCastableFloat() = toFloatOrNull() == null
 
     private fun saveNutritionReferences() {
         viewModelScope.launch {
