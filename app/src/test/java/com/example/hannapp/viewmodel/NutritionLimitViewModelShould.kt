@@ -186,7 +186,7 @@ class NutritionLimitViewModelShould {
     }
 
     @Nested
-    inner class ValidateInput {
+    inner class ValidateOnInput {
 
         private val nutritionReferences = mapOf(
             NutritionReference.KCAL to "1",
@@ -223,13 +223,6 @@ class NutritionLimitViewModelShould {
         }
 
         @Test
-        fun emitSuccessfulValidation() {
-            nutritionLimitViewModel.event(NutritionLimitContract.Event.OnValidate)
-
-            assertThat(nutritionLimitViewModel.state.value.isDataValid).isTrue
-        }
-
-        @Test
         fun emitEmptyFieldsAndValidation() {
             nutritionLimitViewModel.event(
                 NutritionLimitContract.Event.OnNutritionUpdate(
@@ -250,8 +243,6 @@ class NutritionLimitViewModelShould {
                 )
             )
 
-            nutritionLimitViewModel.event(NutritionLimitContract.Event.OnValidate)
-
             assertThat(nutritionLimitViewModel.state.value.isDataValid).isFalse
             assertThat(nutritionLimitViewModel.state.value.invalidReferences).isEqualTo(
                 listOf(
@@ -264,12 +255,15 @@ class NutritionLimitViewModelShould {
 
         @Test
         fun emitInvalidFieldsAndValidation() {
+            assertThat(nutritionLimitViewModel.state.value.isDataValid).isTrue
+
             nutritionLimitViewModel.event(
                 NutritionLimitContract.Event.OnNutritionUpdate(
                     NutritionReference.KCAL,
                     "12?45"
                 )
             )
+
             nutritionLimitViewModel.event(
                 NutritionLimitContract.Event.OnNutritionUpdate(
                     NutritionReference.PROTEIN,
@@ -277,7 +271,6 @@ class NutritionLimitViewModelShould {
                 )
             )
 
-            nutritionLimitViewModel.event(NutritionLimitContract.Event.OnValidate)
             assertThat(nutritionLimitViewModel.state.value.isDataValid).isFalse
             assertThat(nutritionLimitViewModel.state.value.invalidReferences).isEqualTo(
                 listOf(

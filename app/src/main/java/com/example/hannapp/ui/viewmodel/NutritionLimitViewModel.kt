@@ -25,14 +25,7 @@ interface NutritionLimitContract :
         data class State(
             val value: String = "",
             val isError: Boolean = false
-        ) {
-            fun validate(
-                referenceValidationStrategy: ReferenceValidationStrategy,
-                reference: Reference
-            ) {
-                referenceValidationStrategy.validate(value, reference)
-            }
-        }
+        )
     }
 
     data class State(
@@ -60,8 +53,6 @@ interface NutritionLimitContract :
             val value: String
         ) : Event()
 
-        object OnValidate : Event()
-
         object OnSave : Event()
     }
 }
@@ -78,19 +69,26 @@ class NutritionLimitViewModel @Inject constructor(
 
     override fun event(event: NutritionLimitContract.Event) {
         when (event) {
-            is NutritionLimitContract.Event.OnNutritionUpdate -> updateNutritionReference(
-                event.nutritionReference,
-                event.value
-            )
+            is NutritionLimitContract.Event.OnNutritionUpdate -> {
+                updateNutritionReference(
+                    event.nutritionReference,
+                    event.value
+                )
+                emitInvalidReferences(
+                    event.nutritionReference,
+                    event.value
+                )
+            }
 
-            is NutritionLimitContract.Event.OnMilkUpdate -> updateMilkReference(
-                event.milkReference,
-                event.value
-            )
-
-            is NutritionLimitContract.Event.OnValidate -> {
-                emitEmptyReferences()
-                validate()
+            is NutritionLimitContract.Event.OnMilkUpdate -> {
+                updateMilkReference(
+                    event.milkReference,
+                    event.value
+                )
+                emitInvalidReferences(
+                    event.milkReference,
+                    event.value
+                )
             }
 
             is NutritionLimitContract.Event.OnSave -> {
@@ -164,42 +162,26 @@ class NutritionLimitViewModel @Inject constructor(
         }
     }
 
-    private fun emitEmptyReferences() {
-        val invalids = mutableListOf<Reference>()
-        _state.value.apply {
-            kcal.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = NutritionReference.KCAL
-            )
-            protein.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = NutritionReference.PROTEIN
-            )
-            carbohydrates.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = NutritionReference.CARBOHYDRATES
-            )
-            fat.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = NutritionReference.FAT
-            )
-            totalQuantity.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = MilkReference.TOTAL
-            )
-            preNightQuantity.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = MilkReference.PRE_NIGHT
-            )
-            nightQuantity.validate(
-                referenceValidationStrategy = InvalidReferencesList(invalids),
-                reference = MilkReference.NIGHT
-            )
+    private fun emitInvalidReferences(reference: Reference, input: String) {
+        _state.apply {
+            val invalids = value.invalidReferences.toMutableList()
+
+            if (isCastableFloat(input)) {
+                invalids.add(reference)
+            } else {
+                invalids.remove(reference)
+            }
+
+            update {
+                it.copy(
+                    invalidReferences = invalids.toList(),
+                    isDataValid = invalids.isEmpty()
+                )
+            }
         }
-        _state.update { it.copy(invalidReferences = invalids.toList()) }
     }
 
-    private fun validate() = _state.update { it.copy(isDataValid = it.invalidReferences.isEmpty()) }
+    private fun isCastableFloat(input: String) = input.toFloatOrNull() == null
 
     private fun saveNutritionReferences() {
         viewModelScope.launch {
