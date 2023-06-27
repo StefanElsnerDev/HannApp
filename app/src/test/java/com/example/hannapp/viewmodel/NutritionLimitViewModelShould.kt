@@ -26,6 +26,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,6 +39,19 @@ class NutritionLimitViewModelShould {
     private val saveMilkQuantityReferencesUseCase = mock<SaveMilkQuantityReferencesUseCase>()
     private val getNutritionReferencesUseCase = mock<GetNutritionReferencesUseCase>()
     private val getMilkQuantityReferencesUseCase = mock<GetMilkQuantityReferencesUseCase>()
+
+    private val nutritionReferences = mapOf(
+        NutritionReference.KCAL to "1",
+        NutritionReference.PROTEIN to "2",
+        NutritionReference.CARBOHYDRATES to "3",
+        NutritionReference.FAT to "4"
+    )
+
+    private val milkReferences = mapOf(
+        MilkReference.TOTAL to "200",
+        MilkReference.PRE_NIGHT to "20",
+        MilkReference.NIGHT to "80"
+    )
 
     @BeforeEach
     fun beforeEach() = runTest {
@@ -188,19 +202,6 @@ class NutritionLimitViewModelShould {
     @Nested
     inner class ValidateOnInput {
 
-        private val nutritionReferences = mapOf(
-            NutritionReference.KCAL to "1",
-            NutritionReference.PROTEIN to "2",
-            NutritionReference.CARBOHYDRATES to "3",
-            NutritionReference.FAT to "4"
-        )
-
-        private val milkReferences = mapOf(
-            MilkReference.TOTAL to "200",
-            MilkReference.PRE_NIGHT to "20",
-            MilkReference.NIGHT to "80"
-        )
-
         @BeforeEach
         fun beforeEach() {
             nutritionReferences.forEach {
@@ -299,6 +300,27 @@ class NutritionLimitViewModelShould {
     inner class SaveInput {
 
         private val errorMessage = "Something unexpected happened."
+
+        @BeforeEach
+        fun beforeEach() {
+            nutritionReferences.forEach {
+                nutritionLimitViewModel.event(
+                    NutritionLimitContract.Event.OnNutritionUpdate(
+                        it.key,
+                        it.value
+                    )
+                )
+            }
+
+            milkReferences.forEach {
+                nutritionLimitViewModel.event(
+                    NutritionLimitContract.Event.OnMilkUpdate(
+                        it.key,
+                        it.value
+                    )
+                )
+            }
+        }
 
         @Test
         fun invokeSaveNutritionUseCaseOnValidDataState() = runTest {
