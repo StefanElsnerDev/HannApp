@@ -5,7 +5,7 @@ import com.example.hannapp.ui.mood.Mood
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ValidateNutrimentLogUseCase @Inject constructor(
+class ValidatePreNightNutritionLogUseCase @Inject constructor(
     private val nutrimentLogValidationRepository: NutrimentLogValidationRepository
 ) {
     operator fun invoke(): Flow<Mood> = nutrimentLogValidationRepository.validatePreNight()

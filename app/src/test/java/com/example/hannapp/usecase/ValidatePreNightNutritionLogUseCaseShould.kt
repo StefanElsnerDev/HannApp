@@ -1,7 +1,7 @@
 package com.example.hannapp.usecase
 
 import com.example.hannapp.data.repository.NutrimentLogValidationRepository
-import com.example.hannapp.domain.ValidateNutrimentLogUseCase
+import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
 import com.example.hannapp.ui.mood.Mood
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -15,9 +15,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ValidateNutrimentLogUseCaseShould {
+class ValidatePreNightNutritionLogUseCaseShould {
 
-    private lateinit var validateNutrimentLogUseCase: ValidateNutrimentLogUseCase
+    private lateinit var validatePreNightNutritionLogUseCase: ValidatePreNightNutritionLogUseCase
     private val nutrimentLogValidationRepository = mock<NutrimentLogValidationRepository>()
 
     @BeforeEach
@@ -26,21 +26,21 @@ class ValidateNutrimentLogUseCaseShould {
             flowOf(Mood.GREEN)
         )
 
-        validateNutrimentLogUseCase = ValidateNutrimentLogUseCase(
+        validatePreNightNutritionLogUseCase = ValidatePreNightNutritionLogUseCase(
             nutrimentLogValidationRepository = nutrimentLogValidationRepository
         )
     }
 
     @Test
     fun invokeValidationOfNutritionLimitRepository() = runTest {
-        validateNutrimentLogUseCase.invoke()
+        validatePreNightNutritionLogUseCase.invoke()
 
         verify(nutrimentLogValidationRepository).validatePreNight()
     }
 
     @Test
     fun emitMoodOnLogBelowLimit() = runTest {
-        val mood = validateNutrimentLogUseCase.invoke().first()
+        val mood = validatePreNightNutritionLogUseCase.invoke().first()
 
         assertThat(mood).isInstanceOf(Mood::class.java)
         assertThat(mood).isEqualTo(Mood.GREEN)

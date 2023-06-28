@@ -8,7 +8,7 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
-import com.example.hannapp.domain.ValidateNutrimentLogUseCase
+import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
 import com.example.hannapp.ui.mood.Mood
 import com.example.hannapp.ui.viewmodel.NutrimentSelectContract
 import com.example.hannapp.ui.viewmodel.NutritionSelectViewModel
@@ -40,7 +40,7 @@ class NutritionSelectViewModelShould {
     private val updateNutrimentLogUseCase = mock(UpdateNutrimentLogUseCase::class.java)
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
-    private val validateNutrimentLogUseCase = mock(ValidateNutrimentLogUseCase::class.java)
+    private val validatePreNightNutritionLogUseCase = mock(ValidatePreNightNutritionLogUseCase::class.java)
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -91,7 +91,7 @@ class NutritionSelectViewModelShould {
             flowOf(nutrimentUiLog)
         )
 
-        whenever(validateNutrimentLogUseCase.invoke()).thenReturn(
+        whenever(validatePreNightNutritionLogUseCase.invoke()).thenReturn(
             flowOf(Mood.GREEN)
         )
 
@@ -101,7 +101,7 @@ class NutritionSelectViewModelShould {
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
-            validateNutrimentLogUseCase = validateNutrimentLogUseCase,
+            validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
             dispatcher = testDispatcher
         )
     }
@@ -126,7 +126,7 @@ class NutritionSelectViewModelShould {
             deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
-            validateNutrimentLogUseCase = validateNutrimentLogUseCase,
+            validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
             dispatcher = testDispatcher
         )
 
@@ -178,7 +178,7 @@ class NutritionSelectViewModelShould {
                 deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
                 updateNutrimentLogUseCase = updateNutrimentLogUseCase,
                 getNutrimentLogUseCase = getNutrimentLogUseCase,
-                validateNutrimentLogUseCase = validateNutrimentLogUseCase,
+                validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
                 dispatcher = testDispatcher
             )
 
@@ -466,13 +466,13 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun invokeValidationUseCaseOnInstantiation() = runTest {
-            verify(validateNutrimentLogUseCase).invoke()
+            verify(validatePreNightNutritionLogUseCase).invoke()
             assertThat(nutritionViewModel.state.value.validation).isEqualTo(Mood.GREEN)
         }
 
         @Test
         fun emitValidation() = runTest {
-            whenever(validateNutrimentLogUseCase.invoke()).thenReturn(
+            whenever(validatePreNightNutritionLogUseCase.invoke()).thenReturn(
                 flowOf(Mood.RED)
             )
 
@@ -485,7 +485,7 @@ class NutritionSelectViewModelShould {
         fun emitErrorOnValidationError() = runTest {
             val errorMessage = "Failed requirement"
 
-            whenever(validateNutrimentLogUseCase.invoke()).thenThrow(
+            whenever(validatePreNightNutritionLogUseCase.invoke()).thenThrow(
                 IllegalArgumentException(errorMessage)
             )
 
@@ -500,7 +500,7 @@ class NutritionSelectViewModelShould {
         fun emitErrorOnUnexpectedError() = runTest {
             val errorMessage = "Unexpected Error"
 
-            whenever(validateNutrimentLogUseCase.invoke()).thenThrow(
+            whenever(validatePreNightNutritionLogUseCase.invoke()).thenThrow(
                 RuntimeException(errorMessage)
             )
 

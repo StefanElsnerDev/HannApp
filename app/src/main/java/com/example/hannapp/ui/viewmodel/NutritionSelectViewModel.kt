@@ -15,7 +15,7 @@ import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
-import com.example.hannapp.domain.ValidateNutrimentLogUseCase
+import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
 import com.example.hannapp.ui.mood.Mood
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -62,7 +62,7 @@ class NutritionSelectViewModel @Inject constructor(
     private val deleteNutrimentLogUseCase: DeleteNutrimentLogUseCase,
     private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     private val getNutrimentLogUseCase: GetNutrimentLogUseCase,
-    private val validateNutrimentLogUseCase: ValidateNutrimentLogUseCase,
+    private val validatePreNightNutritionLogUseCase: ValidatePreNightNutritionLogUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
     private lateinit var memento: Memento
@@ -283,7 +283,7 @@ class NutritionSelectViewModel @Inject constructor(
     private fun validate() {
         viewModelScope.launch(dispatcher) {
             try {
-                validateNutrimentLogUseCase().collectLatest { mood ->
+                validatePreNightNutritionLogUseCase().collectLatest { mood ->
                     _uiState.update { it.copy(validation = mood) }
                 }
             } catch (e: IllegalArgumentException) {
