@@ -8,5 +8,5 @@ import javax.inject.Inject
 class ValidateNutrimentLogUseCase @Inject constructor(
     private val nutrimentLogValidationRepository: NutrimentLogValidationRepository
 ) {
-    operator fun invoke(): Flow<Mood> = nutrimentLogValidationRepository.validate()
+    operator fun invoke(): Flow<Mood> = nutrimentLogValidationRepository.validatePreNight()
 }

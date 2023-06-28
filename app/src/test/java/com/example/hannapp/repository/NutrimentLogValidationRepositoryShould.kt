@@ -76,7 +76,7 @@ class NutrimentLogValidationRepositoryShould {
             )
         )
 
-        val mood = nutrimentLogValidationRepository.validate().first()
+        val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.GREEN)
     }
@@ -93,7 +93,7 @@ class NutrimentLogValidationRepositoryShould {
             )
         )
 
-        val mood = nutrimentLogValidationRepository.validate().first()
+        val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.GREEN)
     }
@@ -110,7 +110,7 @@ class NutrimentLogValidationRepositoryShould {
             )
         )
 
-        val mood = nutrimentLogValidationRepository.validate().first()
+        val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.YELLOW)
     }
@@ -127,7 +127,7 @@ class NutrimentLogValidationRepositoryShould {
             )
         )
 
-        val mood = nutrimentLogValidationRepository.validate().first()
+        val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.YELLOW)
     }
@@ -144,7 +144,7 @@ class NutrimentLogValidationRepositoryShould {
             )
         )
 
-        val mood = nutrimentLogValidationRepository.validate().first()
+        val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.RED)
     }

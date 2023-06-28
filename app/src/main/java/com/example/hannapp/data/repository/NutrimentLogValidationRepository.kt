@@ -11,8 +11,8 @@ class NutrimentLogValidationRepository @Inject constructor(
     private val nutritionLimitsRepository: NutritionLimitsRepository,
     private val nutrimentLogRepository: NutrimentLogRepository
 ) {
-    fun validate(): Flow<Mood> = nutrimentLogRepository.getLogs()
-        .combine(nutritionLimitsRepository.getDailyShare()) { logModels, limit ->
+    fun validatePreNight(): Flow<Mood> = nutrimentLogRepository.getLogs()
+        .combine(nutritionLimitsRepository.getPreNightShare()) { logModels, limit ->
 
             val levels = calcNutritionLevels(logModels, limit)
 

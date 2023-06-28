@@ -22,7 +22,7 @@ class ValidateNutrimentLogUseCaseShould {
 
     @BeforeEach
     fun beforeEach() {
-        whenever(nutrimentLogValidationRepository.validate()).thenReturn(
+        whenever(nutrimentLogValidationRepository.validatePreNight()).thenReturn(
             flowOf(Mood.GREEN)
         )
 
@@ -35,7 +35,7 @@ class ValidateNutrimentLogUseCaseShould {
     fun invokeValidationOfNutritionLimitRepository() = runTest {
         validateNutrimentLogUseCase.invoke()
 
-        verify(nutrimentLogValidationRepository).validate()
+        verify(nutrimentLogValidationRepository).validatePreNight()
     }
 
     @Test
