@@ -1,18 +1,24 @@
 package com.example.hannapp.repository
 
+import com.example.hannapp.data.model.MilkReferenceUiModel
 import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutritionLimitReferenceModel
 import com.example.hannapp.data.model.entity.Nutrition
+import com.example.hannapp.data.repository.MilkReferenceRepository
 import com.example.hannapp.data.repository.NutrimentLogRepository
 import com.example.hannapp.data.repository.NutrimentLogValidationRepository
 import com.example.hannapp.data.repository.NutritionLimitsRepository
 import com.example.hannapp.ui.mood.Mood
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -23,6 +29,7 @@ class NutrimentLogValidationRepositoryShould {
     private lateinit var nutrimentLogValidationRepository: NutrimentLogValidationRepository
     private val nutritionLimitsRepository = mock<NutritionLimitsRepository>()
     private val nutrimentLogRepository = mock<NutrimentLogRepository>()
+    private val milkReferenceRepository = mock<MilkReferenceRepository>()
 
     private val nutritionLimit = NutritionLimitReferenceModel(
         kcal = 10.0,
@@ -52,15 +59,31 @@ class NutrimentLogValidationRepositoryShould {
         )
     }
 
+    private val milkReferenceUiModel = MilkReferenceUiModel(
+        maxQuantity = 1060f,
+        dayTimeQuantity = 340f,
+        preNightQuantity = 80f,
+        nightQuantity = 720f
+    )
+
+    private val testDispatcher = UnconfinedTestDispatcher()
+
     @BeforeEach
     fun beforeEach() {
-        whenever(nutritionLimitsRepository.getDailyShare()).thenReturn(
+        Dispatchers.setMain(testDispatcher)
+
+        whenever(nutritionLimitsRepository.getPreNightShare()).thenReturn(
             flowOf(nutritionLimit)
+        )
+
+        whenever(milkReferenceRepository.emitReference()).thenReturn(
+            flowOf(milkReferenceUiModel)
         )
 
         nutrimentLogValidationRepository = NutrimentLogValidationRepository(
             nutritionLimitsRepository = nutritionLimitsRepository,
-            nutrimentLogRepository = nutrimentLogRepository
+            nutrimentLogRepository = nutrimentLogRepository,
+            milkReferenceRepository = milkReferenceRepository
         )
     }
 
@@ -147,5 +170,44 @@ class NutrimentLogValidationRepositoryShould {
         val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
         assertThat(mood).isEqualTo(Mood.RED)
+    }
+
+    @Nested
+    inner class CalculatePreNightOverFlow {
+
+        @Test
+        fun returnNoVolumeOnEmptyLog() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    emptyList()
+                )
+            )
+
+            val volume = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
+            assertThat(volume).isEqualTo(0.0)
+        }
+
+        @Test
+        fun returnCompleteVolumeOnExhaustedLog() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    listOf(
+                        NutrimentLogModel(
+                            id = 123,
+                            nutrition = Nutrition(
+                                protein = nutritionLimit.protein
+                            ),
+                            quantity = 123.0,
+                            createdAt = 123456789,
+                            modifiedAt = null
+                        )
+                    )
+                )
+            )
+
+            val volume = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
+
+            assertThat(volume).isEqualTo(milkReferenceUiModel.preNightQuantity.toDouble())
+        }
     }
 }

@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 class NutrimentLogValidationRepository @Inject constructor(
     private val nutritionLimitsRepository: NutritionLimitsRepository,
-    private val nutrimentLogRepository: NutrimentLogRepository
+    private val nutrimentLogRepository: NutrimentLogRepository,
+    private val milkReferenceRepository: MilkReferenceRepository
 ) {
     fun validatePreNight(): Flow<Mood> = nutrimentLogRepository.getLogs()
         .combine(nutritionLimitsRepository.getPreNightShare()) { logModels, limit ->
@@ -45,4 +46,13 @@ class NutrimentLogValidationRepository @Inject constructor(
             )
         )
     }
+
+    fun calculatePreNightOverflow() = nutrimentLogRepository.getLogs()
+        .combine(nutritionLimitsRepository.getPreNightShare()) { logModels, limit ->
+            val proteinSum = logModels.sumOf { it.nutrition.protein ?: 0.0 }
+            val proteinOfShare = limit.protein
+            proteinSum.div(proteinOfShare)
+        }.combine(milkReferenceRepository.emitReference()) { rate, milkQuantities ->
+            rate * milkQuantities.preNightQuantity
+        }
 }
