@@ -3,10 +3,9 @@ package com.example.hannapp.data.repository
 import com.example.hannapp.data.model.MilkReferenceUiModel
 import com.example.hannapp.data.model.NutritionLimitReferenceModel
 import com.example.hannapp.data.model.NutritionUiReferences
+import com.example.hannapp.utils.round
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import java.math.BigDecimal
-import java.math.RoundingMode
 import javax.inject.Inject
 
 class NutritionLimitsRepository @Inject constructor(
@@ -58,6 +57,4 @@ class NutritionLimitsRepository @Inject constructor(
     private fun MilkReferenceUiModel.calculatePreNightRate() = preNightQuantity / maxQuantity
 
     private fun MilkReferenceUiModel.calculateNightRate() = nightQuantity / maxQuantity
-
-    private fun Double.round() = BigDecimal(this).setScale(1, RoundingMode.HALF_UP).toDouble()
 }
