@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetPreNightMilkDiscardUseCase @Inject constructor(
     private val nutrimentLogValidationRepository: NutrimentLogValidationRepository
 ) {
-    operator fun invoke() = nutrimentLogValidationRepository.calculatePreNightOverflow()
+    operator fun invoke() = nutrimentLogValidationRepository.calculatePreNightMilkDiscard()
 }

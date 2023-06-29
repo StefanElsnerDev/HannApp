@@ -223,7 +223,7 @@ class NutrimentLogValidationRepositoryShould {
                 )
             )
 
-            val volume = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
+            val volume = nutrimentLogValidationRepository.calculatePreNightMilkDiscard().first()
             assertThat(volume).isEqualTo(0.0)
         }
 
@@ -247,7 +247,7 @@ class NutrimentLogValidationRepositoryShould {
                 )
             )
 
-            val volume = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
+            val volume = nutrimentLogValidationRepository.calculatePreNightMilkDiscard().first()
 
             assertThat(volume).isEqualTo(milkReferenceUiModel.preNightQuantity.toDouble())
         }

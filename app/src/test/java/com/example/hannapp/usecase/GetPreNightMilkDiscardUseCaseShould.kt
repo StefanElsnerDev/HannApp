@@ -23,7 +23,7 @@ class GetPreNightMilkDiscardUseCaseShould {
 
     @BeforeEach
     fun beforeEach() {
-        whenever(nutrimentLogValidationRepository.calculatePreNightOverflow()).thenReturn(
+        whenever(nutrimentLogValidationRepository.calculatePreNightMilkDiscard()).thenReturn(
             flowOf(overflowQuantity)
         )
 
@@ -36,12 +36,12 @@ class GetPreNightMilkDiscardUseCaseShould {
     fun invokeRepository() {
         getPreNightMilkDiscardUseCase()
 
-        verify(nutrimentLogValidationRepository).calculatePreNightOverflow()
+        verify(nutrimentLogValidationRepository).calculatePreNightMilkDiscard()
     }
 
     @Test
     fun getOverflow() = runTest {
-        val quantity = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
+        val quantity = nutrimentLogValidationRepository.calculatePreNightMilkDiscard().first()
 
         assertThat(quantity).isEqualTo(overflowQuantity)
     }
