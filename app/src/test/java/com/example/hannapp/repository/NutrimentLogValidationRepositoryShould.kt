@@ -35,11 +35,13 @@ class NutrimentLogValidationRepositoryShould {
     private val milkReferenceRepository = mock<MilkReferenceRepository>()
     private val substitutionRepository = mock<SubstitutionRepository>()
 
+    private val limit = 100.0
+
     private val nutritionLimit = NutritionLimitReferenceModel(
-        kcal = 100.0,
-        protein = 100.0,
-        carbohydrates = 100.0,
-        fat = 100.0
+        kcal = limit,
+        protein = limit,
+        carbohydrates = limit,
+        fat = limit
     )
 
     private fun generateNutrimentLevelLog(
@@ -92,89 +94,122 @@ class NutrimentLogValidationRepositoryShould {
         )
     }
 
-    @Test
-    fun emitGreenMoodOnEmptyNutriments() = runTest {
-        whenever(nutrimentLogRepository.getLogs()).thenReturn(
-            flowOf(
-                generateNutrimentLevelLog(
-                    limit = nutritionLimit,
-                    level = 0.0f,
-                    logSize = 5
+    @Nested
+    inner class ValidatePreNight {
+        @Test
+        fun emitGreenMoodOnEmptyNutriments() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 0.0f,
+                        logSize = 5
+                    )
                 )
             )
-        )
 
-        val mood = nutrimentLogValidationRepository.validatePreNight().first()
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
-        assertThat(mood).isEqualTo(Mood.GREEN)
-    }
+            assertThat(mood).isEqualTo(Mood.GREEN)
+        }
 
-    @Test
-    fun emitGreenMoodOnNutrimentLogBelow80PercentageOfDayLimit() = runTest {
-        whenever(nutrimentLogRepository.getLogs()).thenReturn(
-            flowOf(
-                generateNutrimentLevelLog(
-                    limit = nutritionLimit,
-                    level = 0.79f,
-                    logSize = 5
+        @Test
+        fun emitGreenMoodOnNutrimentLogBelow80PercentageOfDayLimit() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 0.79f,
+                        logSize = 5
+                    )
                 )
             )
-        )
 
-        val mood = nutrimentLogValidationRepository.validatePreNight().first()
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
-        assertThat(mood).isEqualTo(Mood.GREEN)
-    }
+            assertThat(mood).isEqualTo(Mood.GREEN)
+        }
 
-    @Test
-    fun emitYellowMoodOnNutrimentLogOn80PercentOfDayLimit() = runTest {
-        whenever(nutrimentLogRepository.getLogs()).thenReturn(
-            flowOf(
-                generateNutrimentLevelLog(
-                    limit = nutritionLimit,
-                    level = 0.8f,
-                    logSize = 5
+        @Test
+        fun emitYellowMoodOnNutrimentLogOn80PercentOfDayLimit() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 0.8f,
+                        logSize = 5
+                    )
                 )
             )
-        )
 
-        val mood = nutrimentLogValidationRepository.validatePreNight().first()
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
-        assertThat(mood).isEqualTo(Mood.YELLOW)
-    }
+            assertThat(mood).isEqualTo(Mood.YELLOW)
+        }
 
-    @Test
-    fun emitYellowMoodOnNutrimentLogOn99PercentOfDayLimit() = runTest {
-        whenever(nutrimentLogRepository.getLogs()).thenReturn(
-            flowOf(
-                generateNutrimentLevelLog(
-                    limit = nutritionLimit,
-                    level = 0.99f,
-                    logSize = 5
+        @Test
+        fun emitYellowMoodOnNutrimentLogOn99PercentOfDayLimit() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 0.99f,
+                        logSize = 5
+                    )
                 )
             )
-        )
 
-        val mood = nutrimentLogValidationRepository.validatePreNight().first()
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
-        assertThat(mood).isEqualTo(Mood.YELLOW)
-    }
+            assertThat(mood).isEqualTo(Mood.YELLOW)
+        }
 
-    @Test
-    fun emitRedMoodOnNutrimentLogOnExceedingDayLimit() = runTest {
-        whenever(nutrimentLogRepository.getLogs()).thenReturn(
-            flowOf(
-                generateNutrimentLevelLog(
-                    limit = nutritionLimit,
-                    level = 1f,
-                    logSize = 10
+        @Test
+        fun emitRedMoodOnNutrimentLogOnExceedingDayLimit() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 1f,
+                        logSize = 10
+                    )
                 )
             )
-        )
 
-        val mood = nutrimentLogValidationRepository.validatePreNight().first()
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
 
-        assertThat(mood).isEqualTo(Mood.RED)
+            assertThat(mood).isEqualTo(Mood.RED)
+        }
+
+        @Test
+        fun emitRedMoodOnNutrimentLogOnExceedingDayLimitByQuantity() = runTest {
+            val share = 10.0
+
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    listOf(
+                        NutrimentLogModel(
+                            id = 1,
+                            nutrition = Nutrition(
+                                uid = 1,
+                                name = "",
+                                kcal = limit / share,
+                                protein = limit / share,
+                                fat = limit / share,
+                                carbohydrates = limit / share
+                            ),
+                            quantity = share,
+                            createdAt = 1234567,
+                            modifiedAt = null
+                        )
+                    )
+                )
+            )
+
+            val mood = nutrimentLogValidationRepository.validatePreNight().first()
+
+            assertThat(mood).isEqualTo(Mood.RED)
+        }
     }
 
     @Nested

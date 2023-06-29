@@ -35,15 +35,15 @@ class NutrimentLogValidationRepository @Inject constructor(
     ): List<Float> {
         return listOf(
             calcLevel(
-                quantities = logModels.map { it.nutrition.protein ?: 0.0 },
+                quantities = logModels.map { (it.nutrition.protein?.times(it.quantity)) ?: 0.0 },
                 limit = limit.protein
             ),
             calcLevel(
-                quantities = logModels.map { it.nutrition.carbohydrates ?: 0.0 },
+                quantities = logModels.map { (it.nutrition.carbohydrates?.times(it.quantity)) ?: 0.0 },
                 limit = limit.carbohydrates
             ),
             calcLevel(
-                quantities = logModels.map { it.nutrition.fat ?: 0.0 },
+                quantities = logModels.map { (it.nutrition.fat?.times(it.quantity)) ?: 0.0 },
                 limit = limit.fat
             )
         )
