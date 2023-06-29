@@ -153,7 +153,10 @@ class NutritionSelectViewModelShould {
             .isEqualTo(
                 NutrimentSelectContract.State(
                     isLoading = true,
-                    errorMessage = null
+                    errorMessage = null,
+                    log = nutrimentUiLog,
+                    milkOverflow = milkDiscard.toString(),
+                    maltoSubstitution = maltoSubstitution.toString()
                 )
             )
     }
