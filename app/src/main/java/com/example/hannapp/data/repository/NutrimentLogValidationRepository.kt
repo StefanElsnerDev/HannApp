@@ -1,5 +1,6 @@
 package com.example.hannapp.data.repository
 
+import com.example.hannapp.R
 import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutritionLimitReferenceModel
 import com.example.hannapp.ui.mood.Mood
@@ -10,7 +11,8 @@ import javax.inject.Inject
 class NutrimentLogValidationRepository @Inject constructor(
     private val nutritionLimitsRepository: NutritionLimitsRepository,
     private val nutrimentLogRepository: NutrimentLogRepository,
-    private val milkReferenceRepository: MilkReferenceRepository
+    private val milkReferenceRepository: MilkReferenceRepository,
+    private val substitutionRepository: SubstitutionRepository
 ) {
     fun validatePreNight(): Flow<Mood> = nutrimentLogRepository.getLogs()
         .combine(nutritionLimitsRepository.getPreNightShare()) { logModels, limit ->
@@ -53,6 +55,21 @@ class NutrimentLogValidationRepository @Inject constructor(
             val proteinOfShare = limit.protein
             proteinSum.div(proteinOfShare)
         }.combine(milkReferenceRepository.emitReference()) { rate, milkQuantities ->
-            rate * milkQuantities.preNightQuantity
+            rate.times(milkQuantities.preNightQuantity)
+        }
+
+    private fun calculatePreNightEnergySubstitution() =
+        calculatePreNightOverflow().combine(milkReferenceRepository.emitReference()) { volume, milkReferences ->
+            volume.div(milkReferences.preNightQuantity)
+        }.combine(nutritionLimitsRepository.getPreNightShare()) { rate, limit ->
+            rate.times(limit.kcal)
+        }
+
+    fun calculatePreNightMaltodextrinSubstitution() =
+        calculatePreNightEnergySubstitution().combine(
+            substitutionRepository.getMaltoDextrin()
+        ) { missingKcal, malto ->
+            require(malto.kcal != null) { R.string.missing_nutriments_malto }
+            missingKcal.times(100).div(malto.kcal)
         }
 }

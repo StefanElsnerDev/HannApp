@@ -3,11 +3,13 @@ package com.example.hannapp.repository
 import com.example.hannapp.data.model.MilkReferenceUiModel
 import com.example.hannapp.data.model.NutrimentLogModel
 import com.example.hannapp.data.model.NutritionLimitReferenceModel
+import com.example.hannapp.data.model.NutritionModel
 import com.example.hannapp.data.model.entity.Nutrition
 import com.example.hannapp.data.repository.MilkReferenceRepository
 import com.example.hannapp.data.repository.NutrimentLogRepository
 import com.example.hannapp.data.repository.NutrimentLogValidationRepository
 import com.example.hannapp.data.repository.NutritionLimitsRepository
+import com.example.hannapp.data.repository.SubstitutionRepository
 import com.example.hannapp.ui.mood.Mood
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,6 +22,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
@@ -30,12 +33,13 @@ class NutrimentLogValidationRepositoryShould {
     private val nutritionLimitsRepository = mock<NutritionLimitsRepository>()
     private val nutrimentLogRepository = mock<NutrimentLogRepository>()
     private val milkReferenceRepository = mock<MilkReferenceRepository>()
+    private val substitutionRepository = mock<SubstitutionRepository>()
 
     private val nutritionLimit = NutritionLimitReferenceModel(
-        kcal = 10.0,
-        protein = 10.0,
-        carbohydrates = 10.0,
-        fat = 10.0
+        kcal = 100.0,
+        protein = 100.0,
+        carbohydrates = 100.0,
+        fat = 100.0
     )
 
     private fun generateNutrimentLevelLog(
@@ -83,7 +87,8 @@ class NutrimentLogValidationRepositoryShould {
         nutrimentLogValidationRepository = NutrimentLogValidationRepository(
             nutritionLimitsRepository = nutritionLimitsRepository,
             nutrimentLogRepository = nutrimentLogRepository,
-            milkReferenceRepository = milkReferenceRepository
+            milkReferenceRepository = milkReferenceRepository,
+            substitutionRepository = substitutionRepository
         )
     }
 
@@ -208,6 +213,60 @@ class NutrimentLogValidationRepositoryShould {
             val volume = nutrimentLogValidationRepository.calculatePreNightOverflow().first()
 
             assertThat(volume).isEqualTo(milkReferenceUiModel.preNightQuantity.toDouble())
+        }
+    }
+
+    @Nested
+    inner class CalculateSubstitution {
+
+        @BeforeEach
+        fun beforeEach() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    emptyList()
+                )
+            )
+
+            whenever(substitutionRepository.getMaltoDextrin()).thenReturn(
+                flowOf(NutritionModel(kcal = 1.0))
+            )
+        }
+
+        @Test fun emitNoMaltoSubstitutionOnLackOfMilkOverflow() = runTest {
+            val substitution = nutrimentLogValidationRepository.calculatePreNightMaltodextrinSubstitution().first()
+            assertThat(substitution).isEqualTo(0.0)
+        }
+
+        @Test fun emitMaltoSubstitutionOnMilkOverflow() = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = 0.5f,
+                        logSize = 1
+                    )
+                )
+            )
+
+            whenever(substitutionRepository.getMaltoDextrin()).thenReturn(
+                flowOf(NutritionModel(kcal = 100.0))
+            )
+
+            val maltoQuantity = nutrimentLogValidationRepository.calculatePreNightMaltodextrinSubstitution().first()
+            assertThat(maltoQuantity).isEqualTo(50.0)
+        }
+
+        @Test
+        fun throwOnMissingMaltoNutriments() = runTest {
+            whenever(substitutionRepository.getMaltoDextrin()).thenReturn(
+                flowOf(NutritionModel(kcal = null))
+            )
+
+            val exception = assertThrows<IllegalArgumentException> {
+                nutrimentLogValidationRepository.calculatePreNightMaltodextrinSubstitution().first()
+            }
+
+            assertThat(exception.message).matches("\\d+")
         }
     }
 }
