@@ -194,15 +194,17 @@ class NutrimentLogValidationRepositoryShould {
 
         @Test
         fun returnCompleteVolumeOnExhaustedLog() = runTest {
+            val quantity = 10.0
+
             whenever(nutrimentLogRepository.getLogs()).thenReturn(
                 flowOf(
                     listOf(
                         NutrimentLogModel(
                             id = 123,
                             nutrition = Nutrition(
-                                protein = nutritionLimit.protein
+                                protein = nutritionLimit.protein.div(quantity)
                             ),
-                            quantity = 123.0,
+                            quantity = quantity,
                             createdAt = 123456789,
                             modifiedAt = null
                         )

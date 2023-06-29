@@ -51,7 +51,7 @@ class NutrimentLogValidationRepository @Inject constructor(
 
     fun calculatePreNightOverflow() = nutrimentLogRepository.getLogs()
         .combine(nutritionLimitsRepository.getPreNightShare()) { logModels, limit ->
-            val proteinSum = logModels.sumOf { it.nutrition.protein ?: 0.0 }
+            val proteinSum = logModels.sumOf { (it.nutrition.protein?.times(it.quantity)) ?: 0.0 }
             val proteinOfShare = limit.protein
             proteinSum.div(proteinOfShare)
         }.combine(milkReferenceRepository.emitReference()) { rate, milkQuantities ->
