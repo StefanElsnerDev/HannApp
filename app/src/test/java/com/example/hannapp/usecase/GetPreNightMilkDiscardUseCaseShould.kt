@@ -1,7 +1,7 @@
 package com.example.hannapp.usecase
 
 import com.example.hannapp.data.repository.NutrimentLogValidationRepository
-import com.example.hannapp.domain.GetPreNightMilkOverflowUseCase
+import com.example.hannapp.domain.GetPreNightMilkDiscardUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -14,9 +14,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetPreNightMilkOverflowUseCaseShould {
+class GetPreNightMilkDiscardUseCaseShould {
 
-    private lateinit var getPreNightMilkOverflowUseCase: GetPreNightMilkOverflowUseCase
+    private lateinit var getPreNightMilkDiscardUseCase: GetPreNightMilkDiscardUseCase
     private val nutrimentLogValidationRepository = mock<NutrimentLogValidationRepository>()
 
     private val overflowQuantity = 123.4
@@ -27,14 +27,14 @@ class GetPreNightMilkOverflowUseCaseShould {
             flowOf(overflowQuantity)
         )
 
-        getPreNightMilkOverflowUseCase = GetPreNightMilkOverflowUseCase(
+        getPreNightMilkDiscardUseCase = GetPreNightMilkDiscardUseCase(
             nutrimentLogValidationRepository = nutrimentLogValidationRepository
         )
     }
 
     @Test
     fun invokeRepository() {
-        getPreNightMilkOverflowUseCase()
+        getPreNightMilkDiscardUseCase()
 
         verify(nutrimentLogValidationRepository).calculatePreNightOverflow()
     }

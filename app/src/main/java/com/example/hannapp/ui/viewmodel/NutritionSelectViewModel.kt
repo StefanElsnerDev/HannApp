@@ -14,7 +14,7 @@ import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.GetPreNightMaltoSubstitutionUseCase
-import com.example.hannapp.domain.GetPreNightMilkOverflowUseCase
+import com.example.hannapp.domain.GetPreNightMilkDiscardUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
@@ -67,7 +67,7 @@ class NutritionSelectViewModel @Inject constructor(
     private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     private val getNutrimentLogUseCase: GetNutrimentLogUseCase,
     private val validatePreNightNutritionLogUseCase: ValidatePreNightNutritionLogUseCase,
-    private val getPreNightMilkOverflowUseCase: GetPreNightMilkOverflowUseCase,
+    private val getPreNightMilkDiscardUseCase: GetPreNightMilkDiscardUseCase,
     private val getPreNightMaltoSubstitutionUseCase: GetPreNightMaltoSubstitutionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
@@ -311,7 +311,7 @@ class NutritionSelectViewModel @Inject constructor(
     private fun getMilkOverflow() {
         viewModelScope.launch(dispatcher) {
             try {
-                getPreNightMilkOverflowUseCase().collectLatest { milk ->
+                getPreNightMilkDiscardUseCase().collectLatest { milk ->
                     _uiState.update { it.copy(milkDiscard = milk.toString()) }
                 }
             } catch (e: Exception) {
