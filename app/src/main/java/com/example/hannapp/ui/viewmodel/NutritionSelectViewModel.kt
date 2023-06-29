@@ -40,7 +40,7 @@ interface NutrimentSelectContract :
         val nutrimentLogId: Long? = null,
         val quantity: String = "",
         val validation: Mood = Mood.GREEN,
-        val milkOverflow: String = "",
+        val milkDiscard: String = "",
         val maltoSubstitution: String = "",
         val isEditMode: Boolean = false,
         val isLoading: Boolean = false,
@@ -312,7 +312,7 @@ class NutritionSelectViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 getPreNightMilkOverflowUseCase().collectLatest { milk ->
-                    _uiState.update { it.copy(milkOverflow = milk.toString()) }
+                    _uiState.update { it.copy(milkDiscard = milk.toString()) }
                 }
             } catch (e: Exception) {
                 updateErrorState(

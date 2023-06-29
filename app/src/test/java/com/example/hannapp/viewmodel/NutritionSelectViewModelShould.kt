@@ -155,7 +155,7 @@ class NutritionSelectViewModelShould {
                     isLoading = true,
                     errorMessage = null,
                     log = nutrimentUiLog,
-                    milkOverflow = milkDiscard.toString(),
+                    milkDiscard = milkDiscard.toString(),
                     maltoSubstitution = maltoSubstitution.toString()
                 )
             )
@@ -543,7 +543,7 @@ class NutritionSelectViewModelShould {
 
         @Test
         fun emitMilkDiscard() {
-            assertThat(nutritionViewModel.state.value.milkOverflow).isEqualTo(milkDiscard.toString())
+            assertThat(nutritionViewModel.state.value.milkDiscard).isEqualTo(milkDiscard.toString())
         }
     }
 
