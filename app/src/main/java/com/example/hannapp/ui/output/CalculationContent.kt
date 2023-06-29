@@ -27,6 +27,8 @@ import com.example.hannapp.ui.theme.HannAppTheme
 @Composable
 fun CalculationContent(
     modifier: Modifier = Modifier,
+    milkDiscard: String,
+    maltoSubstitution: String,
     mood: Mood
 ) {
     Surface(
@@ -47,7 +49,7 @@ fun CalculationContent(
                     .fillMaxWidth()
                     .padding(PADDING),
                 drawable = R.drawable.liter,
-                text = "1234.56 ml",
+                text = "$milkDiscard ml",
                 label = stringResource(id = R.string.milk_discard)
             )
             OutputCard(
@@ -55,7 +57,7 @@ fun CalculationContent(
                     .fillMaxWidth()
                     .padding(PADDING),
                 drawable = R.drawable.spoon,
-                text = "1234.56 g",
+                text = "$maltoSubstitution g",
                 label = stringResource(id = R.string.malto_addition)
             )
             MoodLight(
@@ -77,6 +79,8 @@ fun CalculationPreview_LightMode() {
     HannAppTheme {
         CalculationContent(
             modifier = Modifier.fillMaxSize(),
+            milkDiscard = "123.4",
+            maltoSubstitution = "89.2",
             mood = Mood.YELLOW
         )
     }
@@ -90,6 +94,8 @@ fun CalculationPreview_LightMode() {
 fun CalculationPreview_DarkMode() {
     HannAppTheme {
         CalculationContent(
+            milkDiscard = "123.4",
+            maltoSubstitution = "89.2",
             mood = Mood.GREEN
         )
     }
