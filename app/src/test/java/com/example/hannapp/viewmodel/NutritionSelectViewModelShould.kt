@@ -6,6 +6,8 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
+import com.example.hannapp.domain.GetPreNightMaltoSubstitutionUseCase
+import com.example.hannapp.domain.GetPreNightMilkOverflowUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
@@ -41,6 +43,8 @@ class NutritionSelectViewModelShould {
     private val getNutrimentLogUseCase = mock(GetNutrimentLogUseCase::class.java)
     private val deleteNutrimentLogUseCase = mock(DeleteNutrimentLogUseCase::class.java)
     private val validatePreNightNutritionLogUseCase = mock(ValidatePreNightNutritionLogUseCase::class.java)
+    private val getPreNightMilkOverflowUseCase = mock(GetPreNightMilkOverflowUseCase::class.java)
+    private val getPreNightMaltoSubstitutionUseCase = mock(GetPreNightMaltoSubstitutionUseCase::class.java)
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -79,6 +83,9 @@ class NutritionSelectViewModelShould {
         )
     )
 
+    private val milkDiscard = 45.8
+    private val maltoSubstitution = 33.3
+
     @BeforeEach
     fun beforeEach() {
         Dispatchers.setMain(testDispatcher)
@@ -95,6 +102,14 @@ class NutritionSelectViewModelShould {
             flowOf(Mood.GREEN)
         )
 
+        whenever(getPreNightMilkOverflowUseCase.invoke()).thenReturn(
+            flowOf(milkDiscard)
+        )
+
+        whenever(getPreNightMaltoSubstitutionUseCase.invoke()).thenReturn(
+            flowOf(maltoSubstitution)
+        )
+
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase = getNutritionUseCase,
             insertNutrimentLogUseCase = insertNutrimentLogUseCase,
@@ -102,6 +117,8 @@ class NutritionSelectViewModelShould {
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
             validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
+            getPreNightMilkOverflowUseCase = getPreNightMilkOverflowUseCase,
+            getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
             dispatcher = testDispatcher
         )
     }
@@ -127,6 +144,8 @@ class NutritionSelectViewModelShould {
             updateNutrimentLogUseCase = updateNutrimentLogUseCase,
             getNutrimentLogUseCase = getNutrimentLogUseCase,
             validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
+            getPreNightMilkOverflowUseCase = getPreNightMilkOverflowUseCase,
+            getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
             dispatcher = testDispatcher
         )
 
@@ -179,6 +198,8 @@ class NutritionSelectViewModelShould {
                 updateNutrimentLogUseCase = updateNutrimentLogUseCase,
                 getNutrimentLogUseCase = getNutrimentLogUseCase,
                 validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
+                getPreNightMilkOverflowUseCase = getPreNightMilkOverflowUseCase,
+                getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
                 dispatcher = testDispatcher
             )
 
@@ -507,6 +528,32 @@ class NutritionSelectViewModelShould {
             nutritionViewModel.event(NutrimentSelectContract.Event.OnValidate)
 
             assertThat(nutritionViewModel.state.value.errorMessage?.message).isNotNull.isEqualTo(errorMessage)
+        }
+    }
+
+    @Nested
+    inner class EmitMilkDiscard {
+        @Test
+        fun invokeUseCase() {
+            verify(getPreNightMilkOverflowUseCase).invoke()
+        }
+
+        @Test
+        fun emitMilkDiscard() {
+            assertThat(nutritionViewModel.state.value.milkOverflow).isEqualTo(milkDiscard.toString())
+        }
+    }
+
+    @Nested
+    inner class EmitMaltSubstitution {
+        @Test
+        fun invokeUseCase() {
+            verify(getPreNightMaltoSubstitutionUseCase).invoke()
+        }
+
+        @Test
+        fun emitMilkDiscard() {
+            assertThat(nutritionViewModel.state.value.maltoSubstitution).isEqualTo(maltoSubstitution.toString())
         }
     }
 }

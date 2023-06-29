@@ -13,6 +13,8 @@ import com.example.hannapp.data.modul.IoDispatcher
 import com.example.hannapp.domain.DeleteNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutrimentLogUseCase
 import com.example.hannapp.domain.GetNutritionUseCase
+import com.example.hannapp.domain.GetPreNightMaltoSubstitutionUseCase
+import com.example.hannapp.domain.GetPreNightMilkOverflowUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
@@ -38,6 +40,8 @@ interface NutrimentSelectContract :
         val nutrimentLogId: Long? = null,
         val quantity: String = "",
         val validation: Mood = Mood.GREEN,
+        val milkOverflow: String = "",
+        val maltoSubstitution: String = "",
         val isEditMode: Boolean = false,
         val isLoading: Boolean = false,
         val errorMessage: Message? = null
@@ -63,6 +67,8 @@ class NutritionSelectViewModel @Inject constructor(
     private val updateNutrimentLogUseCase: UpdateNutrimentLogUseCase,
     private val getNutrimentLogUseCase: GetNutrimentLogUseCase,
     private val validatePreNightNutritionLogUseCase: ValidatePreNightNutritionLogUseCase,
+    private val getPreNightMilkOverflowUseCase: GetPreNightMilkOverflowUseCase,
+    private val getPreNightMaltoSubstitutionUseCase: GetPreNightMaltoSubstitutionUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
     private lateinit var memento: Memento
@@ -73,6 +79,8 @@ class NutritionSelectViewModel @Inject constructor(
     init {
         getLog()
         validate()
+        getMilkOverflow()
+        getMaltoSubstitution()
     }
 
     private var _nutriments = MutableSharedFlow<PagingData<NutritionUiModel>>()
@@ -291,6 +299,36 @@ class NutritionSelectViewModel @Inject constructor(
                     stringRes = R.string.missing_nutrition_limits,
                     string = e.message
                 )
+            } catch (e: Exception) {
+                updateErrorState(
+                    stringRes = null,
+                    string = e.message
+                )
+            }
+        }
+    }
+
+    private fun getMilkOverflow() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                getPreNightMilkOverflowUseCase().collectLatest { milk ->
+                    _uiState.update { it.copy(milkOverflow = milk.toString()) }
+                }
+            } catch (e: Exception) {
+                updateErrorState(
+                    stringRes = null,
+                    string = e.message
+                )
+            }
+        }
+    }
+
+    private fun getMaltoSubstitution() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                getPreNightMaltoSubstitutionUseCase().collectLatest { malto ->
+                    _uiState.update { it.copy(maltoSubstitution = malto.toString()) }
+                }
             } catch (e: Exception) {
                 updateErrorState(
                     stringRes = null,
