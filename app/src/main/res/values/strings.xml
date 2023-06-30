@@ -46,4 +46,5 @@
     <string name="save_change">Do you really want to save the changes. This will override your existing data.</string>
     <string name="warning">Warning</string>
     <string name="reset_log">Do you really want to clear the history.</string>
+    <string name="delete_item">Do you really want to delete the item? Deleted items can not be restored.</string>
 </resources>

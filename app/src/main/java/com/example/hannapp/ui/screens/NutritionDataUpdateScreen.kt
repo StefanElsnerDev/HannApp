@@ -75,6 +75,7 @@ fun NutritionDataUpdateContent(
     val error = uiState.errorMessage
     val snackbarHostState = remember { SnackbarHostState() }
     val showUpdateDialog = rememberSaveable { mutableStateOf(false) }
+    val showDeleteDialog = rememberSaveable { mutableStateOf(false) }
 
     AppScaffold(
         floatingActionButton = {
@@ -137,7 +138,10 @@ fun NutritionDataUpdateContent(
                                 onItemSelected(it)
                                 expanded = false
                             },
-                            onLongClick = { onDeleteSelected(it) }
+                            onLongClick = {
+                                onItemSelected(it)
+                                showDeleteDialog.value = true
+                            }
                         )
                     }
                 )
@@ -176,6 +180,20 @@ fun NutritionDataUpdateContent(
                 onConfirm = {
                     onUpdate()
                     showUpdateDialog.value = false
+                    focusManager.clearFocus()
+                }
+            )
+        }
+
+        if (showDeleteDialog.value) {
+            Dialog(
+                title = stringResource(id = R.string.warning),
+                text = stringResource(id = R.string.delete_item),
+                onDismiss = { showDeleteDialog.value = false },
+                onConfirm = {
+                    onDeleteSelected(uiState.cachedNutritionUiModel)
+                    onItemSelected(NutritionUiModel()) // TODO("Move selection logic into view model on transformation to MVI")
+                    showDeleteDialog.value = false
                     focusManager.clearFocus()
                 }
             )
