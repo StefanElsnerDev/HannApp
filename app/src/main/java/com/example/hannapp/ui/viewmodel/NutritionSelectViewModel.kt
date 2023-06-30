@@ -16,6 +16,7 @@ import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.GetPreNightMaltoSubstitutionUseCase
 import com.example.hannapp.domain.GetPreNightMilkDiscardUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
+import com.example.hannapp.domain.IsDiscardExceedingVolumeUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
 import com.example.hannapp.ui.mood.Mood
@@ -42,6 +43,7 @@ interface NutrimentSelectContract :
         val validation: Mood = Mood.GREEN,
         val milkDiscard: String = "",
         val maltoSubstitution: String = "",
+        val isDiscardExceeding: Boolean = false,
         val isEditMode: Boolean = false,
         val isLoading: Boolean = false,
         val errorMessage: Message? = null
@@ -69,6 +71,7 @@ class NutritionSelectViewModel @Inject constructor(
     private val validatePreNightNutritionLogUseCase: ValidatePreNightNutritionLogUseCase,
     private val getPreNightMilkDiscardUseCase: GetPreNightMilkDiscardUseCase,
     private val getPreNightMaltoSubstitutionUseCase: GetPreNightMaltoSubstitutionUseCase,
+    private val isDiscardExceedingVolumeUseCase: IsDiscardExceedingVolumeUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel(), NutrimentSelectContract {
     private lateinit var memento: Memento
@@ -80,6 +83,7 @@ class NutritionSelectViewModel @Inject constructor(
         getLog()
         validate()
         getMilkOverflow()
+        isDiscardExceeding()
         getMaltoSubstitution()
     }
 
@@ -328,6 +332,21 @@ class NutritionSelectViewModel @Inject constructor(
             try {
                 getPreNightMaltoSubstitutionUseCase().collectLatest { malto ->
                     _uiState.update { it.copy(maltoSubstitution = malto.toString()) }
+                }
+            } catch (e: Exception) {
+                updateErrorState(
+                    stringRes = null,
+                    string = e.message
+                )
+            }
+        }
+    }
+
+    private fun isDiscardExceeding() {
+        viewModelScope.launch(dispatcher) {
+            try {
+                isDiscardExceedingVolumeUseCase().collectLatest { isExceeding ->
+                    _uiState.update { it.copy(isDiscardExceeding = isExceeding) }
                 }
             } catch (e: Exception) {
                 updateErrorState(

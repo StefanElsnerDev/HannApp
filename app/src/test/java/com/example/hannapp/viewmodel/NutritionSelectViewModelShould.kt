@@ -9,6 +9,7 @@ import com.example.hannapp.domain.GetNutritionUseCase
 import com.example.hannapp.domain.GetPreNightMaltoSubstitutionUseCase
 import com.example.hannapp.domain.GetPreNightMilkDiscardUseCase
 import com.example.hannapp.domain.InsertNutrimentLogUseCase
+import com.example.hannapp.domain.IsDiscardExceedingVolumeUseCase
 import com.example.hannapp.domain.UpdateNutrimentLogUseCase
 import com.example.hannapp.domain.ValidatePreNightNutritionLogUseCase
 import com.example.hannapp.ui.mood.Mood
@@ -45,6 +46,7 @@ class NutritionSelectViewModelShould {
     private val validatePreNightNutritionLogUseCase = mock(ValidatePreNightNutritionLogUseCase::class.java)
     private val getPreNightMilkDiscardUseCase = mock(GetPreNightMilkDiscardUseCase::class.java)
     private val getPreNightMaltoSubstitutionUseCase = mock(GetPreNightMaltoSubstitutionUseCase::class.java)
+    private val isDiscardExceedingVolumeUseCase = mock(IsDiscardExceedingVolumeUseCase::class.java)
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -119,6 +121,7 @@ class NutritionSelectViewModelShould {
             validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
             getPreNightMilkDiscardUseCase = getPreNightMilkDiscardUseCase,
             getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
+            isDiscardExceedingVolumeUseCase = isDiscardExceedingVolumeUseCase,
             dispatcher = testDispatcher
         )
     }
@@ -146,6 +149,7 @@ class NutritionSelectViewModelShould {
             validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
             getPreNightMilkDiscardUseCase = getPreNightMilkDiscardUseCase,
             getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
+            isDiscardExceedingVolumeUseCase = isDiscardExceedingVolumeUseCase,
             dispatcher = testDispatcher
         )
 
@@ -203,6 +207,7 @@ class NutritionSelectViewModelShould {
                 validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
                 getPreNightMilkDiscardUseCase = getPreNightMilkDiscardUseCase,
                 getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
+                isDiscardExceedingVolumeUseCase = isDiscardExceedingVolumeUseCase,
                 dispatcher = testDispatcher
             )
 
@@ -557,6 +562,49 @@ class NutritionSelectViewModelShould {
         @Test
         fun emitMilkDiscard() {
             assertThat(nutritionViewModel.state.value.maltoSubstitution).isEqualTo(maltoSubstitution.toString())
+        }
+    }
+
+    @Nested
+    inner class EmitExceedingState {
+        @Test
+        fun emitNoExceedingState() {
+            whenever(isDiscardExceedingVolumeUseCase.invoke()).thenReturn(flowOf(false))
+
+            nutritionViewModel = NutritionSelectViewModel(
+                getNutritionUseCase = getNutritionUseCase,
+                insertNutrimentLogUseCase = insertNutrimentLogUseCase,
+                deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+                updateNutrimentLogUseCase = updateNutrimentLogUseCase,
+                getNutrimentLogUseCase = getNutrimentLogUseCase,
+                validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
+                getPreNightMilkDiscardUseCase = getPreNightMilkDiscardUseCase,
+                getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
+                isDiscardExceedingVolumeUseCase = isDiscardExceedingVolumeUseCase,
+                dispatcher = testDispatcher
+            )
+
+            assertThat(nutritionViewModel.state.value.isDiscardExceeding).isFalse
+        }
+
+        @Test
+        fun emitExceedingState() {
+            whenever(isDiscardExceedingVolumeUseCase.invoke()).thenReturn(flowOf(true))
+
+            nutritionViewModel = NutritionSelectViewModel(
+                getNutritionUseCase = getNutritionUseCase,
+                insertNutrimentLogUseCase = insertNutrimentLogUseCase,
+                deleteNutrimentLogUseCase = deleteNutrimentLogUseCase,
+                updateNutrimentLogUseCase = updateNutrimentLogUseCase,
+                getNutrimentLogUseCase = getNutrimentLogUseCase,
+                validatePreNightNutritionLogUseCase = validatePreNightNutritionLogUseCase,
+                getPreNightMilkDiscardUseCase = getPreNightMilkDiscardUseCase,
+                getPreNightMaltoSubstitutionUseCase = getPreNightMaltoSubstitutionUseCase,
+                isDiscardExceedingVolumeUseCase = isDiscardExceedingVolumeUseCase,
+                dispatcher = testDispatcher
+            )
+
+            assertThat(nutritionViewModel.state.value.isDiscardExceeding).isTrue
         }
     }
 }
