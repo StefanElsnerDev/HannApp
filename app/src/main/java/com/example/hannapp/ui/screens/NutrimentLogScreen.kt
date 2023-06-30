@@ -184,6 +184,7 @@ fun NutrimentLogContent(
                             .fillMaxWidth()
                             .padding(horizontal = PADDING),
                         milkDiscard = uiState.milkDiscard,
+                        isDiscardExceeding = uiState.isDiscardExceeding,
                         maltoSubstitution = uiState.maltoSubstitution,
                         mood = Mood.GREEN
                     )
@@ -215,6 +216,7 @@ fun NutrimentLogContent(
                             .fillMaxWidth(0.5f)
                             .padding(horizontal = PADDING),
                         milkDiscard = uiState.milkDiscard,
+                        isDiscardExceeding = uiState.isDiscardExceeding,
                         maltoSubstitution = uiState.maltoSubstitution,
                         mood = uiState.validation
                     )

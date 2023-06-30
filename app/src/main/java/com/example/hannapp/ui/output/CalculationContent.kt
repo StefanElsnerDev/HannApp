@@ -28,6 +28,7 @@ import com.example.hannapp.ui.theme.HannAppTheme
 fun CalculationContent(
     modifier: Modifier = Modifier,
     milkDiscard: String,
+    isDiscardExceeding: Boolean,
     maltoSubstitution: String,
     mood: Mood
 ) {
@@ -80,6 +81,24 @@ fun CalculationPreview_LightMode() {
         CalculationContent(
             modifier = Modifier.fillMaxSize(),
             milkDiscard = "123.4",
+            isDiscardExceeding = false,
+            maltoSubstitution = "89.2",
+            mood = Mood.YELLOW
+        )
+    }
+}
+
+@Preview(
+    device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait",
+    uiMode = UI_MODE_NIGHT_NO
+)
+@Composable
+fun CalculationPreview_Exceeding_LightMode() {
+    HannAppTheme {
+        CalculationContent(
+            modifier = Modifier.fillMaxSize(),
+            milkDiscard = "123.4",
+            isDiscardExceeding = true,
             maltoSubstitution = "89.2",
             mood = Mood.YELLOW
         )
@@ -95,6 +114,7 @@ fun CalculationPreview_DarkMode() {
     HannAppTheme {
         CalculationContent(
             milkDiscard = "123.4",
+            isDiscardExceeding = false,
             maltoSubstitution = "89.2",
             mood = Mood.GREEN
         )
