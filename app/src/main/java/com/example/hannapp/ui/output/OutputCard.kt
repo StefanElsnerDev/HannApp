@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,14 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hannapp.R
 import com.example.hannapp.ui.theme.HannAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, text: String) {
+fun OutputCard(
+    modifier: Modifier,
+    @DrawableRes drawable: Int,
+    label: String,
+    text: String,
+    isError: Boolean = false
+) {
     Row(
         modifier = modifier.width(192.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -45,7 +50,13 @@ fun OutputCard(modifier: Modifier, @DrawableRes drawable: Int, label: String, te
             onValueChange = {},
             readOnly = true,
             textStyle = MaterialTheme.typography.titleMedium,
-            label = { Text(text = label) }
+            label = { Text(text = label) },
+            isError = isError,
+            supportingText = {
+                if (isError) {
+                    Text(text = stringResource(id = R.string.discard_exceeding))
+                }
+            }
         )
     }
 }
@@ -59,6 +70,20 @@ fun OutputCardPreview_LightMode() {
             drawable = R.drawable.liter,
             label = "Milchausschuss",
             text = "1234,56 ml"
+        )
+    }
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_NO)
+@Composable
+fun OutputCardPreview_Is_Exceeding_LightMode() {
+    HannAppTheme {
+        OutputCard(
+            modifier = Modifier,
+            drawable = R.drawable.liter,
+            label = "Milchausschuss",
+            text = "1234,56 ml",
+            isError = true
         )
     }
 }

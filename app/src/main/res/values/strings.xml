@@ -41,4 +41,5 @@
     <string name="milk_quantities">Milk quantities</string>
     <string name="nutrition_references">Nutrition references</string>
     <string name="missing_nutriments_malto">Missing nutriments for Maltodextring</string>
+    <string name="discard_exceeding">Discard is exceeding available volume</string>
 </resources>

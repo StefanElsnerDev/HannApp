@@ -51,7 +51,8 @@ fun CalculationContent(
                     .padding(PADDING),
                 drawable = R.drawable.liter,
                 text = "$milkDiscard ml",
-                label = stringResource(id = R.string.milk_discard)
+                label = stringResource(id = R.string.milk_discard),
+                isError = isDiscardExceeding
             )
             OutputCard(
                 modifier = Modifier
