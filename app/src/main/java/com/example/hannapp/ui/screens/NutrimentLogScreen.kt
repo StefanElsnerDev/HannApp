@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -45,6 +47,7 @@ import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
 import com.example.hannapp.ui.components.AppTopBar
+import com.example.hannapp.ui.components.Dialog
 import com.example.hannapp.ui.components.NavigationBar
 import com.example.hannapp.ui.components.SnackBar
 import com.example.hannapp.ui.mood.Mood
@@ -74,6 +77,7 @@ fun NutrimentLogContent(
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     val error = uiState.errorMessage
+    val showUpdateDialog = rememberSaveable { mutableStateOf(true) }
 
     AppScaffold(
         topBar = {
@@ -96,10 +100,7 @@ fun NutrimentLogContent(
                         }
 
                         IconButton(
-                            onClick = {
-                                event(NutrimentSelectContract.Event.OnUpdate)
-                                focusManager.clearFocus()
-                            }
+                            onClick = { showUpdateDialog.value = true }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Done,
@@ -235,6 +236,18 @@ fun NutrimentLogContent(
                 actionLabel = label
             )
         }
+    }
+
+    if (showUpdateDialog.value) {
+        Dialog(
+            title = stringResource(id = R.string.warning),
+            text = stringResource(id = R.string.save_change),
+            onDismiss = { showUpdateDialog.value = false },
+            onConfirm = {
+                event(NutrimentSelectContract.Event.OnUpdate)
+                focusManager.clearFocus()
+            }
+        )
     }
 }
 

@@ -43,4 +43,6 @@
     <string name="missing_nutriments_malto">Missing nutriments for Maltodextring</string>
     <string name="discard_exceeding">Discard is exceeding available volume</string>
     <string name="abort">Abort</string>
+    <string name="save_change">Do you really want to save the changes. This will override your existing data.</string>
+    <string name="warning">Warning</string>
 </resources>
