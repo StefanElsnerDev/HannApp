@@ -112,7 +112,9 @@ fun NutrimentLogContent(
                     }
 
                     false -> {
-                        IconButton(onClick = { showResetDialog.value = true }) {
+                        IconButton(
+                            onClick = { showResetDialog.value = true }
+                        ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.restore),
                                 contentDescription = null
@@ -258,7 +260,7 @@ fun NutrimentLogContent(
             text = stringResource(id = R.string.reset_log),
             onDismiss = { showResetDialog.value = false },
             onConfirm = {
-                event(NutrimentSelectContract.Event.OnUpdate)
+                event(NutrimentSelectContract.Event.OnClearAll)
                 showResetDialog.value = false
                 focusManager.clearFocus()
             }
