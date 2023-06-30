@@ -23,6 +23,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
@@ -250,6 +252,46 @@ class NutrimentLogValidationRepositoryShould {
             val volume = nutrimentLogValidationRepository.calculatePreNightMilkDiscard().first()
 
             assertThat(volume).isEqualTo(milkReferenceUiModel.preNightQuantity.toDouble())
+        }
+    }
+
+    @Nested
+    inner class EvaluateDiscardExceedingVolume {
+
+        @ParameterizedTest
+        @ValueSource(floats = [0.0f, 0.5f, 0.9f, 0.99f])
+        fun emitNoExceeding(level: Float) = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = level,
+                        logSize = 5
+                    )
+                )
+            )
+
+            val isExceeding = nutrimentLogValidationRepository.isPreNightDiscardExceedingVolume().first()
+
+            assertThat(isExceeding).isFalse
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [1.01f, 1.1f, 10.0f, 100.0f])
+        fun emitExceeding(level: Float) = runTest {
+            whenever(nutrimentLogRepository.getLogs()).thenReturn(
+                flowOf(
+                    generateNutrimentLevelLog(
+                        limit = nutritionLimit,
+                        level = level,
+                        logSize = 5
+                    )
+                )
+            )
+
+            val isExceeding = nutrimentLogValidationRepository.isPreNightDiscardExceedingVolume().first()
+
+            assertThat(isExceeding).isTrue
         }
     }
 

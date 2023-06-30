@@ -58,6 +58,11 @@ class NutrimentLogValidationRepository @Inject constructor(
             rate.times(milkQuantities.preNightQuantity)
         }
 
+    fun isPreNightDiscardExceedingVolume() = calculatePreNightMilkDiscard()
+        .combine(milkReferenceRepository.emitReference()) { discard, limit ->
+            discard > limit.preNightQuantity
+        }
+
     private fun calculatePreNightEnergySubstitution() =
         calculatePreNightMilkDiscard().combine(milkReferenceRepository.emitReference()) { volume, milkReferences ->
             volume.div(milkReferences.preNightQuantity)
