@@ -55,7 +55,7 @@ class NutritionInsertViewModel @Inject constructor(
         _uiComponentState.update { state ->
             state.copy(
                 nutritionUiModel = NutritionUiModel(
-                    name = product.productName,
+                    name = product.productName ?: "",
                     kcal = product.nutriments.kcal.toString(),
                     protein = product.nutriments.protein.toString(),
                     fat = product.nutriments.fat.toString(),

@@ -72,7 +72,7 @@ fun ProductCard(
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = product.productName
+                    text = product.productName ?: ""
                 )
 
                 TextField(
