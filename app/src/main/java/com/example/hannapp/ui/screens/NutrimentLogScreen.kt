@@ -77,7 +77,8 @@ fun NutrimentLogContent(
     val snackbarHostState = remember { SnackbarHostState() }
     val focusManager = LocalFocusManager.current
     val error = uiState.errorMessage
-    val showUpdateDialog = rememberSaveable { mutableStateOf(true) }
+    val showUpdateDialog = rememberSaveable { mutableStateOf(false) }
+    val showResetDialog = rememberSaveable { mutableStateOf(false) }
 
     AppScaffold(
         topBar = {
@@ -111,7 +112,7 @@ fun NutrimentLogContent(
                     }
 
                     false -> {
-                        IconButton(onClick = { event(NutrimentSelectContract.Event.OnClearAll) }) {
+                        IconButton(onClick = { showResetDialog.value = true }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.restore),
                                 contentDescription = null
@@ -245,6 +246,20 @@ fun NutrimentLogContent(
             onDismiss = { showUpdateDialog.value = false },
             onConfirm = {
                 event(NutrimentSelectContract.Event.OnUpdate)
+                showUpdateDialog.value = false
+                focusManager.clearFocus()
+            }
+        )
+    }
+
+    if (showResetDialog.value) {
+        Dialog(
+            title = stringResource(id = R.string.warning),
+            text = stringResource(id = R.string.reset_log),
+            onDismiss = { showResetDialog.value = false },
+            onConfirm = {
+                event(NutrimentSelectContract.Event.OnUpdate)
+                showResetDialog.value = false
                 focusManager.clearFocus()
             }
         )
