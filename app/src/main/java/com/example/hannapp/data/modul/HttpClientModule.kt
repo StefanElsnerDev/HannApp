@@ -30,7 +30,7 @@ object HttpClientModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://de.openfoodfacts.org/cgi/")
+        .baseUrl("https://world.openfoodfacts.org/cgi/")
         .client(okHttpClient)
         .build()
 }
