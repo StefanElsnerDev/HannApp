@@ -19,9 +19,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +46,7 @@ import com.example.hannapp.data.distinct.Sugar
 import com.example.hannapp.data.model.NutritionUiModel
 import com.example.hannapp.ui.button.FAB
 import com.example.hannapp.ui.components.AppScaffold
+import com.example.hannapp.ui.components.Dialog
 import com.example.hannapp.ui.components.NutrimentCard
 import com.example.hannapp.ui.components.SnackBar
 import com.example.hannapp.ui.dropdown.DropDownDialog
@@ -68,12 +71,17 @@ fun NutritionDataUpdateContent(
     onReset: (NutritionDataComponent) -> Unit,
     onUpdate: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     val error = uiState.errorMessage
     val snackbarHostState = remember { SnackbarHostState() }
+    val showUpdateDialog = rememberSaveable { mutableStateOf(false) }
 
     AppScaffold(
         floatingActionButton = {
-            FAB({ Icon(painterResource(id = R.drawable.change), "") }) { onUpdate() }
+            FAB(
+                icon = { Icon(painterResource(id = R.drawable.change), "") },
+                onClick = { showUpdateDialog.value = true }
+            )
         },
         snackBarHost = {
             SnackbarHost(
@@ -140,7 +148,7 @@ fun NutritionDataUpdateContent(
                 nutritionUiModel = componentUiState.nutritionUiModel,
                 onComponentValueChange = onComponentValueChange,
                 onReset = onReset,
-                onLastItem = onUpdate,
+                onLastItem = { showUpdateDialog.value = true },
                 uiComponents = uiComponents,
                 errors = componentUiState.errors,
                 showErrors = componentUiState.showErrors
@@ -158,6 +166,19 @@ fun NutritionDataUpdateContent(
                     )
                 }
             }
+        }
+
+        if (showUpdateDialog.value) {
+            Dialog(
+                title = stringResource(id = R.string.warning),
+                text = stringResource(id = R.string.save_change),
+                onDismiss = { showUpdateDialog.value = false },
+                onConfirm = {
+                    onUpdate()
+                    showUpdateDialog.value = false
+                    focusManager.clearFocus()
+                }
+            )
         }
     }
 }
