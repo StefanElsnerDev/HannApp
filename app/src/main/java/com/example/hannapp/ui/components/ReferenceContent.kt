@@ -10,8 +10,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +33,9 @@ fun ReferenceContent(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
+    val showUpdateDialog = rememberSaveable { mutableStateOf(false) }
+
     AppScaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -47,7 +53,7 @@ fun ReferenceContent(
                             contentDescription = null
                         )
                     },
-                    onClick = { event(NutritionLimitContract.Event.OnSave) }
+                    onClick = { showUpdateDialog.value = true }
                 )
             }
         }
@@ -85,11 +91,24 @@ fun ReferenceContent(
                         preNightState = preNightQuantity,
                         nightState = nightQuantity,
                         isCompactScreen = isCompactScreen,
-                        onLastItem = { event(NutritionLimitContract.Event.OnSave) },
+                        onLastItem = { showUpdateDialog.value = true },
                         event = event
                     )
                 }
             }
+        }
+
+        if (showUpdateDialog.value) {
+            Dialog(
+                title = stringResource(id = R.string.warning),
+                text = stringResource(id = R.string.save_change),
+                onDismiss = { showUpdateDialog.value = false },
+                onConfirm = {
+                    event(NutritionLimitContract.Event.OnSave)
+                    showUpdateDialog.value = false
+                    focusManager.clearFocus()
+                }
+            )
         }
     }
 }
