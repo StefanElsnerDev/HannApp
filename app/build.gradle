@@ -73,9 +73,9 @@ dependencies {
     implementation libs.retrofit
     implementation libs.retrofit.gson
     //Room
-    implementation libs.room.runtime
-    implementation libs.room.ktx
-    implementation libs.room.paging
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    implementation libs.androidx.room.paging
     //HILT
     implementation libs.hilt
     implementation libs.androidx.hilt.navigation
