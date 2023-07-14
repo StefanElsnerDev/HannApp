@@ -1,7 +1,7 @@
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin
-    alias libs.plugins.kapt
+    alias libs.plugins.ksp
     alias libs.plugins.hilt
     alias libs.plugins.junit5
     alias libs.plugins.ktlint
@@ -93,8 +93,8 @@ dependencies {
 
     annotationProcessor libs.androidx.room.compiler
 
-    kapt libs.androidx.room.compiler
-    kapt libs.hilt.compiler
+    ksp libs.androidx.room.compiler
+    ksp libs.hilt.compiler
 
     testImplementation libs.jupiter.junit.api
     testRuntimeOnly libs.jupiter.junit.engine

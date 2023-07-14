@@ -31,10 +31,11 @@ compose-test = "1.4.3"
 
 androidGradlePlugin = "8.0.2"
 androidLibraryPlugin = "8.0.2"
-kotlinPlugin = "1.8.10"
 hiltPlugin = "2.44"
 junit5Plugin = "1.8.2.1"
 ktlintPlugin = "11.3.2"
+kotlinPlugin = "1.8.10"
+kspPlugin = "1.8.10-1.0.9"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
@@ -99,7 +100,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = {id = "com.android.library", version.ref = "androidLibraryPlugin"}
 kotlin = {id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin"}
-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinPlugin"}
+ksp = {id = "com.google.devtools.ksp", version.ref = "kspPlugin"}
 hilt = {id = "com.google.dagger.hilt.android", version.ref = "hiltPlugin"}
 junit5 = {id = "de.mannodermaus.android-junit5", version.ref = "junit5Plugin"}
 ktlint = {id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin"}
