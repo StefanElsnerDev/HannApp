@@ -1,6 +1,7 @@
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin
+    alias libs.plugins.kapt
     alias libs.plugins.ksp
     alias libs.plugins.hilt
     alias libs.plugins.junit5
@@ -48,6 +49,9 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    kapt {
+        correctErrorTypes true
+    }
 }
 
 task installGitHook(type: Copy) {
@@ -94,7 +98,7 @@ dependencies {
     annotationProcessor libs.androidx.room.compiler
 
     ksp libs.androidx.room.compiler
-    ksp libs.hilt.compiler
+    kapt libs.hilt.compiler
 
     testImplementation libs.jupiter.junit.api
     testRuntimeOnly libs.jupiter.junit.engine
