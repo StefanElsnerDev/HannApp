@@ -15,7 +15,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.example.hannapp.ui.theme.HannAppTheme
 import kotlinx.coroutines.flow.flowOf
 
@@ -37,10 +36,8 @@ fun <T : Any> DropDownDialog(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
-                items(pagingItems) { item ->
-                    item?.let {
-                        itemContent(it)
-                    }
+                items(pagingItems.itemCount) { index ->
+                    pagingItems[index]?.let { itemContent(it) }
                 }
             }
         }
