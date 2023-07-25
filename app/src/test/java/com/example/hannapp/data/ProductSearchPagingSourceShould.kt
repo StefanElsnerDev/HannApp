@@ -21,7 +21,6 @@ class ProductSearchPagingSourceShould {
     private val productDataSource: ProductDataSource = mock()
     private val loadParams: PagingSource.LoadParams<Int> = mock()
 
-    private val searchTerm = "Apple"
     private val firstPage = 1
 
     private val products = listOf(
@@ -57,12 +56,10 @@ class ProductSearchPagingSourceShould {
 
     @BeforeEach
     fun beforeEach() = runTest {
-        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenReturn(result)
+        whenever(productDataSource.search(any(), eq(firstPage), any())).thenReturn(result)
 
         productSearchPagingSource = ProductSearchPagingSource(
-            productDataSource = productDataSource,
-            searchString = "Apple",
-            pageSize = 24
+            productDataSource = productDataSource
         )
     }
 
@@ -94,7 +91,7 @@ class ProductSearchPagingSourceShould {
     fun returnErrorLoadResultOnFailure() = runTest {
         val error = NetworkResult.Error<List<Product>>(code = 401, message = "Authentication failed")
 
-        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenReturn(
+        whenever(productDataSource.search(any(), eq(firstPage), any())).thenReturn(
             error
         )
 
@@ -107,7 +104,7 @@ class ProductSearchPagingSourceShould {
     fun returnErrorLoadResultOnException() = runTest {
         val exception = RuntimeException("Something terrible happened")
 
-        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenThrow(
+        whenever(productDataSource.search(any(), eq(firstPage), any())).thenThrow(
             exception
         )
 

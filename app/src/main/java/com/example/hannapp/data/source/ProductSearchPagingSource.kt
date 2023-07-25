@@ -10,10 +10,11 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ProductSearchPagingSource @Inject constructor(
-    private val productDataSource: ProductDataSource,
-    private val searchString: String,
-    private val pageSize: Int
+    private val productDataSource: ProductDataSource
 ) : PagingSource<Int, Product>() {
+
+    var searchString: String = ""
+    var pageSize: Int = 24
 
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
