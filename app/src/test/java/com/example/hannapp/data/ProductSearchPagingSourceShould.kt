@@ -3,26 +3,22 @@ package com.example.hannapp.data
 import androidx.paging.PagingSource
 import com.example.hannapp.data.model.api.Nutriments
 import com.example.hannapp.data.model.api.Product
-import com.example.hannapp.data.model.api.ProductSearchResult
-import com.example.hannapp.data.remote.ProductSearchApi
+import com.example.hannapp.data.source.ProductDataSource
 import com.example.hannapp.data.source.ProductSearchPagingSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import retrofit2.Response
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProductSearchPagingSourceShould {
 
     private lateinit var productSearchPagingSource: ProductSearchPagingSource
-    private val productSearchApi: ProductSearchApi = mock()
+    private val productDataSource: ProductDataSource = mock()
     private val loadParams: PagingSource.LoadParams<Int> = mock()
 
     private val searchTerm = "Apple"
@@ -57,24 +53,14 @@ class ProductSearchPagingSourceShould {
         )
     )
 
-    private val response: Response<ProductSearchResult> = Response.success(
-        200,
-        ProductSearchResult(
-            count = 2,
-            page = 0,
-            pageCount = 2,
-            pageSize = 24,
-            products = products,
-            skip = 0
-        )
-    )
+    private val result = NetworkResult.Success(products)
 
     @BeforeEach
     fun beforeEach() = runTest {
-        whenever(productSearchApi.search(searchTerm, firstPage)).thenReturn(response)
+        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenReturn(result)
 
         productSearchPagingSource = ProductSearchPagingSource(
-            productSearchApi = productSearchApi,
+            productDataSource = productDataSource,
             searchString = "Apple",
             pageSize = 24
         )
@@ -84,7 +70,7 @@ class ProductSearchPagingSourceShould {
     fun callProductSearchApi() = runTest {
         productSearchPagingSource.load(loadParams)
 
-        verify(productSearchApi).search(any(), any(), any(), any(), any())
+        verify(productDataSource).search(any(), any(), any())
     }
 
     @Test
@@ -106,11 +92,10 @@ class ProductSearchPagingSourceShould {
 
     @Test
     fun returnErrorLoadResultOnFailure() = runTest {
-        val errorResponse: Response<ProductSearchResult> =
-            Response.error(401, "Authentication failed".toResponseBody())
+        val error = NetworkResult.Error<List<Product>>(code = 401, message = "Authentication failed")
 
-        whenever(productSearchApi.search(searchTerm, firstPage)).thenReturn(
-            errorResponse
+        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenReturn(
+            error
         )
 
         val result = productSearchPagingSource.load(loadParams)
@@ -122,7 +107,7 @@ class ProductSearchPagingSourceShould {
     fun returnErrorLoadResultOnException() = runTest {
         val exception = RuntimeException("Something terrible happened")
 
-        whenever(productSearchApi.search(searchTerm, firstPage)).thenThrow(
+        whenever(productDataSource.search(eq(searchTerm), eq(firstPage), any())).thenThrow(
             exception
         )
 

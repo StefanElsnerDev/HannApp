@@ -2,12 +2,15 @@ package com.example.hannapp.data.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.hannapp.data.NetworkResult
 import com.example.hannapp.data.model.api.Product
-import com.example.hannapp.data.remote.ProductSearchApi
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
+import retrofit2.Response
+import javax.inject.Inject
 
-class ProductSearchPagingSource(
-    private val productSearchApi: ProductSearchApi,
+class ProductSearchPagingSource @Inject constructor(
+    private val productDataSource: ProductDataSource,
     private val searchString: String,
     private val pageSize: Int
 ) : PagingSource<Int, Product>() {
@@ -21,32 +24,36 @@ class ProductSearchPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         val page = params.key ?: 1
-        return try {
-            val response = productSearchApi.search(
+
+        try {
+            val result = productDataSource.search(
                 searchString = searchString,
                 page = page,
                 pageSize = pageSize
             )
 
-            if (response.isSuccessful) {
-                val resultBody = response.body()
+            return when (result) {
+                is NetworkResult.Success -> {
+                    LoadResult.Page(
+                        data = result.data,
+                        prevKey = if (page == 1) null else page,
+                        nextKey = if (result.data.isEmpty()) null else page.plus(1)
+                    )
+                }
 
-                require(resultBody != null)
+                is NetworkResult.Error -> LoadResult.Error(
+                    throwable = HttpException(
+                        Response.error<List<Product>>(
+                            result.code,
+                            result.message.toResponseBody()
+                        )
+                    )
+                )
 
-                LoadResult.Page(
-                    data = resultBody.products,
-                    prevKey = if (page == 1) null else page,
-                    nextKey = if (resultBody.products.isEmpty()) null else page.plus(1)
-                )
-            } else {
-                return LoadResult.Error(
-                    HttpException(response)
-                )
+                is NetworkResult.Exception -> LoadResult.Error(throwable = result.e)
             }
-        } catch (exception: HttpException) {
-            return LoadResult.Error(exception)
-        } catch (exception: Exception) {
-            return LoadResult.Error(exception)
+        } catch (e: Exception) {
+            return LoadResult.Error(throwable = e)
         }
     }
 }
