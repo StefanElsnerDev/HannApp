@@ -1,19 +1,19 @@
 package com.example.hannapp.repository
 
-import com.example.hannapp.data.remote.ProductSearchApi
 import com.example.hannapp.data.repository.ProductSearchRepository
+import com.example.hannapp.data.source.ProductDataSource
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.kotlin.mock
 
 class ProductSearchRepositoryShould {
 
     private lateinit var productSearchRepository: ProductSearchRepository
-    private val productSearchApi: ProductSearchApi = mock()
+    private val productDataSource: ProductDataSource = mock()
 
     @BeforeEach
     fun beforeEach() {
         productSearchRepository = ProductSearchRepository(
-            productSearchApi = productSearchApi
+            productDataSource = productDataSource
         )
     }
 
