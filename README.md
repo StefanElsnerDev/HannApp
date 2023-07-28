@@ -3,7 +3,7 @@
 ![android](https://forthebadge.com/images/badges/built-for-android.svg)
 ![android](https://forthebadge.com/images/badges/built-with-love.svg)
 
-![version](https://img.shields.io/badge/Gradle-8.0.2%2B-blue)
+![version](https://img.shields.io/badge/Gradle-8.2.1%2B-blue)
 ![version](https://img.shields.io/badge/version-0.0.1-green)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
@@ -39,7 +39,7 @@ Make sure you have installed the current [Gradle](https://gradle.org/install/) v
 $ gradle -v
 
 ------------------------------------------------------------
-Gradle 8.0.2
+Gradle 8.2.1
 ------------------------------------------------------------
 ```
 
