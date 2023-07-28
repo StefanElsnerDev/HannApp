@@ -7,11 +7,11 @@
 ![version](https://img.shields.io/badge/version-0.0.1-green)
 ![license](https://img.shields.io/badge/license-MIT-blue)
 
-# HannApp
+# MemApp
 
-HannApp is an Android application for following a specific diet plan.
+MemApp is an Android application for following a specific diet plan.
 
-The application is motivated by a friends daughter named Hanna, whose metabolism needs to receive a
+The application is motivated by a friends daughter, whose metabolism needs to receive a
 precise amount of nutrients throughout the day.
 It helps to track meals, determine the exact nutritional values and calculate any necessary
 nutritional supplements.
@@ -90,7 +90,7 @@ prescribed diet limits or exceeding.
 
 # Credits
 
-HannApp is fetching nutriments from a open database
+MemApp is fetching nutriments from a open database
 named [Open Food Facts](https://world.openfoodfacts.org/), whichs is a non-profit project developed
 by thousands of volunteers. Thanks to their enthusiasm it is possible to search and to add food in
 such a handy way.
