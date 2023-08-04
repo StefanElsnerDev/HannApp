@@ -112,6 +112,10 @@ class NutritionSelectViewModelShould {
             flowOf(maltoSubstitution)
         )
 
+        whenever(isDiscardExceedingVolumeUseCase.invoke()).thenReturn(
+            flowOf(false)
+        )
+
         nutritionViewModel = NutritionSelectViewModel(
             getNutritionUseCase = getNutritionUseCase,
             insertNutrimentLogUseCase = insertNutrimentLogUseCase,
