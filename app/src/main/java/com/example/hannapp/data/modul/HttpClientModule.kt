@@ -1,5 +1,6 @@
 package com.example.hannapp.data.modul
 
+import com.example.hannapp.data.remote.MockInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +24,16 @@ object HttpClientModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor) =
-        OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
+    fun providesMockInterceptor() = MockInterceptor()
+
+    @Singleton
+    @Provides
+    fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor, mockInterceptor: MockInterceptor) =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(mockInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
 
     @Singleton
     @Provides
