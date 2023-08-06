@@ -1,6 +1,6 @@
 package com.example.hannapp.data.modul
 
-import com.example.hannapp.data.remote.MockInterceptor
+import com.example.hannapp.data.MockInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

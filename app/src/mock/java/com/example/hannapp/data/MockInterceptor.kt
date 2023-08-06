@@ -1,4 +1,4 @@
-package com.example.hannapp.data.remote
+package com.example.hannapp.data
 
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
