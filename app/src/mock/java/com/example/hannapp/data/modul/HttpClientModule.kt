@@ -1,3 +1,5 @@
+package com.example.hannapp.data.modul
+
 import com.example.hannapp.data.remote.MockInterceptor
 import dagger.Module
 import dagger.Provides
@@ -37,7 +39,7 @@ object HttpClientModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("")
+        .baseUrl("https://world.openfoodfacts.org/cgi/")
         .client(okHttpClient)
         .build()
 }
