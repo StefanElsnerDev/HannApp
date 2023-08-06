@@ -1,5 +1,6 @@
 package com.example.hannapp.data.modul
 
+import com.example.hannapp.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,7 +34,7 @@ object HttpClientModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://world.openfoodfacts.org/cgi/")
+        .baseUrl(BuildConfig.BASE_URL)
         .client(okHttpClient)
         .build()
 }

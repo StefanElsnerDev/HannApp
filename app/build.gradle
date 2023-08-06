@@ -38,10 +38,12 @@ android {
         mock {
             dimension "version"
             applicationIdSuffix ".mock"
+            buildConfigField("String", "BASE_URL", "\"https://httpbin.org/\"")
         }
         live {
             dimension "version"
             applicationIdSuffix ".live"
+            buildConfigField("String", "BASE_URL", " \"https://world.openfoodfacts.org/cgi/\"")
         }
     }
 
