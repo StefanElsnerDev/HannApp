@@ -54,7 +54,7 @@ class ProductDataSourceImplShould {
 
     @Test
     fun returnResultOnSuccess() = runTest {
-        whenever(productSearchApi.search(any(), any(), any(), any(), any())).thenReturn(
+        whenever(productSearchApi.search(any(), any(), any())).thenReturn(
             Response.success(200, productSearchResult)
         )
 
@@ -71,7 +71,7 @@ class ProductDataSourceImplShould {
     fun returnErrorOnNetworkError() = runTest {
         val message = "Internal Server Error"
 
-        whenever(productSearchApi.search(any(), any(), any(), any(), any())).thenReturn(
+        whenever(productSearchApi.search(any(), any(), any())).thenReturn(
             Response.error(500, message.toResponseBody())
         )
 
@@ -93,7 +93,7 @@ class ProductDataSourceImplShould {
     fun returnErrorOnException() = runTest {
         val exception = RuntimeException("exception")
 
-        whenever(productSearchApi.search(any(), any(), any(), any(), any())).thenThrow(
+        whenever(productSearchApi.search(any(), any(), any())).thenThrow(
             exception
         )
 
