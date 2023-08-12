@@ -1,7 +1,7 @@
 package com.example.hannapp.data.modul
 
 import com.example.hannapp.BuildConfig
-import com.example.hannapp.data.MockInterceptor
+import com.example.hannapp.data.remote.MockInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -25,11 +26,12 @@ object HttpClientModule {
 
     @Singleton
     @Provides
-    fun providesMockInterceptor() = MockInterceptor()
+    @MockSearchInterceptor
+    fun providesMockInterceptor(@MockSearchResponse mockResponse: String) = MockInterceptor(mockResponse)
 
     @Singleton
     @Provides
-    fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor, mockInterceptor: MockInterceptor) =
+    fun provideHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor, @MockSearchInterceptor mockInterceptor: MockInterceptor) =
         OkHttpClient
             .Builder()
             .addInterceptor(mockInterceptor)
@@ -44,3 +46,7 @@ object HttpClientModule {
         .client(okHttpClient)
         .build()
 }
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class MockSearchInterceptor
